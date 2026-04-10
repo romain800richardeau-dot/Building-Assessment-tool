@@ -1,0 +1,1 @@
+const EM={QDV:{l:"Qualité de vie",c:"qdv",x:"#2E7D32"},ENV:{l:"Respect de l\'environnement",c:"env",x:"#1565C0"},ECO:{l:"Performance économique",c:"eco",x:"#E65100"},SMR_PIL:{l:"SMR — Pilotage maîtrisé",c:"smr",x:"#6A1B9A"},SMR_SYS:{l:"SMR — Chapitres du système",c:"smr",x:"#6A1B9A"}};

@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BREEAM NC V7 - Outil de Faisabilité</title>
+    <title>Verdict — Plateforme d'évaluation environnementale du bâtiment</title>
     <link rel="icon" href="assets/images/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <!-- Extracted data objects -->
@@ -39,6 +41,7 @@
     <script src="data/BP_T13.js"></script>
     <script src="data/BP_T14.js"></script>
 
+    <script src="data/SITE_ANALYSIS.js"></script>
     <script src="data/GLOSS.js"></script>
     <script src="data/T.js"></script>
     <script src="data/EM.js"></script>
@@ -15417,6 +15420,464 @@ function filterGlossList(inputId,bodyId,countId){
 
     
 /* ============================================================ */
+/* ===== SITE ANALYSIS - CSS ================================= */
+/* ============================================================ */
+.site-analysis-container {
+    position: fixed; top: 0; left: 230px; right: 0; height: 100vh;
+    background: #fff; display: none; flex-direction: column;
+    overflow: hidden; z-index: 100;
+}
+.site-analysis-container.open { display: flex; }
+.sa-wrap { flex: 1; overflow-y: auto; padding: 0; }
+
+/* ── Header / search ── */
+.sa-header-bar {
+    padding: 24px 36px 20px; border-bottom: 1px solid #004D40; background: #00695C;
+}
+.sa-header-bar .sa-title { color: #fff; }
+.sa-header-bar .sa-subtitle { color: #B2DFDB; }
+.sa-title { font-size: 1.15rem; font-weight: 700; color: #1E293B; margin: 0 0 4px; letter-spacing: -0.01em; }
+.sa-subtitle { color: #64748B; font-size: 0.85rem; margin: 0 0 16px; }
+.sa-search-bar { display: flex; gap: 10px; align-items: stretch; }
+.sa-input-wrap { position: relative; flex: 1; }
+.sa-search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+.sa-input {
+    width: 100%; padding: 10px 12px 10px 36px; border: 1px solid #CBD5E1;
+    border-radius: 6px; font-size: 0.9rem; background: #fff !important; outline: none;
+    box-sizing: border-box; transition: border-color 0.15s;
+    color: #1E293B;
+}
+.sa-input:-webkit-autofill,
+.sa-input:-webkit-autofill:hover,
+.sa-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #fff inset !important;
+    -webkit-text-fill-color: #1E293B !important;
+}
+.sa-input:focus { border-color: #475569; }
+.sa-autocomplete {
+    position: absolute; top: 100%; left: 0; right: 0; background: #fff;
+    border: 1px solid #E2E8F0; border-radius: 6px; box-shadow: 0 6px 16px rgba(0,0,0,0.10);
+    display: none; z-index: 200; max-height: 260px; overflow-y: auto; margin-top: 2px;
+}
+.sa-autocomplete.show { display: block; }
+.sa-ac-item {
+    padding: 10px 14px; cursor: pointer; font-size: 0.88rem; color: #334155;
+    border-bottom: 1px solid #F1F5F9;
+}
+.sa-ac-item:last-child { border-bottom: none; }
+.sa-ac-item:hover { background: #F1F5F9; }
+.sa-ac-item .sa-ac-main { font-weight: 600; }
+.sa-ac-item .sa-ac-ctx { color: #94A3B8; font-size: 0.8rem; margin-top: 1px; }
+.sa-search-btn {
+    display: flex; align-items: center; gap: 6px; padding: 10px 20px;
+    background: #1E293B; color: #fff; border: none; border-radius: 6px;
+    font-size: 0.88rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+.sa-search-btn:hover:not(:disabled) { background: #334155; }
+.sa-search-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.sa-selected-address {
+    margin-top: 12px; padding: 10px 14px; background: #F8FAFC; border-left: 3px solid #475569;
+    font-size: 0.88rem; color: #334155;
+}
+
+/* ── Loading ── */
+.sa-loading { text-align: center; padding: 48px 20px; }
+.sa-loading-spinner {
+    width: 32px; height: 32px; border: 3px solid #E2E8F0; border-top-color: #475569;
+    border-radius: 50%; animation: sa-spin 0.7s linear infinite; margin: 0 auto 12px;
+}
+@keyframes sa-spin { to { transform: rotate(360deg); } }
+.sa-loading p { color: #64748B; font-size: 0.92rem; margin: 0; }
+.sa-loading-steps { margin-top: 12px; }
+.sa-loading-step {
+    display: inline-block; padding: 4px 10px; margin: 3px;
+    background: #F1F5F9; border-radius: 3px; font-size: 0.8rem; color: #64748B;
+}
+.sa-loading-step.done { background: #ECFDF5; color: #065F46; }
+.sa-loading-step.active { background: #FEF9C3; color: #713F12; }
+.sa-loading-step.error { background: #FEF2F2; color: #991B1B; }
+
+/* ── Dashboard body ── */
+.sa-dashboard { padding: 24px 32px; }
+
+/* ── Row 1: Synthesis (left) + Map (right) ── */
+.sa-dash-top {
+    display: grid; grid-template-columns: 380px 1fr; gap: 16px;
+    margin-bottom: 20px; align-items: start;
+}
+
+/* ── Synthesis panel ── */
+.sa-synthesis {
+    background: #fff; border: 1px solid #E2E8F0; border-radius: 6px;
+    display: flex; flex-direction: column; min-height: 360px;
+}
+.sa-synthesis-title {
+    padding: 12px 16px; background: #EFF8F6; border-bottom: 1px solid #D4EDEA;
+    font-size: 0.82rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; color: #00695C; margin: 0;
+}
+.sa-synthesis-body { padding: 14px 16px; flex: 1; overflow-y: auto; }
+#saMpIntro .sa-synthesis-body { overflow-y: visible; }
+
+/* ── Collapsible intro panel ── */
+#saMpIntro { position: relative; max-height: 500px; overflow: hidden; transition: max-height 0.3s ease; }
+#saMpIntro.sa-expanded { max-height: 5000px; }
+.sa-collapse-fade {
+    position: absolute; bottom: 32px; left: 0; right: 0; height: 60px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+    pointer-events: none; z-index: 1;
+}
+#saMpIntro.sa-expanded .sa-collapse-fade { display: none; }
+.sa-collapse-toggle {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    width: 100%; padding: 6px 0; border: none; border-top: 1px solid #E2E8F0;
+    background: #fff; cursor: pointer; color: #64748B; font-size: 0.78rem;
+    text-align: center; border-radius: 0 0 6px 6px; z-index: 2;
+}
+.sa-collapse-toggle:hover { background: #F8FAFC; color: #334155; }
+.sa-collapse-toggle svg { vertical-align: middle; margin-left: 4px; transition: transform 0.2s; }
+#saMpIntro.sa-expanded .sa-collapse-toggle svg { transform: rotate(180deg); }
+.sa-collapse-hide { display: none; }
+.sa-alert-line {
+    display: flex; align-items: baseline; gap: 10px;
+    padding: 7px 0; border-bottom: 1px solid #F8FAFC; font-size: 0.84rem;
+    color: #334155; line-height: 1.55;
+}
+.sa-alert-line:last-child { border-bottom: none; }
+.sa-alert-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    position: relative; top: 4px;
+}
+.sa-dot-red { background: #DC2626; }
+.sa-dot-orange { background: #D97706; }
+.sa-dot-green { background: #16A34A; }
+.sa-dot-gray { background: #94A3B8; }
+
+/* ── Sommaire chevron + TOC panel ── */
+.sa-toc-wrap {
+    position: fixed; left: 230px; top: 0; bottom: 0;
+    z-index: 101; display: none; pointer-events: none;
+}
+.sa-toc-wrap.visible { display: block; }
+
+.sa-toc-toggle {
+    position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+    width: 22px; height: 56px; background: #FAFBFC; border: 1px solid #E2E8F0;
+    border-left: none; border-radius: 0 6px 6px 0; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #64748B; pointer-events: auto;
+    transition: left 0.25s ease, background 0.15s, color 0.15s;
+    padding: 0;
+}
+.sa-toc-wrap.open .sa-toc-toggle { left: 250px; }
+.sa-toc-toggle:hover { background: #EEF2FF; color: #1E3A5F; }
+.sa-toc-toggle svg { width: 14px; height: 14px; flex-shrink: 0; transition: transform 0.25s; }
+.sa-toc-wrap.open .sa-toc-toggle svg { transform: rotate(180deg); }
+
+.sa-toc-panel {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 250px; background: #fff; border-right: 1px solid #E2E8F0;
+    box-shadow: 4px 0 16px rgba(0,0,0,0.08);
+    transform: translateX(-100%); opacity: 0; pointer-events: none;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+    display: flex; flex-direction: column;
+}
+.sa-toc-wrap.open .sa-toc-panel {
+    transform: translateX(0); opacity: 1; pointer-events: auto;
+}
+.sa-toc-title {
+    padding: 14px 16px; font-size: 0.72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em; color: #64748B;
+    border-bottom: 1px solid #E2E8F0; background: #FAFBFC;
+    margin: 0;
+}
+.sa-toc-list { list-style: none; padding: 8px 0; margin: 0; flex: 1; overflow-y: auto; }
+.sa-toc-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; font-size: 0.84rem; color: #475569;
+    cursor: pointer; transition: background 0.12s; border: none;
+    background: none; width: 100%; text-align: left; font-family: inherit;
+    line-height: 1.4;
+}
+.sa-toc-item:hover { background: #F1F5F9; }
+.sa-toc-item.active { background: #EEF2FF; color: #1E3A5F; font-weight: 600; border-right: 3px solid #4F46E5; }
+.sa-toc-item-dot {
+    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    background: #CBD5E1;
+}
+.sa-toc-item.active .sa-toc-item-dot { background: #4F46E5; }
+
+/* ── Row 2: Thematic sections stacked ── */
+.sa-sections-stack { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+/* ── Theme cards ── */
+.sa-section {
+    background: #fff; border: 1px solid #E2E8F0; border-radius: 6px;
+    overflow: hidden;
+}
+.sa-section-header {
+    display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+    cursor: pointer; user-select: none; background: #EEF2FF;
+    border-bottom: 1px solid transparent;
+}
+.sa-section-header:hover { background: #E0E7FF; }
+.sa-section.open .sa-section-header { border-bottom-color: #E2E8F0; }
+.sa-section-icon {
+    width: 24px; height: 24px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.sa-section-icon svg { width: 18px; height: 18px; color: #1E3A5F; }
+.sa-section-header h3 {
+    flex: 1; margin: 0; font-size: 0.88rem; font-weight: 600; color: #1E293B;
+}
+.sa-section-count {
+    font-size: 0.72rem; color: #64748B; background: #F1F5F9;
+    padding: 2px 8px; border-radius: 3px;
+}
+.sa-section-source { font-size: 0.7rem; color: #94A3B8; }
+.sa-section-chevron {
+    font-size: 0.7rem; color: #94A3B8; transition: transform 0.25s;
+}
+.sa-section.open .sa-section-chevron { transform: rotate(180deg); }
+
+/* ── Preview tags (visible when collapsed) ── */
+.sa-section-preview {
+    padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 6px;
+    border-bottom: 1px solid #F1F5F9;
+}
+.sa-ptag {
+    font-size: 0.73rem; padding: 3px 9px; border-radius: 3px;
+    font-weight: 500; white-space: nowrap;
+}
+.sa-ptag-high { background: #FEF2F2; color: #991B1B; }
+.sa-ptag-medium { background: #FEF3C7; color: #92400E; }
+.sa-ptag-low { background: #F1F5F9; color: #475569; }
+.sa-ptag-info { background: #EFF6FF; color: #1E40AF; }
+.sa-ptag-ok { background: #ECFDF5; color: #065F46; }
+
+/* ── Expandable body ── */
+.sa-section-body {
+    max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
+}
+.sa-section.open .sa-section-body { max-height: 2000px; overflow-y: auto; }
+
+/* ── Tables inside sections ── */
+.sa-table {
+    width: 100%; border-collapse: collapse; font-size: 0.85rem;
+}
+.sa-table th {
+    text-align: left; padding: 8px 10px; background: #F8FAFC;
+    color: #64748B; font-weight: 600; font-size: 0.78rem;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    border-bottom: 2px solid #E2E8F0;
+}
+.sa-table td {
+    padding: 8px 10px; border-bottom: 1px solid #F1F5F9;
+    color: #334155; vertical-align: top;
+}
+.sa-table tr:last-child td { border-bottom: none; }
+.sa-table tr:hover td { background: #FAFBFC; }
+
+/* ── Severity indicators ── */
+.sa-sev {
+    display: inline-block; padding: 2px 8px; border-radius: 3px;
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.02em;
+}
+.sa-sev-high { background: #FEE2E2; color: #991B1B; }
+.sa-sev-medium { background: #FEF3C7; color: #92400E; }
+.sa-sev-low { background: #ECFDF5; color: #065F46; }
+.sa-sev-info { background: #EFF6FF; color: #1E40AF; }
+.sa-sev-na { background: #F1F5F9; color: #64748B; }
+.sa-mini-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 8px 0; }
+.sa-mini-table th, .sa-mini-table td { padding: 4px 10px; border: 1px solid #E2E8F0; text-align: left; }
+.sa-mini-table th { background: #F8FAFC; font-weight: 600; color: #334155; }
+
+/* ── BREEAM credit tags ── */
+.sa-credit {
+    display: inline-block; padding: 1px 6px; margin: 2px 2px 0 0;
+    border: 1px solid #CBD5E1; border-radius: 3px; font-size: 0.72rem;
+    font-weight: 600; color: #475569;
+}
+
+/* ── Empty / no data ── */
+.sa-empty {
+    padding: 16px; color: #94A3B8; font-size: 0.88rem;
+    background: #FAFBFC; border: 1px dashed #E2E8F0; border-radius: 4px;
+    text-align: center;
+}
+
+/* ── Error ── */
+.sa-error {
+    padding: 12px 16px; background: #FEF2F2; border: 1px solid #FECACA;
+    border-radius: 4px; color: #991B1B; font-size: 0.85rem;
+}
+
+/* ── PDF link ── */
+.sa-pdf-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; background: #F8FAFC;
+    border: 1px solid #CBD5E1; border-radius: 4px;
+    font-size: 0.84rem; font-weight: 600; color: #1E293B;
+    text-decoration: none;
+}
+.sa-pdf-link:hover { background: #F1F5F9; }
+
+/* ── Map panel (right side of dash-top) ── */
+.sa-map-section {
+    background: #fff; border: 1px solid #E2E8F0; border-radius: 6px;
+    overflow: hidden; display: flex; flex-direction: column;
+}
+.sa-map-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px; background: #EFF8F6; border-bottom: 1px solid #D4EDEA;
+}
+.sa-map-title { margin: 0; font-size: 0.85rem; font-weight: 600; color: #1E293B; }
+.sa-map-controls { display: flex; gap: 4px; }
+.sa-map-layer-btn {
+    padding: 4px 10px; border: 1px solid #E2E8F0; border-radius: 4px;
+    background: #fff; color: #64748B; font-size: 0.75rem; font-weight: 600;
+    cursor: pointer;
+}
+.sa-map-layer-btn:hover { background: #F8FAFC; }
+.sa-map-layer-btn.active { background: #1E293B; color: #fff; border-color: #1E293B; }
+.sa-map { flex: 1; min-height: 500px; width: 100%; }
+
+/* ── PDF strip ── */
+.sa-pdf-strip {
+    display: flex; align-items: center; justify-content: space-between;
+    background: #fff; border: 1px solid #E2E8F0; border-radius: 6px;
+    padding: 14px 18px; margin-bottom: 16px;
+}
+.sa-pdf-strip-text { font-size: 0.84rem; color: #64748B; }
+
+/* ── Detail Panel (same pattern as methodology-panel) ── */
+.sa-detail-overlay {
+    display: none;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.18); z-index: 1199;
+}
+.sa-detail-overlay.open { display: block; }
+.sa-detail-panel {
+    position: fixed; top: 0; left: 0;
+    width: 560px; height: 100vh;
+    background-color: #fff; z-index: 1200;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    display: flex; flex-direction: column;
+    box-shadow: 4px 0 16px rgba(0,0,0,0.08);
+}
+.sa-detail-panel.open { transform: translateX(0); }
+.sa-detail-panel-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid #E2E8F0;
+    display: flex; justify-content: space-between; align-items: center;
+    background: #F8FAFC; flex-shrink: 0;
+}
+.sa-detail-panel-header h2 {
+    font-size: 15px; color: #1E293B; margin: 0; font-weight: 700;
+}
+.sa-detail-panel-close {
+    background: none; border: none; font-size: 24px;
+    cursor: pointer; color: #64748B; transition: color 0.2s; line-height: 1;
+}
+.sa-detail-panel-close:hover { color: #1E293B; }
+.sa-detail-panel-content {
+    flex: 1; overflow-y: auto; padding: 20px;
+    font-size: 13px; line-height: 1.65; color: #1E293B;
+}
+.sa-detail-panel-content h3 {
+    font-size: 14px; font-weight: 700; color: #1E293B;
+    margin: 20px 0 8px; padding-bottom: 4px;
+    border-bottom: 1px solid #E2E8F0;
+}
+.sa-detail-panel-content h3:first-child { margin-top: 0; }
+.sa-detail-panel-content p { margin: 0 0 10px; text-align: justify; }
+.sa-detail-panel-content ul { margin: 0 0 12px 18px; padding: 0; }
+.sa-detail-panel-content li { margin-bottom: 4px; }
+.sa-detail-panel-content .sa-dp-tag {
+    display: inline-block; padding: 2px 8px; border-radius: 3px;
+    font-size: 11px; font-weight: 600; margin-right: 4px;
+}
+.sa-dp-tag-red { background: #FEE2E2; color: #991B1B; }
+.sa-dp-tag-orange { background: #FEF3C7; color: #92400E; }
+.sa-dp-tag-green { background: #ECFDF5; color: #065F46; }
+.sa-dp-tag-blue { background: #EFF6FF; color: #1E40AF; }
+.sa-dp-map { height: 280px; width: 100%; border-radius: 4px; border: 1px solid #E2E8F0; margin: 12px 0; }
+.sa-dp-legend {
+    display: flex; flex-wrap: wrap; gap: 8px 16px;
+    padding: 8px 12px; margin: 6px 0 0; background: #F8FAFC;
+    border: 1px solid #E2E8F0; border-radius: 4px; font-size: 0.78rem; color: #475569;
+}
+.sa-dp-legend-item { display: flex; align-items: center; gap: 6px; }
+.sa-dp-legend-swatch {
+    width: 16px; height: 12px; border-radius: 2px; flex-shrink: 0;
+    display: inline-block;
+}
+.sa-dp-legend-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    display: inline-block; border: 1.5px solid white; box-shadow: 0 0 0 1px #CBD5E1;
+}
+.sa-dp-legend-diamond {
+    width: 12px; height: 12px; flex-shrink: 0; display: inline-block;
+    transform: rotate(45deg); border-radius: 1px;
+}
+.sa-dp-legend-triangle {
+    width: 0; height: 0; flex-shrink: 0; display: inline-block;
+    border-left: 7px solid transparent; border-right: 7px solid transparent; border-bottom: 12px solid;
+}
+.sa-dp-legend-circle-outline {
+    width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0;
+    display: inline-block; background: transparent; border: 2px solid;
+}
+.sa-dp-legend-star {
+    width: 14px; height: 14px; flex-shrink: 0; display: inline-block;
+    clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+}
+.sa-dp-legend-square {
+    width: 12px; height: 12px; flex-shrink: 0; display: inline-block; border-radius: 1px;
+}
+.sa-wfs-label {
+    background: rgba(255,255,255,0.88); border: none; box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    padding: 3px 7px; font-size: 11px; font-weight: 600; color: #1E3A5F;
+    white-space: normal; max-width: 260px; line-height: 1.3; text-align: center;
+}
+.sa-wfs-label::before { display: none; }
+.sa-road-label {
+    background: rgba(255,255,255,0.95); border: 1px solid #64748B;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    padding: 2px 6px; font-size: 11px; font-weight: 700; color: #1E293B;
+    letter-spacing: 0.3px; white-space: nowrap; border-radius: 3px;
+    pointer-events: none; position: relative; display: inline-block;
+}
+.sa-road-label span { display: block; line-height: 16px; }
+.sa-dp-source {
+    font-size: 11px; color: #94A3B8; margin-top: 16px;
+    padding-top: 10px; border-top: 1px solid #E2E8F0;
+}
+.sa-dp-source a { color: #64748B; }
+/* Loupe button in tables */
+.sa-loupe {
+    background: none; border: 1px solid #E2E8F0; border-radius: 3px;
+    cursor: pointer; padding: 2px 6px; color: #64748B;
+    font-size: 13px; line-height: 1; transition: all 0.15s;
+    vertical-align: middle;
+}
+.sa-loupe:hover { background: #F1F5F9; color: #1E293B; border-color: #CBD5E1; }
+.sa-loupe svg { width: 14px; height: 14px; vertical-align: -2px; }
+
+/* ── Responsive ── */
+@media (max-width: 1000px) {
+    .sa-dash-top { grid-template-columns: 1fr; }
+    .sa-dashboard { padding: 16px; }
+}
+@media (max-width: 768px) {
+    .sa-header-bar, .sa-dashboard { padding-left: 16px; padding-right: 16px; }
+    .sa-search-bar { flex-direction: column; }
+    .site-analysis-container { left: 0; }
+    .sa-detail-panel { width: 100%; }
+}
+
+/* ============================================================ */
 /* ===== HQE CERTIFICATION SYSTEM - INJECTED CSS ============= */
 /* ============================================================ */
 #hqeContainer { display:none; flex:1; overflow-y:auto; }
@@ -16320,6 +16781,13 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
                     <button class="nav-tree-child" onclick="openPlanning()">Planning</button>
                 </div>
             </div>
+
+            <!-- ANALYSE DE SITE -->
+            <div class="nav-section-title">Analyse de site</div>
+            <button class="nav-btn" id="navSiteAnalysis" onclick="switchView('siteAnalysis')">
+                <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C7.6 2 4 5.4 4 9.5C4 14.3 12 22 12 22s8-7.7 8-12.5C20 5.4 16.4 2 12 2z"/></svg></span>
+                <span class="nav-btn-label">Environnement</span>
+            </button>
 
             <!-- ÉVALUATION -->
             <div class="nav-section-title">Évaluation</div>
@@ -17703,6 +18171,176 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
                 <div id="dashboardContent"></div>
             </div>
 
+            <!-- ===== TOC Sommaire Environnement ===== -->
+            <div class="sa-toc-wrap" id="saTocWrap">
+                <button class="sa-toc-toggle" id="saTocToggle" onclick="saToggleToc()" title="Sommaire">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+                </button>
+                <nav class="sa-toc-panel" id="saTocPanel">
+                    <h4 class="sa-toc-title">Sommaire</h4>
+                    <ul class="sa-toc-list">
+                        <li><button class="sa-toc-item active" data-page="MilieuPhysique" onclick="saGoToPage('MilieuPhysique')"><span class="sa-toc-item-dot"></span>Milieu physique</button></li>
+                        <li><button class="sa-toc-item" data-page="Risques" onclick="saGoToPage('Risques')"><span class="sa-toc-item-dot"></span>Risques naturels, technologiques et sociaux</button></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- ===== ANALYSE ENVIRONNEMENTALE DE SITE ===== -->
+            <div id="siteAnalysisContainer" class="site-analysis-container">
+                <div class="sa-wrap">
+                    <div class="sa-header-bar">
+                        <h2 class="sa-title">Analyse environnementale de site</h2>
+                        <p class="sa-subtitle">Adresse du projet</p>
+                        <div class="sa-search-bar">
+                            <div class="sa-input-wrap">
+                                <svg class="sa-search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                <input type="text" id="saAddressInput" class="sa-input" placeholder="Saisir une adresse..." autocomplete="off">
+                                <div id="saAutocomplete" class="sa-autocomplete"></div>
+                            </div>
+                            <button id="saSearchBtn" class="sa-search-btn" onclick="saSiteSearch()" disabled>Analyser</button>
+                        </div>
+                    </div>
+
+                    <div id="saLoading" class="sa-loading" style="display:none;">
+                        <div class="sa-loading-spinner"></div>
+                        <p>Interrogation des bases de donn&eacute;es publiques...</p>
+                        <div id="saLoadingSteps" class="sa-loading-steps"></div>
+                    </div>
+
+                    <div id="saResults" style="display:none;">
+                        <div class="sa-dashboard">
+
+                            <!-- Row 1 : Synthese (left) + Carte (right) -->
+                            <div class="sa-dash-top">
+                                <div id="saSynthesis" class="sa-synthesis"></div>
+                                <div id="saMapSection" class="sa-map-section">
+                                    <div class="sa-map-header">
+                                        <h3 class="sa-map-title">Localisation</h3>
+                                        <div class="sa-map-controls">
+                                            <button class="sa-map-layer-btn active" id="saLayerAerial" onclick="saSetMapLayer('aerial')">A&eacute;rienne</button>
+                                            <button class="sa-map-layer-btn" id="saLayerPlan" onclick="saSetMapLayer('plan')">Plan</button>
+                                            <button class="sa-map-layer-btn" id="saLayerCadastre" onclick="saSetMapLayer('cadastre')">Cadastre</button>
+                                        </div>
+                                    </div>
+                                    <div id="saMap" class="sa-map"></div>
+                                </div>
+                            </div>
+
+                            <!-- Row 2 : Thematic sections stacked -->
+                            <div class="sa-sections-stack">
+
+                                <!-- 1. Risques -->
+                                <div class="sa-section open" id="saSectionRisques">
+                                    <div class="sa-section-header" onclick="saToggleSection('Risques')">
+                                        <span class="sa-section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+                                        <h3>Risques naturels et technologiques</h3>
+                                        <span class="sa-section-count" id="saCountRisques"></span>
+                                        <span class="sa-section-source">G&eacute;orisques</span>
+                                        <span class="sa-section-chevron">&#9660;</span>
+                                    </div>
+                                    <div class="sa-section-body" id="saBodyRisques"></div>
+                                </div>
+
+                                <!-- 2. Biodiversite -->
+                                <div class="sa-section open" id="saSectionBiodiversite">
+                                    <div class="sa-section-header" onclick="saToggleSection('Biodiversite')">
+                                        <span class="sa-section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 019.8 6.9C15.5 4.9 17 3.5 17 3.5s2 4.9 2 8.5a7 7 0 01-7 8z"/><path d="M12 20V10"/></svg></span>
+                                        <h3>Biodiversit&eacute; et espaces prot&eacute;g&eacute;s</h3>
+                                        <span class="sa-section-count" id="saCountBiodiversite"></span>
+                                        <span class="sa-section-source">INPN / API Carto</span>
+                                        <span class="sa-section-chevron">&#9660;</span>
+                                    </div>
+                                    <div class="sa-section-body" id="saBodyBiodiversite"></div>
+                                </div>
+
+                                <!-- 3. ICPE -->
+                                <div class="sa-section open" id="saSectionICPE">
+                                    <div class="sa-section-header" onclick="saToggleSection('ICPE')">
+                                        <span class="sa-section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20"/><path d="M5 20V8l5 4V4l5 4V4l5 4v12"/><line x1="9" y1="20" x2="9" y2="16"/><line x1="13" y1="20" x2="13" y2="16"/></svg></span>
+                                        <h3>Installations class&eacute;es (ICPE)</h3>
+                                        <span class="sa-section-count" id="saCountICPE"></span>
+                                        <span class="sa-section-source">G&eacute;orisques</span>
+                                        <span class="sa-section-chevron">&#9660;</span>
+                                    </div>
+                                    <div class="sa-section-body" id="saBodyICPE"></div>
+                                </div>
+
+                                <!-- 4. Pollution -->
+                                <div class="sa-section open" id="saSectionPollution">
+                                    <div class="sa-section-header" onclick="saToggleSection('Pollution')">
+                                        <span class="sa-section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/><line x1="8" y1="15" x2="8" y2="15.01"/><line x1="12" y1="17" x2="12" y2="17.01"/><line x1="10" y1="13" x2="10" y2="13.01"/></svg></span>
+                                        <h3>Sites et sols pollu&eacute;s</h3>
+                                        <span class="sa-section-count" id="saCountPollution"></span>
+                                        <span class="sa-section-source">G&eacute;orisques (SSP)</span>
+                                        <span class="sa-section-chevron">&#9660;</span>
+                                    </div>
+                                    <div class="sa-section-body" id="saBodyPollution"></div>
+                                </div>
+
+                                <!-- 5. Urbanisme -->
+                                <div class="sa-section open" id="saSectionUrbanisme">
+                                    <div class="sa-section-header" onclick="saToggleSection('Urbanisme')">
+                                        <span class="sa-section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="6" x2="9" y2="6.01"/><line x1="15" y1="6" x2="15" y2="6.01"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="15" y1="10" x2="15" y2="10.01"/><line x1="9" y1="14" x2="9" y2="14.01"/><line x1="15" y1="14" x2="15" y2="14.01"/><path d="M9 18h6v4H9z"/></svg></span>
+                                        <h3>Urbanisme</h3>
+                                        <span class="sa-section-count" id="saCountUrbanisme"></span>
+                                        <span class="sa-section-source">G&eacute;oportail Urbanisme</span>
+                                        <span class="sa-section-chevron">&#9660;</span>
+                                    </div>
+                                    <div class="sa-section-body" id="saBodyUrbanisme"></div>
+                                </div>
+
+                            </div>
+
+                            <!-- PDF link -->
+                            <div id="saPdfSection" style="display:none;"></div>
+
+                        </div>
+                    </div>
+
+                    <!-- Page Milieu physique -->
+                    <div id="saMilieuPhysiquePage" style="display:none;">
+                        <div class="sa-dashboard">
+
+                            <!-- Row 1 : intro (left) + Carte (right) -->
+                            <div class="sa-dash-top">
+                                <div id="saMpIntro" class="sa-synthesis sa-collapsible">
+                                    <div class="sa-collapse-fade"></div>
+                                    <button class="sa-collapse-toggle" onclick="saMpToggleCollapse()">
+                                        Voir plus <svg width="12" height="12" viewBox="0 0 12 12"><polyline points="2,4 6,8 10,4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                                    </button>
+                                </div>
+                                <div class="sa-map-section">
+                                    <div class="sa-map-header">
+                                        <h3 class="sa-map-title">Localisation</h3>
+                                        <div class="sa-map-controls">
+                                            <button class="sa-map-layer-btn active" id="saMpLayerAerial" onclick="saMpSetMapLayer('aerial')">A&eacute;rienne</button>
+                                            <button class="sa-map-layer-btn" id="saMpLayerPlan" onclick="saMpSetMapLayer('plan')">Plan</button>
+                                            <button class="sa-map-layer-btn" id="saMpLayerCadastre" onclick="saMpSetMapLayer('cadastre')">Cadastre</button>
+                                        </div>
+                                    </div>
+                                    <div id="saMpMap" class="sa-map"></div>
+                                </div>
+                            </div>
+
+                            <!-- Row 2 : Milieu physique data table -->
+                            <div class="sa-sections-stack">
+                                <div class="sa-section open" id="saSectionMilieuPhysique">
+                                    <div class="sa-section-header" onclick="saToggleSection('MilieuPhysique')">
+                                        <span class="sa-section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
+                                        <h3>Milieu physique</h3>
+                                        <span class="sa-section-count" id="saCountMilieuPhysique"></span>
+                                        <span class="sa-section-chevron">&#9660;</span>
+                                    </div>
+                                    <div class="sa-section-body" id="saBodyMilieuPhysique">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- General Dashboard -->
             <div class="dashboard-container" id="generalDashboardContainer">
                 <div id="generalDashboardContent"></div>
@@ -17927,6 +18565,16 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
             </div>
         </div>
         <div class="methodology-panel-content" id="methContent"></div>
+    </div>
+
+    <!-- Site Analysis Detail Panel (left-side, same pattern as Meth) -->
+    <div class="sa-detail-overlay" id="saDetailOverlay" onclick="closeSaDetailPanel()"></div>
+    <div class="sa-detail-panel" id="saDetailPanel">
+        <div class="sa-detail-panel-header">
+            <h2 id="saDetailTitle">Detail</h2>
+            <button class="sa-detail-panel-close" onclick="closeSaDetailPanel()">&times;</button>
+        </div>
+        <div class="sa-detail-panel-content" id="saDetailContent"></div>
     </div>
 
     <!-- MOA Detail Panel (left-side, same pattern as Meth) — kept for backward compat -->
@@ -24762,6 +25410,7 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
             if (typeof closeMoaDetailPanel === 'function') closeMoaDetailPanel();
             if (typeof closeMoaFichePanel === 'function') closeMoaFichePanel();
             if (window.closeBPFichePanel) window.closeBPFichePanel();
+            if (typeof closeSaDetailPanel === 'function') closeSaDetailPanel();
         }
 
         // Toggle methodology left panel from the detail panel header button
@@ -30888,7 +31537,7 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
             const wsDocs = XLSX.utils.aoa_to_sheet(docsRows);
             XLSX.utils.book_append_sheet(wb, wsDocs, 'Documents');
 
-            const fileName = `BREEAM_NCv7_Faisabilite_${projectData.name || 'Export'}_${projectData.date}.xlsx`;
+            const fileName = `Verdict_Evaluation_${projectData.name || 'Export'}_${projectData.date}.xlsx`;
             XLSX.writeFile(wb, fileName);
             showMessage('Excel exporté avec succès');
             } catch(e) {
@@ -31004,7 +31653,7 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
                 new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 80 },
                     children: [new TextRun({ text: 'New Construction V7', font: 'Arial', size: 28, color: '666666' })] }),
                 new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 500 },
-                    children: [new TextRun({ text: 'Outil de Faisabilit\u00e9 \u2013 Verdict', font: 'Arial', size: 22, color: '999999' })] }),
+                    children: [new TextRun({ text: 'Verdict \u2013 Plateforme d\u2019\u00e9valuation environnementale', font: 'Arial', size: 22, color: '999999' })] }),
             ];
 
             // Photo du bâtiment
@@ -31899,6 +32548,11 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
             bpEl.classList.remove('open');
             plubEl.classList.remove('open');
         if (hqeEl) hqeEl.classList.remove('open');
+            var siteEl = document.getElementById('siteAnalysisContainer');
+            if (siteEl) siteEl.classList.remove('open');
+            // Hide TOC sommaire when leaving siteAnalysis
+            var tocWrapR = document.getElementById('saTocWrap');
+            if (tocWrapR) { tocWrapR.classList.remove('visible','open'); }
             document.querySelector('.main-content').classList.remove('bp-active');
             if (lockBar) lockBar.style.display = 'none';
             // Hide all tree toolbars
@@ -31918,6 +32572,8 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
             var navNcV7MoaBtn = document.getElementById('navNcV7Moa');
             if (navNcV7MoaBtn) navNcV7MoaBtn.classList.remove('active');
             if (navPLUb) navPLUb.classList.remove('active');
+            var navSiteBtn = document.getElementById('navSiteAnalysis');
+            if (navSiteBtn) navSiteBtn.classList.remove('active');
             if (navRfoAssess) navRfoAssess.classList.remove('active');
             if (navRfoDash) navRfoDash.classList.remove('active');
             var navNcv7FonctR = document.getElementById('navNcv7Fonctionnement');
@@ -32231,6 +32887,21 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
                 setTimeout(function() { if (typeof rfoResizeHeroCanvas === 'function') rfoResizeHeroCanvas(); }, 50);
                 // Initialize & render RFO
                 rfoUpdateUI();
+            } else if (view === 'siteAnalysis') {
+                var siteAnalEl = document.getElementById('siteAnalysisContainer');
+                if (siteAnalEl) siteAnalEl.classList.add('open');
+                var navSiteA = document.getElementById('navSiteAnalysis');
+                if (navSiteA) navSiteA.classList.add('active');
+                // Show TOC toggle chevron
+                var tocWrapSA = document.getElementById('saTocWrap');
+                if (tocWrapSA) tocWrapSA.classList.add('visible');
+                // Keep Mise en œuvre + Ressources visible in sidebar
+                if (breeamResEl) breeamResEl.style.display = '';
+                // Hide all hero banners for this neutral view
+                if (heroEl) heroEl.style.display = 'none';
+                if (rfoHeroEl) rfoHeroEl.style.display = 'none';
+                // Initialize site analysis if not yet done
+                if (typeof initSiteAnalysis === 'function') initSiteAnalysis();
             } else if (view === 'rfoDashboard') {
                 if (rfoDashEl) rfoDashEl.classList.add('open');
                 if (navRfoDash) navRfoDash.classList.add('active');

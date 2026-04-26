@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 520" role="img" aria-labelledby="svg-lot-dedie-title svg-lot-dedie-desc" style="font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; max-width: 100%; height: auto;">
+  <title id="svg-lot-dedie-title">Les cinq signaux qui plaident pour un lot dédié</title>
+  <desc id="svg-lot-dedie-desc">Cinq situations convergentes qui justifient la création d'un lot réemploi dédié : ampleur du projet, nombreux matériaux, filières peu structurées, ambition élevée, filière ESS locale.</desc>
+
+  <rect x="4" y="4" width="272" height="512" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <path d="M4 12 Q4 4 12 4 L268 4 Q276 4 276 12 L276 52 L4 52 Z" fill="#1D4ED8"/>
+  <text x="140" y="28" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" letter-spacing="1">LOT DÉDIÉ S'IMPOSE</text>
+  <text x="140" y="44" text-anchor="middle" font-size="9.5" fill="#DBEAFE" letter-spacing="0.5">5 signaux convergents</text>
+
+  <g transform="translate(14, 62)">
+    <rect x="0" y="0" width="252" height="82" rx="6" fill="#fff" stroke="#CBD5E1"/>
+    <circle cx="22" cy="40" r="14" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.5"/>
+    <g transform="translate(22, 40)" stroke="#1E3A8A" stroke-width="1.5" fill="none">
+      <rect x="-6" y="-6" width="12" height="4"/>
+      <rect x="-6" y="-1" width="12" height="4"/>
+      <rect x="-6" y="4" width="12" height="4"/>
+    </g>
+    <text x="46" y="22" font-size="11" font-weight="700" fill="#1E3A8A">1 · Ampleur du projet</text>
+    <text x="46" y="40" font-size="9.5" fill="#475569">Gros ANRU, multi-bâtiments :</text>
+    <text x="46" y="53" font-size="9.5" fill="#475569">la coordination ne se répartit</text>
+    <text x="46" y="66" font-size="9.5" fill="#475569">plus sans duplication.</text>
+  </g>
+
+  <g transform="translate(14, 152)">
+    <rect x="0" y="0" width="252" height="82" rx="6" fill="#fff" stroke="#CBD5E1"/>
+    <circle cx="22" cy="40" r="14" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.5"/>
+    <g transform="translate(22, 40)" stroke="#1E3A8A" stroke-width="1" fill="none">
+      <rect x="-7" y="-7" width="4" height="4"/>
+      <rect x="-2" y="-7" width="4" height="4"/>
+      <rect x="3" y="-7" width="4" height="4"/>
+      <rect x="-7" y="-2" width="4" height="4"/>
+      <rect x="-2" y="-2" width="4" height="4"/>
+      <rect x="3" y="-2" width="4" height="4"/>
+      <rect x="-7" y="3" width="4" height="4"/>
+      <rect x="-2" y="3" width="4" height="4"/>
+      <rect x="3" y="3" width="4" height="4"/>
+    </g>
+    <text x="46" y="22" font-size="11" font-weight="700" fill="#1E3A8A">2 · Matériaux multiples</text>
+    <text x="46" y="40" font-size="9.5" fill="#475569">Si dix lots doivent chacun</text>
+    <text x="46" y="53" font-size="9.5" fill="#475569">apprendre à sourcer, autant</text>
+    <text x="46" y="66" font-size="9.5" fill="#475569">centraliser la compétence.</text>
+  </g>
+
+  <g transform="translate(14, 242)">
+    <rect x="0" y="0" width="252" height="82" rx="6" fill="#fff" stroke="#CBD5E1"/>
+    <circle cx="22" cy="40" r="14" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.5"/>
+    <g transform="translate(22, 40)" stroke="#1E3A8A" stroke-width="1.5" fill="none">
+      <circle cx="-6" cy="-4" r="2.5"/>
+      <circle cx="6" cy="-4" r="2.5"/>
+      <circle cx="0" cy="6" r="2.5"/>
+      <line x1="-4" y1="-4" x2="4" y2="-4" stroke-dasharray="1.5 1.5"/>
+    </g>
+    <text x="46" y="22" font-size="11" font-weight="700" fill="#1E3A8A">3 · Filières peu structurées</text>
+    <text x="46" y="40" font-size="9.5" fill="#475569">Aucune entreprise classique</text>
+    <text x="46" y="53" font-size="9.5" fill="#475569">du territoire ne maîtrise :</text>
+    <text x="46" y="66" font-size="9.5" fill="#475569">importer un spécialiste.</text>
+  </g>
+
+  <g transform="translate(14, 332)">
+    <rect x="0" y="0" width="252" height="82" rx="6" fill="#fff" stroke="#CBD5E1"/>
+    <circle cx="22" cy="40" r="14" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.5"/>
+    <g transform="translate(22, 40)" stroke="#1E3A8A" stroke-width="1.5" fill="none">
+      <circle cx="0" cy="0" r="7"/>
+      <circle cx="0" cy="0" r="3" fill="#1E3A8A"/>
+      <line x1="4" y1="-4" x2="9" y2="-9" stroke-width="2"/>
+      <polyline points="6,-9 9,-9 9,-6"/>
+    </g>
+    <text x="46" y="22" font-size="11" font-weight="700" fill="#1E3A8A">4 · Ambition ≥ 20 %</text>
+    <text x="46" y="40" font-size="9.5" fill="#475569">L'objectif n'est atteint que si</text>
+    <text x="46" y="53" font-size="9.5" fill="#475569">quelqu'un est payé pour s'en</text>
+    <text x="46" y="66" font-size="9.5" fill="#475569">occuper à temps plein.</text>
+  </g>
+
+  <g transform="translate(14, 422)">
+    <rect x="0" y="0" width="252" height="82" rx="6" fill="#fff" stroke="#CBD5E1"/>
+    <circle cx="22" cy="40" r="14" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.5"/>
+    <g transform="translate(22, 40)" stroke="#1E3A8A" stroke-width="1.5" fill="none">
+      <circle cx="-5" cy="-2" r="2.5"/>
+      <circle cx="5" cy="-2" r="2.5"/>
+      <circle cx="0" cy="4" r="2.5"/>
+      <path d="M-5,1 Q-5,6 -2,7 M5,1 Q5,6 2,7 M-2,7 Q0,8 2,7"/>
+    </g>
+    <text x="46" y="22" font-size="11" font-weight="700" fill="#1E3A8A">5 · Filière ESS locale</text>
+    <text x="46" y="40" font-size="9.5" fill="#475569">Emplois d'insertion, magasin</text>
+    <text x="46" y="53" font-size="9.5" fill="#475569">de chantier ouvert, écosystème</text>
+    <text x="46" y="66" font-size="9.5" fill="#475569">pérenne au-delà de l'opération.</text>
+  </g>
+</svg>

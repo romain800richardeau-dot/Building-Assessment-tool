@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 430" role="img" aria-labelledby="svg-lot-parlot-title svg-lot-parlot-desc" style="font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; max-width: 100%; height: auto;">
+  <title id="svg-lot-parlot-title">Les quatre situations où l'intégration lot par lot suffit</title>
+  <desc id="svg-lot-parlot-desc">Quatre configurations où un montage classique sans lot dédié est préférable : peu de matériaux, filière mature, budget contraint, entreprise expérimentée.</desc>
+
+  <rect x="4" y="4" width="272" height="422" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <path d="M4 12 Q4 4 12 4 L268 4 Q276 4 276 12 L276 52 L4 52 Z" fill="#475569"/>
+  <text x="140" y="26" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" letter-spacing="0.8">INTÉGRATION LOT PAR LOT</text>
+  <text x="140" y="44" text-anchor="middle" font-size="9.5" fill="#CBD5E1" letter-spacing="0.5">4 situations où elle suffit</text>
+
+  <g transform="translate(14, 62)">
+    <rect x="0" y="0" width="252" height="82" rx="6" fill="#fff" stroke="#CBD5E1"/>
+    <circle cx="22" cy="40" r="14" fill="#F1F5F9" stroke="#475569" stroke-width="1.5"/>
+    <g transform="translate(22, 40)" stroke="#475569" stroke-width="1.5" fill="none">
+      <rect x="-5" y="-5" width="10" height="10"/>
+    </g>
+    <text x="46" y="22" font-size="11" font-weight="700" fill="#334155">1 · Peu de matériaux</text>
+    <text x="46" y="40" font-size="9.5" fill="#475569">Ex. : seules les menuiseries</text>
+    <text x="46" y="53" font-size="9.5" fill="#475569">extérieures sont réemployées.</text>
+    <text x="46" y="66" font-size="9.5" fill="#475569">Le lot menuiserie s'en charge.</text>
+  </g>
+
+  <g transform="translate(14, 152)">
+    <rect x="0" y="0" width="252" height="82" rx="6" fill="#fff" stroke="#CBD5E1"/>
+    <circle cx="22" cy="40" r="14" fill="#F1F5F9" stroke="#475569" stroke-width="1.5"/>
+    <g transform="translate(22, 40)" stroke="#475569" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="-5,0 -1,4 6,-5"/>
+    </g>
+    <text x="46" y="22" font-size="11" font-weight="700" fill="#334155">2 · Filière locale mature</text>
+    <text x="46" y="40" font-size="9.5" fill="#475569">Un fournisseur professionnel</text>
+    <text x="46" y="53" font-size="9.5" fill="#475569">vend le produit reconditionné</text>
+    <text x="46" y="66" font-size="9.5" fill="#475569">prêt à l'emploi.</text>
+  </g>
+
+  <g transform="translate(14, 242)">
+    <rect x="0" y="0" width="252" height="82" rx="6" fill="#fff" stroke="#CBD5E1"/>
+    <circle cx="22" cy="40" r="14" fill="#F1F5F9" stroke="#475569" stroke-width="1.5"/>
+    <text x="22" y="46" text-anchor="middle" font-size="14" font-weight="700" fill="#475569">€</text>
+    <text x="46" y="22" font-size="11" font-weight="700" fill="#334155">3 · Budget contraint</text>
+    <text x="46" y="40" font-size="9.5" fill="#475569">Un lot dédié ajoute un poste</text>
+    <text x="46" y="53" font-size="9.5" fill="#475569">de coût que toutes les opérations</text>
+    <text x="46" y="66" font-size="9.5" fill="#475569">ne peuvent pas absorber.</text>
+  </g>
+
+  <g transform="translate(14, 332)">
+    <rect x="0" y="0" width="252" height="82" rx="6" fill="#fff" stroke="#CBD5E1"/>
+    <circle cx="22" cy="40" r="14" fill="#F1F5F9" stroke="#475569" stroke-width="1.5"/>
+    <g transform="translate(22, 40)" stroke="#475569" stroke-width="1.5" fill="none" stroke-linejoin="round">
+      <polygon points="0,-6 1.8,-1.8 6,-1.8 2.6,1.2 3.8,6 0,3.2 -3.8,6 -2.6,1.2 -6,-1.8 -1.8,-1.8" fill="#F1F5F9"/>
+    </g>
+    <text x="46" y="22" font-size="11" font-weight="700" fill="#334155">4 · Entreprise expérimentée</text>
+    <text x="46" y="40" font-size="9.5" fill="#475569">Références solides en réemploi :</text>
+    <text x="46" y="53" font-size="9.5" fill="#475569">lui confier la mission est plus</text>
+    <text x="46" y="66" font-size="9.5" fill="#475569">simple qu'un lot séparé.</text>
+  </g>
+</svg>

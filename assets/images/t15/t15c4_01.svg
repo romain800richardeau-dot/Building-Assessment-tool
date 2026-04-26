@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440" role="img" aria-labelledby="svg-missions-title svg-missions-desc" style="font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; max-width: 100%; height: auto;">
+  <title id="svg-missions-title">Les trois familles de missions du lot réemploi</title>
+  <desc id="svg-missions-desc">Schéma présentant les missions amont (sourcing, achat, qualification), de terrain (dépose préservante, conditionnement, stockage, transformation) et aval (mise à disposition, vente des surplus, magasin de chantier), avec une bande de coordination transversale.</desc>
+
+  <text x="380" y="24" text-anchor="middle" font-size="14" font-weight="700" fill="#1E293B">Les trois familles de missions du lot réemploi</text>
+
+  <rect x="28" y="48" width="704" height="40" rx="20" fill="#F0FDF4" stroke="#00A88A" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="380" y="65" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857" letter-spacing="1.5">COORDINATION &amp; SYNTHÈSE</text>
+  <text x="380" y="80" text-anchor="middle" font-size="9.5" fill="#475569">laboratoires COFRAC · artisans spécialisés · fiches gisement · rapports d'essais</text>
+
+  <line x1="140" y1="88" x2="140" y2="106" stroke="#00A88A" stroke-width="1" stroke-dasharray="3 2" opacity="0.45"/>
+  <line x1="380" y1="88" x2="380" y2="106" stroke="#00A88A" stroke-width="1" stroke-dasharray="3 2" opacity="0.45"/>
+  <line x1="620" y1="88" x2="620" y2="106" stroke="#00A88A" stroke-width="1" stroke-dasharray="3 2" opacity="0.45"/>
+
+  <!-- AMONT -->
+  <g>
+    <rect x="32" y="106" width="216" height="294" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <path d="M32 114 Q32 106 40 106 L240 106 Q248 106 248 114 L248 140 L32 140 Z" fill="#00A88A"/>
+    <text x="140" y="128" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" letter-spacing="2.5">AMONT</text>
+
+    <g transform="translate(140, 172)">
+      <circle cx="-3" cy="-3" r="11" fill="none" stroke="#047857" stroke-width="2.5"/>
+      <line x1="6" y1="6" x2="14" y2="14" stroke="#047857" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g transform="translate(52, 208)">
+      <rect x="0" y="0" width="176" height="50" rx="6" fill="#fff" stroke="#CBD5E1"/>
+      <circle cx="20" cy="25" r="10" fill="#ECFDF5" stroke="#00A88A" stroke-width="1.5"/>
+      <text x="20" y="29" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">1</text>
+      <text x="42" y="22" font-size="12" font-weight="600" fill="#1E293B">Sourcing</text>
+      <text x="42" y="37" font-size="9.5" fill="#64748B">Recherche de gisements</text>
+    </g>
+
+    <g transform="translate(52, 266)">
+      <rect x="0" y="0" width="176" height="50" rx="6" fill="#fff" stroke="#CBD5E1"/>
+      <circle cx="20" cy="25" r="10" fill="#ECFDF5" stroke="#00A88A" stroke-width="1.5"/>
+      <text x="20" y="29" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">2</text>
+      <text x="42" y="22" font-size="12" font-weight="600" fill="#1E293B">Achat</text>
+      <text x="42" y="37" font-size="9.5" fill="#64748B">MOA, démolisseurs, plateformes</text>
+    </g>
+
+    <g transform="translate(52, 324)">
+      <rect x="0" y="0" width="176" height="50" rx="6" fill="#fff" stroke="#CBD5E1"/>
+      <circle cx="20" cy="25" r="10" fill="#ECFDF5" stroke="#00A88A" stroke-width="1.5"/>
+      <text x="20" y="29" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">3</text>
+      <text x="42" y="22" font-size="12" font-weight="600" fill="#1E293B">Qualification</text>
+      <text x="42" y="37" font-size="9.5" fill="#64748B">Contrôles, essais labo</text>
+    </g>
+  </g>
+
+  <!-- TERRAIN -->
+  <g>
+    <rect x="272" y="106" width="216" height="294" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <path d="M272 114 Q272 106 280 106 L480 106 Q488 106 488 114 L488 140 L272 140 Z" fill="#059669"/>
+    <text x="380" y="128" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" letter-spacing="2.5">TERRAIN</text>
+
+    <g transform="translate(380, 172) rotate(-30)">
+      <rect x="-14" y="-4" width="18" height="8" rx="1.5" fill="#047857"/>
+      <rect x="4" y="-7" width="4" height="14" rx="0.5" fill="#047857"/>
+    </g>
+
+    <g transform="translate(282, 204)">
+      <rect x="0" y="0" width="196" height="42" rx="6" fill="#fff" stroke="#CBD5E1"/>
+      <circle cx="18" cy="21" r="9" fill="#ECFDF5" stroke="#059669" stroke-width="1.5"/>
+      <text x="18" y="25" text-anchor="middle" font-size="10" font-weight="700" fill="#047857">1</text>
+      <text x="38" y="18" font-size="11.5" font-weight="600" fill="#1E293B">Dépose préservante</text>
+      <text x="38" y="32" font-size="9.5" fill="#64748B">≠ démolition classique</text>
+    </g>
+
+    <g transform="translate(282, 252)">
+      <rect x="0" y="0" width="196" height="42" rx="6" fill="#fff" stroke="#CBD5E1"/>
+      <circle cx="18" cy="21" r="9" fill="#ECFDF5" stroke="#059669" stroke-width="1.5"/>
+      <text x="18" y="25" text-anchor="middle" font-size="10" font-weight="700" fill="#047857">2</text>
+      <text x="38" y="18" font-size="11.5" font-weight="600" fill="#1E293B">Conditionnement</text>
+      <text x="38" y="32" font-size="9.5" fill="#64748B">Palettes, bennes, racks</text>
+    </g>
+
+    <g transform="translate(282, 300)">
+      <rect x="0" y="0" width="196" height="42" rx="6" fill="#fff" stroke="#CBD5E1"/>
+      <circle cx="18" cy="21" r="9" fill="#ECFDF5" stroke="#059669" stroke-width="1.5"/>
+      <text x="18" y="25" text-anchor="middle" font-size="10" font-weight="700" fill="#047857">3</text>
+      <text x="38" y="18" font-size="11.5" font-weight="600" fill="#1E293B">Stockage</text>
+      <text x="38" y="32" font-size="9.5" fill="#64748B">Site propre ou foncier MOA</text>
+    </g>
+
+    <g transform="translate(282, 348)">
+      <rect x="0" y="0" width="196" height="42" rx="6" fill="#fff" stroke="#CBD5E1"/>
+      <circle cx="18" cy="21" r="9" fill="#ECFDF5" stroke="#059669" stroke-width="1.5"/>
+      <text x="18" y="25" text-anchor="middle" font-size="10" font-weight="700" fill="#047857">4</text>
+      <text x="38" y="18" font-size="11.5" font-weight="600" fill="#1E293B">Transformation</text>
+      <text x="38" y="32" font-size="9.5" fill="#64748B">Nettoyage, coupe, réparations</text>
+    </g>
+  </g>
+
+  <!-- AVAL -->
+  <g>
+    <rect x="512" y="106" width="216" height="294" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <path d="M512 114 Q512 106 520 106 L720 106 Q728 106 728 114 L728 140 L512 140 Z" fill="#047857"/>
+    <text x="620" y="128" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" letter-spacing="2.5">AVAL</text>
+
+    <g transform="translate(620, 172)">
+      <path d="M-11,-9 L0,-13 L11,-9 L11,7 L0,11 L-11,7 Z" fill="none" stroke="#047857" stroke-width="2" stroke-linejoin="round"/>
+      <line x1="-11" y1="-9" x2="0" y2="-5" stroke="#047857" stroke-width="2"/>
+      <line x1="11" y1="-9" x2="0" y2="-5" stroke="#047857" stroke-width="2"/>
+      <line x1="0" y1="-5" x2="0" y2="11" stroke="#047857" stroke-width="2"/>
+    </g>
+
+    <g transform="translate(532, 208)">
+      <rect x="0" y="0" width="176" height="50" rx="6" fill="#fff" stroke="#CBD5E1"/>
+      <circle cx="20" cy="25" r="10" fill="#ECFDF5" stroke="#047857" stroke-width="1.5"/>
+      <text x="20" y="29" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">1</text>
+      <text x="42" y="22" font-size="12" font-weight="600" fill="#1E293B">Mise à disposition</text>
+      <text x="42" y="37" font-size="9.5" fill="#64748B">Livraison, traçabilité</text>
+    </g>
+
+    <g transform="translate(532, 266)">
+      <rect x="0" y="0" width="176" height="50" rx="6" fill="#fff" stroke="#CBD5E1"/>
+      <circle cx="20" cy="25" r="10" fill="#ECFDF5" stroke="#047857" stroke-width="1.5"/>
+      <text x="20" y="29" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">2</text>
+      <text x="42" y="22" font-size="12" font-weight="600" fill="#1E293B">Vente des surplus</text>
+      <text x="42" y="37" font-size="9.5" fill="#64748B">Récupération de coûts</text>
+    </g>
+
+    <g transform="translate(532, 324)">
+      <rect x="0" y="0" width="176" height="50" rx="6" fill="#fff" stroke="#CBD5E1"/>
+      <circle cx="20" cy="25" r="10" fill="#ECFDF5" stroke="#047857" stroke-width="1.5"/>
+      <text x="20" y="29" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">3</text>
+      <text x="42" y="22" font-size="12" font-weight="600" fill="#1E293B">Magasin de chantier</text>
+      <text x="42" y="37" font-size="9.5" fill="#64748B">Ressourcerie éphémère</text>
+    </g>
+  </g>
+
+  <!-- Flèches dessinées APRÈS les colonnes pour que les pointes restent visibles -->
+  <!-- AMONT → TERRAIN (gap 248→272, arrow 22px centré) -->
+  <g transform="translate(249, 253)">
+    <polygon points="22,0 14,-7 14,-3 0,-3 0,3 14,3 14,7" fill="#00A88A"/>
+  </g>
+
+  <!-- TERRAIN → AVAL (gap 488→512, arrow 22px centré) -->
+  <g transform="translate(489, 253)">
+    <polygon points="22,0 14,-7 14,-3 0,-3 0,3 14,3 14,7" fill="#00A88A"/>
+  </g>
+
+  <text x="380" y="422" text-anchor="middle" font-size="9.5" fill="#64748B" font-style="italic">
+    Flux des matériaux : amont → terrain → aval · la bande de coordination irrigue les trois phases.
+  </text>
+</svg>

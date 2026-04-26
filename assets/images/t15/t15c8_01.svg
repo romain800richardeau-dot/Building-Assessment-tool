@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 510" role="img" aria-labelledby="svg-cadres-title svg-cadres-desc" style="font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; max-width: 100%; height: auto;">
+  <title id="svg-cadres-title">Cadre réglementaire et cadre normatif dans la construction</title>
+  <desc id="svg-cadres-desc">Schéma comparant le cadre réglementaire (minoritaire, obligatoire au sens strict) et le cadre normatif (majoritaire, volontaire mais souvent contractualisé), avec la position du réemploi dans ce paysage.</desc>
+
+  <text x="380" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#1E293B">Cadre réglementaire vs cadre normatif : la disproportion</text>
+  <text x="380" y="40" text-anchor="middle" font-size="11" fill="#64748B" font-style="italic">Une part minime de ce que suit le BDC est obligatoire au sens strict</text>
+
+  <g>
+    <rect x="80" y="58" width="600" height="32" rx="16" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <path d="M80 74 a16 16 0 0 1 16 -16 L116 58 L116 90 L96 90 a16 16 0 0 1 -16 -16 Z" fill="#EF4444"/>
+    <rect x="116" y="58" width="0" height="32" fill="#EF4444"/>
+    <path d="M116 58 L664 58 L664 90 L116 90 Z" fill="#1D4ED8" opacity="0.92"/>
+    <path d="M664 58 L664 90 a16 16 0 0 0 16 -16 a16 16 0 0 0 -16 -16 Z" fill="#1D4ED8" opacity="0.92"/>
+    <line x1="116" y1="54" x2="116" y2="94" stroke="#fff" stroke-width="2"/>
+  </g>
+  <text x="96" y="78" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">~1%</text>
+  <text x="96" y="110" text-anchor="middle" font-size="10" font-weight="700" fill="#B91C1C">RÉGLEMENTAIRE</text>
+  <text x="96" y="123" text-anchor="middle" font-size="9" fill="#64748B">obligatoire</text>
+  <text x="390" y="78" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">~99%</text>
+  <text x="390" y="110" text-anchor="middle" font-size="10" font-weight="700" fill="#1E3A8A">NORMATIF</text>
+  <text x="390" y="123" text-anchor="middle" font-size="9" fill="#64748B">volontaire au sens légal, souvent contractuel</text>
+
+  <g>
+    <rect x="28" y="148" width="344" height="232" rx="8" fill="#FEF2F2" stroke="#FECACA"/>
+    <path d="M28 156 Q28 148 36 148 L364 148 Q372 148 372 156 L372 184 L28 184 Z" fill="#EF4444"/>
+    <text x="200" y="170" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" letter-spacing="1">CADRE RÉGLEMENTAIRE</text>
+    <text x="200" y="181" text-anchor="middle" font-size="9.5" fill="#FEE2E2">Application obligatoire, stricte</text>
+
+    <text x="45" y="208" font-size="10.5" font-weight="700" fill="#991B1B" letter-spacing="0.5">ÉMANE DU LÉGISLATEUR</text>
+    <g transform="translate(45, 216)">
+      <rect x="0" y="0" width="68" height="20" rx="4" fill="#fff" stroke="#EF4444"/>
+      <text x="34" y="14" text-anchor="middle" font-size="10" font-weight="600" fill="#991B1B">Lois</text>
+      <rect x="76" y="0" width="68" height="20" rx="4" fill="#fff" stroke="#EF4444"/>
+      <text x="110" y="14" text-anchor="middle" font-size="10" font-weight="600" fill="#991B1B">Décrets</text>
+      <rect x="152" y="0" width="68" height="20" rx="4" fill="#fff" stroke="#EF4444"/>
+      <text x="186" y="14" text-anchor="middle" font-size="10" font-weight="600" fill="#991B1B">Arrêtés</text>
+      <rect x="228" y="0" width="86" height="20" rx="4" fill="#fff" stroke="#EF4444"/>
+      <text x="271" y="14" text-anchor="middle" font-size="10" font-weight="600" fill="#991B1B">Règlements UE</text>
+    </g>
+
+    <text x="45" y="264" font-size="10.5" font-weight="700" fill="#991B1B" letter-spacing="0.5">EXIGENCES INCONTOURNABLES</text>
+    <g transform="translate(45, 272)" font-size="10.5" fill="#1E293B">
+      <circle cx="6" cy="8" r="2" fill="#EF4444"/>
+      <text x="16" y="11">Sécurité des personnes</text>
+      <circle cx="6" cy="26" r="2" fill="#EF4444"/>
+      <text x="16" y="29">Solidité de l'ouvrage</text>
+      <circle cx="6" cy="44" r="2" fill="#EF4444"/>
+      <text x="16" y="47">Accessibilité</text>
+      <circle cx="6" cy="62" r="2" fill="#EF4444"/>
+      <text x="16" y="65">Performance énergétique (RE2020, RT existant)</text>
+    </g>
+
+    <rect x="45" y="352" width="310" height="20" rx="4" fill="#FEE2E2" stroke="#EF4444" stroke-dasharray="3 2"/>
+    <text x="200" y="366" text-anchor="middle" font-size="10" font-style="italic" fill="#991B1B">Le BDC ne peut rien y déroger.</text>
+  </g>
+
+  <g>
+    <rect x="388" y="148" width="344" height="232" rx="8" fill="#EFF6FF" stroke="#BFDBFE"/>
+    <path d="M388 156 Q388 148 396 148 L724 148 Q732 148 732 156 L732 184 L388 184 Z" fill="#1D4ED8"/>
+    <text x="560" y="170" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" letter-spacing="1">CADRE NORMATIF</text>
+    <text x="560" y="181" text-anchor="middle" font-size="9.5" fill="#DBEAFE">Volontaire au sens légal · contractualisé</text>
+
+    <text x="405" y="208" font-size="10.5" font-weight="700" fill="#1E3A8A" letter-spacing="0.5">RÉFÉRENTIELS MOBILISÉS</text>
+    <g transform="translate(405, 216)">
+      <rect x="0" y="0" width="44" height="20" rx="4" fill="#fff" stroke="#1D4ED8"/>
+      <text x="22" y="14" text-anchor="middle" font-size="10" font-weight="600" fill="#1E3A8A">NF</text>
+      <rect x="52" y="0" width="54" height="20" rx="4" fill="#fff" stroke="#1D4ED8"/>
+      <text x="79" y="14" text-anchor="middle" font-size="10" font-weight="600" fill="#1E3A8A">NF EN</text>
+      <rect x="114" y="0" width="46" height="20" rx="4" fill="#fff" stroke="#1D4ED8"/>
+      <text x="137" y="14" text-anchor="middle" font-size="10" font-weight="600" fill="#1E3A8A">DTU</text>
+      <rect x="168" y="0" width="48" height="20" rx="4" fill="#fff" stroke="#1D4ED8"/>
+      <text x="192" y="14" text-anchor="middle" font-size="10" font-weight="600" fill="#1E3A8A">Atec</text>
+      <rect x="224" y="0" width="48" height="20" rx="4" fill="#fff" stroke="#1D4ED8"/>
+      <text x="248" y="14" text-anchor="middle" font-size="10" font-weight="600" fill="#1E3A8A">Atex</text>
+      <rect x="280" y="0" width="42" height="20" rx="4" fill="#fff" stroke="#1D4ED8"/>
+      <text x="301" y="14" text-anchor="middle" font-size="10" font-weight="600" fill="#1E3A8A">ETE</text>
+    </g>
+    <g transform="translate(405, 244)">
+      <rect x="0" y="0" width="170" height="20" rx="4" fill="#fff" stroke="#1D4ED8"/>
+      <text x="85" y="14" text-anchor="middle" font-size="10" font-weight="600" fill="#1E3A8A">Règles professionnelles</text>
+    </g>
+
+    <text x="405" y="292" font-size="10.5" font-weight="700" fill="#1E3A8A" letter-spacing="0.5">DEVIENNENT OBLIGATOIRES PAR…</text>
+    <g transform="translate(405, 300)" font-size="10.5" fill="#1E293B">
+      <circle cx="6" cy="8" r="2" fill="#1D4ED8"/>
+      <text x="16" y="11">leur référencement dans le <tspan font-weight="700">CCTP</tspan> ;</text>
+      <circle cx="6" cy="26" r="2" fill="#1D4ED8"/>
+      <text x="16" y="29">leur mention dans les <tspan font-weight="700">polices d'assurance</tspan>.</text>
+    </g>
+
+    <rect x="405" y="352" width="310" height="20" rx="4" fill="#DBEAFE" stroke="#1D4ED8" stroke-dasharray="3 2"/>
+    <text x="560" y="366" text-anchor="middle" font-size="10" font-style="italic" fill="#1E3A8A">Le BDC s'appuie dessus mais la loi ne l'impose pas.</text>
+  </g>
+
+  <g>
+    <rect x="28" y="400" width="704" height="92" rx="8" fill="#F0FDF4" stroke="#A7F3D0"/>
+    <path d="M28 408 Q28 400 36 400 L56 400 L56 492 L28 492 Z" fill="#00A88A"/>
+    <text x="42" y="420" text-anchor="middle" font-size="10" font-weight="700" fill="#fff" transform="rotate(-90, 42, 450)" letter-spacing="1.5">RÉEMPLOI</text>
+
+    <g transform="translate(72, 414)">
+      <text x="0" y="12" font-size="10.5" fill="#1E293B"><tspan font-weight="700" fill="#047857">×</tspan>  Les DTU <tspan font-weight="700">n'encadrent pas explicitement</tspan> le réemploi (sauf DTU Cloisons démontables).</text>
+      <text x="0" y="30" font-size="10.5" fill="#1E293B"><tspan font-weight="700" fill="#047857">✓</tspan>  Ils ne l'<tspan font-weight="700">excluent pas non plus</tspan> : un matériau originellement NF reste présumé conforme au DTU.</text>
+      <text x="0" y="52" font-size="10.5" font-weight="700" fill="#047857">→ Le BDC sollicite une DÉMONSTRATION construite par la MOE.</text>
+      <g transform="translate(460, 44)">
+        <rect x="0" y="0" width="196" height="28" rx="14" fill="#00A88A"/>
+        <text x="98" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Fiche Technique Réemploi</text>
+      </g>
+      <text x="460" y="78" font-size="9.5" fill="#64748B" font-style="italic">voir chapitre III</text>
+    </g>
+  </g>
+</svg>

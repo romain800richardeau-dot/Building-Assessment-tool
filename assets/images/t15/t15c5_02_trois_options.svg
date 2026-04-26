@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 490" role="img" aria-labelledby="svg-options-title svg-options-desc" style="font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; max-width: 100%; height: auto;">
+  <title id="svg-options-title">Trois options de cession des matériaux de réemploi</title>
+  <desc id="svg-options-desc">Comparatif en trois colonnes des trois montages contractuels de cession : via le marché de travaux au titulaire (option 1, simple), cession directe par la MOA (option 2, exposée), mandat de cession (option 3, hybride). Pour chaque option, le circuit contractuel, les avantages et le profil cible.</desc>
+
+  <text x="30" y="32" font-size="15" font-weight="700" fill="#1E293B">Trois options de cession</text>
+  <text x="30" y="50" font-size="11" fill="#64748B" font-style="italic">De la plus simple à la plus structurée — le choix selon la charge administrative acceptée et le profil de la MOA.</text>
+
+  <!-- ============ OPTION 1 ============ -->
+  <g>
+    <rect x="30" y="70" width="228" height="388" rx="6" fill="#F0FDF4" stroke="#D1FAE5"/>
+    <rect x="30" y="70" width="228" height="4" rx="6" fill="#00A88A"/>
+
+    <text x="246" y="106" text-anchor="end" font-size="34" font-weight="800" fill="#00A88A" opacity="0.14">01</text>
+
+    <text x="44" y="96" font-size="10" font-weight="700" fill="#047857" letter-spacing="1.4">OPTION</text>
+    <text x="44" y="116" font-size="13" font-weight="700" fill="#1E293B">Via le marché</text>
+    <text x="44" y="132" font-size="13" font-weight="700" fill="#1E293B">de travaux</text>
+
+    <g transform="translate(44, 150)">
+      <rect x="0" y="0" width="50" height="26" rx="3" fill="#fff" stroke="#1E293B" stroke-width="0.9"/>
+      <text x="25" y="17" text-anchor="middle" font-size="10" font-weight="600" fill="#1E293B">MOA</text>
+      <line x1="52" y1="13" x2="78" y2="13" stroke="#1E293B" stroke-width="0.9"/>
+      <polygon points="78,13 72,10 72,16" fill="#1E293B"/>
+      <text x="65" y="8" text-anchor="middle" font-size="9" fill="#64748B" font-style="italic">CCTP</text>
+      <rect x="80" y="0" width="120" height="26" rx="3" fill="#fff" stroke="#1E293B" stroke-width="0.9"/>
+      <text x="140" y="17" text-anchor="middle" font-size="10" font-weight="600" fill="#1E293B">Titulaire du marché</text>
+    </g>
+
+    <text x="44" y="202" font-size="10" font-weight="700" fill="#047857" letter-spacing="0.8">CE QU'ON Y GAGNE</text>
+    <g fill="#1E293B" font-size="11.5">
+      <text x="44" y="222">— pas d'acte de cession séparé</text>
+      <text x="44" y="241">— pas de garantie portée par la MOA</text>
+      <text x="44" y="260">— gestion simplifiée à la clôture</text>
+    </g>
+
+    <text x="44" y="296" font-size="10" font-weight="700" fill="#64748B" letter-spacing="0.8">POINT DE VIGILANCE</text>
+    <text x="44" y="316" font-size="11" fill="#475569" font-style="italic">Prix de reprise négocié</text>
+    <text x="44" y="331" font-size="11" fill="#475569" font-style="italic">par le seul titulaire.</text>
+
+    <line x1="44" y1="358" x2="244" y2="358" stroke="#D1FAE5" stroke-width="1"/>
+
+    <text x="44" y="378" font-size="10.5" font-weight="700" fill="#1E293B">Pour qui ?</text>
+    <text x="44" y="394" font-size="10.5" fill="#475569">MOA cherchant à limiter</text>
+    <text x="44" y="408" font-size="10.5" fill="#475569">la charge administrative.</text>
+
+    <text x="44" y="438" font-size="11" font-weight="700" fill="#047857">Option de référence</text>
+    <text x="44" y="452" font-size="10.5" fill="#64748B" font-style="italic">charge administrative faible</text>
+  </g>
+
+  <!-- ============ OPTION 2 ============ -->
+  <g>
+    <rect x="266" y="70" width="228" height="388" rx="6" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <rect x="266" y="70" width="228" height="4" rx="6" fill="#64748B"/>
+
+    <text x="482" y="106" text-anchor="end" font-size="34" font-weight="800" fill="#64748B" opacity="0.14">02</text>
+
+    <text x="280" y="96" font-size="10" font-weight="700" fill="#047857" letter-spacing="1.4">OPTION</text>
+    <text x="280" y="116" font-size="13" font-weight="700" fill="#1E293B">Cession directe</text>
+    <text x="280" y="132" font-size="13" font-weight="700" fill="#1E293B">par la MOA</text>
+
+    <g transform="translate(280, 150)">
+      <rect x="0" y="0" width="50" height="26" rx="3" fill="#fff" stroke="#1E293B" stroke-width="0.9"/>
+      <text x="25" y="17" text-anchor="middle" font-size="10" font-weight="600" fill="#1E293B">MOA</text>
+      <line x1="52" y1="13" x2="78" y2="13" stroke="#1E293B" stroke-width="0.9"/>
+      <polygon points="78,13 72,10 72,16" fill="#1E293B"/>
+      <text x="65" y="8" text-anchor="middle" font-size="9" fill="#64748B" font-style="italic">contrat</text>
+      <rect x="80" y="0" width="120" height="26" rx="3" fill="#fff" stroke="#1E293B" stroke-width="0.9"/>
+      <text x="140" y="17" text-anchor="middle" font-size="10" font-weight="600" fill="#1E293B">Repreneurs</text>
+    </g>
+
+    <text x="280" y="202" font-size="10" font-weight="700" fill="#047857" letter-spacing="0.8">CE QU'ON Y GAGNE</text>
+    <g fill="#1E293B" font-size="11.5">
+      <text x="280" y="222">— prix intégral (pas d'intermédiaire)</text>
+      <text x="280" y="241">— choix libre des repreneurs :</text>
+      <text x="296" y="256" fill="#64748B" font-size="10.5">ESS, autres MOA, partenaires locaux</text>
+    </g>
+
+    <rect x="280" y="278" width="200" height="66" rx="3" fill="#FEF2F2" stroke="#FECACA" stroke-dasharray="3 2"/>
+    <text x="288" y="294" font-size="10" font-weight="700" fill="#B91C1C" letter-spacing="0.8">EN REVANCHE</text>
+    <g fill="#7F1D1D" font-size="11">
+      <text x="288" y="310">La MOA porte <tspan font-weight="700">toutes</tspan> les</text>
+      <text x="288" y="325">obligations du vendeur : information,</text>
+      <text x="288" y="339" font-size="10.5" font-style="italic">délivrance, vices cachés.</text>
+    </g>
+
+    <text x="280" y="378" font-size="10.5" font-weight="700" fill="#1E293B">Pour qui ?</text>
+    <text x="280" y="394" font-size="10.5" fill="#475569">MOA structurée, matériaux</text>
+    <text x="280" y="408" font-size="10.5" fill="#475569">techniquement documentés.</text>
+
+    <text x="280" y="438" font-size="11" font-weight="700" fill="#B91C1C">À réserver</text>
+    <text x="280" y="452" font-size="10.5" fill="#64748B" font-style="italic">charge administrative forte</text>
+  </g>
+
+  <!-- ============ OPTION 3 ============ -->
+  <g>
+    <rect x="502" y="70" width="228" height="388" rx="6" fill="#F0FDFA" stroke="#CCFBF1"/>
+    <rect x="502" y="70" width="228" height="4" rx="6" fill="#00A88A"/>
+
+    <text x="718" y="106" text-anchor="end" font-size="34" font-weight="800" fill="#00A88A" opacity="0.14">03</text>
+
+    <text x="516" y="96" font-size="10" font-weight="700" fill="#047857" letter-spacing="1.4">OPTION</text>
+    <text x="516" y="116" font-size="13" font-weight="700" fill="#1E293B">Mandat</text>
+    <text x="516" y="132" font-size="13" font-weight="700" fill="#1E293B">de cession</text>
+
+    <g transform="translate(516, 150)">
+      <rect x="0" y="0" width="44" height="26" rx="3" fill="#fff" stroke="#1E293B" stroke-width="0.9"/>
+      <text x="22" y="17" text-anchor="middle" font-size="10" font-weight="600" fill="#1E293B">MOA</text>
+      <line x1="46" y1="13" x2="62" y2="13" stroke="#1E293B" stroke-width="0.9"/>
+      <polygon points="62,13 56,10 56,16" fill="#1E293B"/>
+      <rect x="64" y="0" width="70" height="26" rx="3" fill="#ECFDF5" stroke="#00A88A" stroke-width="1.1"/>
+      <text x="99" y="17" text-anchor="middle" font-size="10" font-weight="700" fill="#047857">Mandataire</text>
+      <line x1="136" y1="13" x2="152" y2="13" stroke="#1E293B" stroke-width="0.9"/>
+      <polygon points="152,13 146,10 146,16" fill="#1E293B"/>
+      <rect x="154" y="0" width="46" height="26" rx="3" fill="#fff" stroke="#1E293B" stroke-width="0.9"/>
+      <text x="177" y="17" text-anchor="middle" font-size="10" font-weight="600" fill="#1E293B">Repreneurs</text>
+    </g>
+
+    <text x="516" y="202" font-size="10" font-weight="700" fill="#047857" letter-spacing="0.8">CE QU'ON Y GAGNE</text>
+    <g fill="#1E293B" font-size="11.5">
+      <text x="516" y="222">— choix des repreneurs (opt. 2)</text>
+      <text x="516" y="241">— responsabilité commerciale</text>
+      <text x="532" y="256" fill="#64748B" font-size="10.5">portée par le mandataire</text>
+    </g>
+
+    <text x="516" y="296" font-size="10" font-weight="700" fill="#64748B" letter-spacing="0.8">LE MANDAT DOIT DÉFINIR</text>
+    <g fill="#475569" font-size="11" font-style="italic">
+      <text x="516" y="316">objet · actes accessoires ·</text>
+      <text x="516" y="331">reddition des comptes ·</text>
+      <text x="516" y="346">rémunération (forfait ou %).</text>
+    </g>
+
+    <line x1="516" y1="358" x2="716" y2="358" stroke="#CCFBF1" stroke-width="1"/>
+
+    <text x="516" y="378" font-size="10.5" font-weight="700" fill="#1E293B">Pour qui ?</text>
+    <text x="516" y="394" font-size="10.5" fill="#475569">MOA qui choisit les repreneurs</text>
+    <text x="516" y="408" font-size="10.5" fill="#475569">sans gérer la contractualisation.</text>
+
+    <text x="516" y="438" font-size="11" font-weight="700" fill="#047857">Solution hybride</text>
+    <text x="516" y="452" font-size="10.5" fill="#64748B" font-style="italic">charge administrative moyenne</text>
+  </g>
+
+  <text x="30" y="482" font-size="10" fill="#64748B" font-style="italic">Bases juridiques : art. 1984 C. civ. · CE, Ass., 5 mars 2003 · BOFIP-TVA (règle de TVA sur montant avant déduction de la reprise).</text>
+</svg>

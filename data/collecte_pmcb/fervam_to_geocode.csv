@@ -1,0 +1,716 @@
+id,rue,cp,ville,adresse_full,name,raison_sociale,telephone,accueil_1,accueil_2,eco_orgs,folder_type
+fvm_0000,impasse du Château d'Eau,49610,JUIGNE SUR LOIRE,impasse du Château d'Eau - 49610 JUIGNE SUR LOIRE,Déchèterie Juigné sur Loire,3R D'ANJOU,,,Particuliers,,Point d'apport volontaire
+fvm_0001,Chemin des Cuetteries,49125,TIERCE,Chemin des Cuetteries - 49125 TIERCE,Déchèterie Tiercé,3R D'ANJOU,,,Particuliers,,Point d'apport volontaire
+fvm_0002,Les Grois,49330,CHATEAUNEUF SUR SARTHE,Les Grois - 49330 CHATEAUNEUF SUR SARTHE,Déchèterie Chateauneuf sur Sarthe,3R D'ANJOU,,,Particuliers,,Point d'apport volontaire
+fvm_0003,Route de Marcé,49140,SEICHES SUR LE LOIR,Route de Marcé - 49140 SEICHES SUR LE LOIR,Déchèterie Seiches sur le Loir,3R D'ANJOU,,,Particuliers,,Point d'apport volontaire
+fvm_0004,Les Malicornières,49430,DURTAL,Les Malicornières - 49430 DURTAL,Déchèterie Durtal,3R D'ANJOU,,,Particuliers,,Point d'apport volontaire
+fvm_0005,ZA La Sablonnière - Route de Montreuil sur Maine,49220,LE LION D ANGERS,ZA La Sablonnière - Route de Montreuil sur Maine - 49220 LE LION D ANGERS,Déchèterie Lion d'Angers,3R D'ANJOU,,,Particuliers,,Point d'apport volontaire
+fvm_0006,Rue Saint Jouin,79700,Mauléon,Rue Saint Jouin - 79700 - Mauléon,Déchetterie,AGGLO 2B,05 49 81 83 39,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0007,23 Rue Lavoisier,79300,Bressuire,23 Rue Lavoisier - 79300 - Bressuire,Déchetterie,AGGLO 2B,05 49 81 73 95,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0008,Longchamp,79140,Cerizay,Longchamp - 79140 - Cerizay,Déchetterie,AGGLO 2B,05 49 81 19 00,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0009,Maison Neuve,79320,Moncoutant,Maison Neuve - 79320 - Moncoutant,Déchetterie,AGGLO 2B,05 49 81 19 00,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0010,Forges,79250,Nueil les Aubiers,Forges - 79250 - Nueil les Aubiers,Déchetterie,AGGLO 2B,05 49 81 19 00,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0011,Zone artisanale des Giraumeries,53940,SAINT-BERTHEVIN,Zone artisanale des Giraumeries - 53940 SAINT-BERTHEVIN,Alternatri 53,Alternatri 53,07 69 96 78 39,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0012,"Route d'Avignon, Euze",30200,BAGNOLS-SUR-CEZE,"Route d'Avignon, Euze, 30200 BAGNOLS-SUR-CEZE",ALU CARMIGANAIS BAGNOLES SUR CEZE,ALU CARMIGANAIS,06 85 74 04 45,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0013,51 rue de la Paperie Saint Barthélémy d'Anjou,49124,SAINT BARTHELEMY D ANJOU,51 rue de la Paperie Saint Barthélémy d'Anjou - 49124 SAINT BARTHELEMY D ANJOU,Déchèterie Villechien,ANGERS LOIRE METROPOLE,,,Particuliers,,Point d'apport volontaire
+fvm_0014,Rue Paul Héroult,49460,MONTREUIL JUIGNE,Rue Paul Héroult - 49460 MONTREUIL JUIGNE,Déchèterie Haut- Coudray,ANGERS LOIRE METROPOLE,,,Particuliers,,Point d'apport volontaire
+fvm_0015,,49250,SEGRÉ EN ANJOU,49250 SEGRÉ EN ANJOU,Déchèterie Segré,ANJOU BLEU COMMUNAUTE,,,Particuliers,,Point d'apport volontaire
+fvm_0016,D183,49500,Chazé sur Argos,D183 - 49500 Chazé sur Argos,Déchèterie Chazé/Argos,ANJOU BLEU COMMUNAUTE,,,Particuliers,,Point d'apport volontaire
+fvm_0017,Boulevard Denis Papin,49520,OMBREE D'ANJOU,Boulevard Denis Papin - 49520 OMBREE D'ANJOU,Déchèterie Combrée,ANJOU BLEU COMMUNAUTE,,,Particuliers,,Point d'apport volontaire
+fvm_0018,Rue de la Pidaie,49420,OMBREE D'ANJOU,Rue de la Pidaie - 49420 OMBREE D'ANJOU,Déchèterie Pouancé,ANJOU BLEU COMMUNAUTE,,,Particuliers,,Point d'apport volontaire
+fvm_0019,37 rue de perthuis,42220,SAINT SAUVEUR EN RUE,37 rue de perthuis - 42220 - SAINT SAUVEUR EN RUE,Déchetterie Pro,BARALLON / Valorsol environnement,04 77 39 20 81,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0020,"ZAC LES HAUTS DE COUERON, 22 RUE JAN PALACH",44220,Coueron,"ZAC LES HAUTS DE COUERON, 22 RUE JAN PALACH, 44220 Coueron",BARBAZANGES TRI OUEST Coueron,BARBAZANGES TRI OUEST,,,,,Point d'apport volontaire
+fvm_0021,ZI du Bois Imbert,85280,LA FERRIERE,ZI du Bois Imbert - 85280 - LA FERRIERE,Exploitation Bati La Ferrière,BATI RECYCLAGE,02 51 27 22 00,Professionnels,,,Point d'apport volontaire
+fvm_0022,Rue René Panhard,44702,Orvault,"Rue René Panhard, 44702 Orvault",BATIDOC ORVAULT,BATIDOC,02 40 20 09 66,,,,Point d'apport volontaire
+fvm_0023,PONT ILLIZ,56310,MELRAND,PONT ILLIZ - 56310 MELRAND,Déchèterie de MELRAND,Baud communauté,02 97 51 98 35,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0024,KERLEDORZ,56310,PLUMELIAU,KERLEDORZ - 56310 PLUMELIAU,Déchèterie de PLUMELIAU,Baud communauté,02 97 51 98 35,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0025,ZA Mont Saint Sébastien - Rue du Mont,77111,Soignolles en Brie,ZA Mont Saint Sébastien - Rue du Mont - 77111 Soignolles en Brie,BIG BENNES,BIG BENNES,01 64 06 72 93,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0026,CHEMIN DE FARNIER,43000,LE PUY EN VELAY,CHEMIN DE FARNIER - 43000 LE PUY EN VELAY,BIGMAT LAURENT,BIGMAT LAURENT,471066880,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0027,14 FAUBOURG MOLLIAN,42130,BOEN,14 FAUBOURG MOLLIAN - 42130 BOEN,BIGMAT SAGRA,BIGMAT SAGRA,477240925,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0028,3 BOULEVARD DE LA BOISSONNETTE,42110,FEURS,3 BOULEVARD DE LA BOISSONNETTE - 42110 FEURS,BIGMAT SAGRA,BIGMAT SAGRA,477262622,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0029,5 RUE DORIAN,42700,FIRMINY,5 RUE DORIAN - 42700 FIRMINY,BIGMAT SAGRA,BIGMAT SAGRA,477560444,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0030,1388 RUE PIERRE SEMARD,42153,RIORGES,1388 RUE PIERRE SEMARD - 42153 RIORGES,BIGMAT SAGRA,BIGMAT SAGRA,477445252,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0031,LES GRAVIERES,42340,RIVAS,LES GRAVIERES - 42340 RIVAS,BIGMAT SAGRA,BIGMAT SAGRA,477546907,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0032,1685 AVENUE DU FOREZ,69590,SAINT SYMPHORIEN SUR COISE,1685 AVENUE DU FOREZ - 69590 SAINT SYMPHORIEN SUR COISE,BIGMAT SAGRA,BIGMAT SAGRA,478445950,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0033,FOUR A CHAUX,42600,SAVIGNEUX,FOUR A CHAUX - 42600 SAVIGNEUX,BIGMAT SAGRA,BIGMAT SAGRA,477588526,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0034,47 RUE EDOUARD MARTEL,42100,ST ETIENNE,47 RUE EDOUARD MARTEL - 42100 ST ETIENNE,BIGMAT SAGRA,BIGMAT SAGRA,477813281,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0035,85 Rue de la Chanière,39570,Perrigny,"85 Rue de la Chanière, 39570 Perrigny",BOUILLER MATERIAUX PERRIGNY,BOUILLER MATERIAUX PERRIGNY,03 84 25 70 72,,,Valobat,Point d'apport volontaire
+fvm_0036,"4 avenue d'Aquitaine Lieu dit ""Argenteyre""",33560,SAINTE-EULALIE,"4 avenue d'Aquitaine Lieu dit ""Argenteyre"" - 33560 - SAINTE-EULALIE",Déchèterie Sainte Eulalie,BRANGEON,05 56 69 76 56,Professionnels,,,Point d'apport volontaire
+fvm_0037,3 rue Surcouf,33000,BORDEAUX,3 rue Surcouf - 33000 - BORDEAUX,Déchèterie Bordeaux,BRANGEON,05 56 69 76 56,Professionnels,,,Point d'apport volontaire
+fvm_0038,34-36 RUE DE LA SEINE,35470,BAIN DE BRETAGNE,34-36 RUE DE LA SEINE - 35470 BAIN DE BRETAGNE,BRETAGNE MATERIAUX,BRETAGNE MATERIAUX BAIN DE BRETAGNE,,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0039,35 RUE SAINT MARC,22300,LANNION,35 RUE SAINT MARC - 22300 LANNION,BRETAGNE MATERIAUX,BRETAGNE MATERIAUX LANNION,,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0040,36 ROUTE NATIONALE 10,78690,LES ESSARTS LE ROI,36 ROUTE NATIONALE 10 -78690 LES ESSARTS LE ROI,BRICO DEPOT LES ESSARTS,BRICO DEPOT,01 34 57 13 60,,,Ecomaison,Point d'apport volontaire
+fvm_0041,La Garenne de Melleville,27930,GUICHAINVILLE,La Garenne de Melleville - 27930 GUICHAINVILLE,BRICOMAN Evreux,BRICOMAN,02 32 23 51 51,,,Valobat,Point d'apport volontaire
+fvm_0042,"Route nationale 112, ZAE POLE MEDITERRANEE",34420,VILLENEUVE-LES-BEZIERS,"Route nationale 112, ZAE POLE MEDITERRANEE 34420 VILLENEUVE-LES-BEZIERS",BRICOMAN Villeneuve Les Béziers,BRICOMAN,06 23 33 65 87,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0043,Siège BRICOMAN,,,Siège BRICOMAN,BRICOMAN Villeneuve Les Béziers,BRICOMAN,06 23 33 65 87,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0044,Zac du clos aux pois,91090,Lisses,"Zac du clos aux pois, 91090 Lisses",Lisses,Bricoman,,,,Valobat,Point d'apport volontaire
+fvm_0045,Route des Templiers,91310,Monthléry,"Route des Templiers, 91310 Monthléry",Montlhery,Bricoman,06 10 41 12 48,,,Valobat,Point d'apport volontaire
+fvm_0046,9 Av. de Rome,13127,Vitrolles,"9 Av. de Rome, 13127 Vitrolles",Bricoman Vitrolles,Bricoman,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0047,"Centre Commercial Géant Casino ""La Thalie",71100,,"Centre Commercial Géant Casino ""La Thalie, 71100",BRICOMAN CHALON SUR SAONE,BRICOMAN CHALON SUR SAONE,03 85 45 00 48,,,Valobat,Point d'apport volontaire
+fvm_0048,ZAC DE LA GRANDE PORTE,59180,CAPPELLE LA GRANDE,ZAC DE LA GRANDE PORTE - 59180 CAPPELLE LA GRANDE,BRICOMAN DUNKERQUE,BRICOMAN DUNKERQUE,03 28 24 58 58,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0049,ZAC FORUM DE PICARDIE,02100,SAINT QUENTIN,ZAC FORUM DE PICARDIE - 02100 SAINT QUENTIN,BRICOMAN SAINT QUENTIN,BRICOMAN SAINT QUENTIN,03 23 67 78 49,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0050,5 Rue Amédée Bollée - ZI La Folie Sud,85310,LA CHAIZE LE VICOMTE,5 Rue Amédée Bollée - ZI La Folie Sud - 85310 LA CHAIZE LE VICOMTE,Broyage Fin Micronisation,Broyage Fin Micronisation,02 55 90 02 32,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0051,77 avenue du 69 Régiment d'infanterie,54270,ESSEY LES NANCY,77 avenue du 69 Régiment d'infanterie - 54270 ESSEY LES NANCY,C2I Chantier cours de stockge,C2I TCS,03 83 21 98 66,Professionnels,Particuliers,valobat,Point d'apport volontaire
+fvm_0052,Impasse des Ponts,57490,L' Hôpital,Impasse des Ponts - 57490 L' Hôpital,Déchèterie L'hôpital,CA SAINT AVOLD SYNERGIE,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0053,Zone Industrielle Lavoisier,57340,Morhange,Zone Industrielle Lavoisier - 57340 Morhange,Décheterie Morhange,CA SAINT AVOLD SYNERGIE,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0054,Zone Artisanale - Rue du Chemin de Fer,57730,VALMONT,Zone Artisanale - Rue du Chemin de Fer - 57730 VALMONT,Décheterie Valmont,CA SAINT AVOLD SYNERGIE,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0055,ZI Sainte Agathe,57190,Florange,ZI Sainte Agathe - 57190 Florange,Déchèterie Florange,CA VAL DE FENSCH,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0056,ZI Saint Jacques,57700,Hayange,ZI Saint Jacques - 57700 Hayange,Déchèterie Hayange,CA VAL DE FENSCH,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0057,PA DE LANN CUINET/ RUE THOMAS EDISON,56390,GRAND CHAMP,PA DE LANN CUINET/ RUE THOMAS EDISON - 56390 GRAND CHAMP,CAB56,CAB56,,Professionnels,,,Point d'apport volontaire
+fvm_0058,ZA les Castelliers,27930,LA CHAPELLE,ZA les Castelliers - 27930 LA CHAPELLE,CARRE RECYCLAGE La chapelle,CARRE RECYCLAGE,02 32 67 04 81,,,Valobat,Point d'apport volontaire
+fvm_0059,10 Rue du Rossignol,57330,HETTANGE-GRANDE,10 Rue du Rossignol - 57330 HETTANGE-GRANDE,Déchèterie ETTANGE GRANDE,CC CATTENOM ET ENVIRONS,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0060,Route du Luxembourg (RD1),57570,CATTENOM-SENTZICH,Route du Luxembourg (RD1) - 57570 CATTENOM-SENTZICH,Déchèterie SENTZICH,CC CATTENOM ET ENVIRONS,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0061,Rue du château,54470,Bernécourt,Rue du château - 54470 Bernécourt,Déchèterie BERNECOURT,CC MAD ET MOSELLE,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0062,1 B Route de Saint-Julien,54470,Charey,1 B Route de Saint-Julien - 54470 Charey,Déchèterie CHAREY,CC MAD ET MOSELLE,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0063,Route de Virton,55600,Montmedy,Route de Virton - 55600 Montmedy,Déchèterie MONTMEDY,CC PAYS DE MONTMEDY,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0064,12 rue Marechal Foch,57390,Audun-le-Tiche,12 rue Marechal Foch - 57390 Audun-le-Tiche,Déchèterie AUDUN LE TICHE,CC PAYS HAUT VAL D'ALZETTE,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0065,font des saints,57365,ENNERY,font des saints - 57365 - ENNERY,DECH ENNERY,CC RIVES DE MOSELLE,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0066,2 Rue Emile Galle,57280,MAIZIERES LES METZ,2 Rue Emile Galle - 57280 - MAIZIERES LES METZ,DECH MAIZIERES LES METZ,CC RIVES DE MOSELLE,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0067,57 Chp de Mars,57270,RICHEMONT,57 Chp de Mars - 57270 - RICHEMONT,DECH RICHEMONT,CC RIVES DE MOSELLE,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0068,Chemin d'Hauconcourt,57525,TALANGE,Chemin d'Hauconcourt - 57525 - TALANGE,DECH TALANGE,CC RIVES DE MOSELLE,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0069,Route de Bechy,57580,REMILLY,Route de Bechy - 57580 - REMILLY,DECH REMILLY,CC SUD MESSIN,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0070,141 A Les Hauts Chênes,57420,VERNY,141 A Les Hauts Chênes - 57420 - VERNY,DECH VERNY,CC SUD MESSIN,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0071,Rue du pré contal,54300,Lunéville,Rue du pré contal - 54300 Lunéville,Déchèterie LUNEVILLE,CC TERRITOIRE DE LUNEVILLE A BACCARAT,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0072,BRENOLO,56660,SAINT JEAN BREVELAY,BRENOLO - 56660 SAINT JEAN BREVELAY,Déchèterie SAINT JEAN BREVELAY,Centre Morbihan communauté,02 97 60 42 29,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0073,RUE DU 8 MAI 1945,91470,PECQUEUSE,RUE DU 8 MAI 1945 - 91470 PECQUEUSE,CHAVIGNY AGENCE DE LIMOURS,CHAVIGNY,01 64 91 00 44,,,Ecomaison,Point d'apport volontaire
+fvm_0074,23 rue des Genêts,57800,Betting,23 rue des Genêts - 57800 - Betting,CITRAVAL BETTING,CITRAVAL,03 87 04 15 89,Professionnels,,,Point d'apport volontaire
+fvm_0075,380 rue des épicéas,54840,BOIS-DE-HAYE,380 rue des épicéas - 54840 BOIS-DE-HAYE,CITRAVAL BOIS-DE-HAYE,CITRAVAL,03 83 64 62 94,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0076,Rue Nicolas Barry,88150,Chavelot,Rue Nicolas Barry - 88150 - Chavelot,CITRAVAL CHAVELOT,CITRAVAL,03 29 29 81 86,Professionnels,,,Point d'apport volontaire
+fvm_0077,Chemin de Ramonville,57120,Rombas,Chemin de Ramonville - 57120 - Rombas,CITRAVAL ROMBAS,CITRAVAL,03 87 67 84 08,Professionnels,,,Point d'apport volontaire
+fvm_0078,Rue de Sarrebourg,57400,Sarraltroff,Rue de Sarrebourg - 57400 - Sarraltroff,CITRAVAL SARRALTROFF,CITRAVAL,03 67 07 95 65,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0079,rue de la Libération,50480,Ste-Mère-Eglise,rue de la Libération - 50480 Ste-Mère-Eglise,Decheterie de Carquebut,Com Com Baie du Cotentin,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0080,Kerdanvez,29160,Crozon,Kerdanvez - 29160 - Crozon,Déchèterie de Crozon,ComCom  Crozon,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0081,Navarrou,29570,Camaret,Navarrou - 29570 - Camaret,Déchèterie de Camaret,ComCom  Crozon,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0082,Kerguelen,29590,Rosnoën,Kerguelen - 29590 - Rosnoën,Déchèterie de Rosnoën,ComCom  Crozon,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0083,Péren,29150,Chateaulin,Péren - 29150 - Chateaulin,Déchèterie de chateaulin,ComCom chateaulin,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0084,Cosquerou,29190,Pleyben,Cosquerou - 29190 - Pleyben,Déchèterie de Pleyben,ComCom chateaulin,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0085,La croix neuve,29550,Plonevez Porzay,La croix neuve - 29550 - Plonevez Porzay,Déchèterie de Plonenez Porzay,ComCom chateaulin,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0086,8 rue des Ateliers,67210,Obernai,8 rue des Ateliers - 67210 Obernai,Déchèterie d'Obernai,ComCom du Pays de Ste Odile,03 88 95 53 52,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0087,RD 215,67880,Krautergersheim,RD 215 - 67880 Krautergersheim,Déchèterie de Krautergersheim,ComCom du Pays de Ste Odile,03 88 95 53 52,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0088,209 Av. de la Roudet,33500,Libourne,209 Av. de la Roudet - 33500 Libourne,Déchèterie professionnelle de Libourne,Communauté d'Agglomération du Libourne,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0089,2 route de la Belle Croix,50200,Gratot,2 route de la Belle Croix - 50200 Gratot,Decheterie de Gratot,Coutances Mer et Bocage,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0090,2 rue du Manoir,50660,Quettreville-sur-Sienne,2 rue du Manoir - 50660 Quettreville-sur-Sienne,decheterie de Hyenville,Coutances Mer et Bocage,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0091,ZI du sactar,84500,BOLLENE,ZI du sactar- 84500 - BOLLENE,Déchetterie Pro,CVA Alcyon / Valorsol environnement,04 90 30 99 12,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0092,Route de Verneuil,28340,LAMBLORE,Route de Verneuil - 28340 LAMBLORE,DECHETERIE Lamblore,DECHETERIE,02 37 23 32 63,,,Valobat,Point d'apport volontaire
+fvm_0093,Le Pressoir,28240,SAINT-ÉLIPH,Le Pressoir - 28240 SAINT-ÉLIPH,DECHETERIE ST Eliph,DECHETERIE,06 79 07 98 33,,,Valobat,Point d'apport volontaire
+fvm_0094,ZI D ACTIVITES - ROUTE D OULINS,28260,,ZI D ACTIVITES - ROUTE D OULINS - 28260,DECHETERIE ANET,DECHETERIE,01 34 57 12 20,,,Ecomaison,Point d'apport volontaire
+fvm_0095,4 Rue du Chemin Vert,95100,Argenteuil,4 Rue du Chemin Vert  95100 Argenteuil,Déchèterie d'Argenteuil \ SYNDICAT AZUR,Décheterie,01 30 25 23 15,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0096,Rue de Pierrelaye,95550,BESSANCOURT,Rue de Pierrelaye 95550 BESSANCOURT,Déchèterie de Bessancourt \ S.MIXTE TRI-ACTION,Décheterie,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0097,85 rue du 14 juillet,93140,Bondy,85 rue du 14 juillet 93140 Bondy,Déchèterie de Bondy \ Est Ensemble,Décheterie,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0098,78 Avenue Paul Vaillant Couturier,93120,La Courneuve,78 Avenue Paul Vaillant Couturier 93120 La Courneuve,TERSEN Site de LA COURNEUVE,Décheterie,06 49 87 31 10,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0099,ZI DU BOIS DE LA FONTAINE - 10 RUE DES EPIS,91670,ANGERVILLE,ZI DU BOIS DE LA FONTAINE - 10 RUE DES EPIS - 91670 ANGERVILLE,DECHETERIE ANGERVILLE,DECHETERIE,01 34 57 12 20,,,Ecomaison,Point d'apport volontaire
+fvm_0100,RUE DES VAUX DE CERNAY,78610,AUFFARGIS,RUE DES VAUX DE CERNAY - 78610 AUFFARGIS,DECHETERIE AUFFARGIS,DECHETERIE,07 48 11 00 67,,,Ecomaison,Point d'apport volontaire
+fvm_0101,ROUTE DE LA BEAUCHE,28270,BREZOLLES,ROUTE DE LA BEAUCHE - 28270 BREZOLLES,DECHETERIE BREZOLLES,DECHETERIE,07 57 49 41 61,,,Ecomaison,Point d'apport volontaire
+fvm_0102,5 RUE DES TILLEULS,28120,ILLERS COMBRAY,5 RUE DES TILLEULS - 28120 ILLERS COMBRAY,DECHETERIE ILLIERS COMBRAY,DECHETERIE,02 37 96 74 66,,,Ecomaison,Point d'apport volontaire
+fvm_0103,,27540,IVRY LA BATAILLE,27540 IVRY LA BATAILLE,DECHETERIE IVRY LA BATAILLE,DECHETERIE,07 57 49 41 65,,,Ecomaison,Point d'apport volontaire
+fvm_0104,11 RUE DU BOEL,28310,JANVILLE,11 RUE DU BOEL - 28310 JANVILLE,DECHETRIE JANVILLE,DECHETERIE,07 48 11 00 64,,,Ecomaison,Point d'apport volontaire
+fvm_0105,BOIS DE LA FOLIE,28150,OUARVILLE,BOIS DE LA FOLIE - 28150 OUARVILLE,DECHETERIE OUARVILLE,DECHETERIE,07 48 11 00 70,,,Ecomaison,Point d'apport volontaire
+fvm_0106,2 RUE DU CLOS DE MAROLLE,28130,PIERRES,2 RUE DU CLOS DE MAROLLE - 28130 PIERRES,DECHETERIE PIERRES,DECHETERIE,07 48 10 95 53,,,Ecomaison,Point d'apport volontaire
+fvm_0107,ROUTE D ABLIS,78730,SAINT ARNOULT EN YVELINES,ROUTE D ABLIS 78730 SAINT ARNOULT EN YVELINES,DECHETERIE ST ANOULT,DECHETERIE,07 57 49 41 63,,,Ecomaison,Point d'apport volontaire
+fvm_0108,ROUTE DE GENONVILLE,28150,LES VILLAGES VOVEENS,ROUTE DE GENONVILLE 28150 LES VILLAGES VOVEENS,DECHETERIE VOVES,DECHETERIE,07 48 11 00 66,,,Ecomaison,Point d'apport volontaire
+fvm_0109,16 ROUTE DE DAMVILLE,27320,LA MADELAINE DE NONANCOURT,16 ROUTE DE DAMVILLE - 27320 LA MADELAINE DE NONANCOURT,DECHETERIE LA MADELAINE DE NONANCOURT,DECHETERIE,07 57 49 41 63,,,Ecomaison,Point d'apport volontaire
+fvm_0110,,39220,Les Rousses,39220 Les Rousses,DECHETERIE  LES ROUSSES,DECHETERIE  LES ROUSSES,03 84 33 41 61,,,Valobat,Point d'apport volontaire
+fvm_0111,,39240,Arinthod,39240 Arinthod,DECHETERIE D ARINTHOD,DECHETERIE D ARINTHOD,03 84 48 50 33,,,Valobat,Point d'apport volontaire
+fvm_0112,14 Chem. des Alamans,39270,Orgelet,"14 Chem. des Alamans, 39270 Orgelet",DECHETERIE D ORGELET,DECHETERIE D ORGELET,03 84 35 58 17.,,,Valobat,Point d'apport volontaire
+fvm_0113,,53300,Ambrières-les-Vallées,53300 Ambrières-les-Vallées,Déchèterie d'Ambrieres-les-vallees,Déchèterie d'Ambrieres-les-vallees,02 43 08 15 69,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0114,,39190,Beaufort,39190 Beaufort,DECHETERIE DE BEAUFORT,DECHETERIE DE BEAUFORT,03 84 25 15 84,,,Valobat,Point d'apport volontaire
+fvm_0115,Rue Saint-Gilles,53290,Bierné-les-Village,Rue Saint-Gilles - 53290 Bierné-les-Village,Déchèterie de Bierné,Déchèterie de Bierné,02 43 09 59 27,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0116,All. du Bois,39100,Brevans,"All. du Bois, 39100 Brevans",DECHETERIE DE BREVANS,DECHETERIE DE BREVANS,03 84 69 11 48,,,Valobat,Point d'apport volontaire
+fvm_0117,437 Rue du Mont Rivel,39300,Champagnole,"437 Rue du Mont Rivel, 39300 Champagnole",DECHETERIE DE CHAMPAGNOLE,DECHETERIE DE CHAMPAGNOLE,03 84 52 42 70,,,Valobat,Point d'apport volontaire
+fvm_0118,Rue de l'aiguillage,39230,Chaumergy,"Rue de l'aiguillage, 39230 Chaumergy",DECHETERIE DE CHAUMERGY,DECHETERIE DE CHAUMERGY,03 84 48 60 49,,,Valobat,Point d'apport volontaire
+fvm_0119,,39120,Chaussin,39120 Chaussin,DECHETERIE DE CHAUSSIN,DECHETERIE DE CHAUSSIN,03 84 82 56 19,,,Valobat,Point d'apport volontaire
+fvm_0120,,39130,Clairvaux-les-Lacs,39130 Clairvaux-les-Lacs,DECHETERIE DE CLAIRVAUX LES LACS,DECHETERIE DE CLAIRVAUX LES LACS,03 84 25 80 37,,,Valobat,Point d'apport volontaire
+fvm_0121,Rte de Niafles,53400,Craon,Rte de Niafles - 53400 Craon,Déchèterie de Craon,Déchèterie de Craon,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0122,Rte de Dommartin,71480,Cuiseaux,"Rte de Dommartin, 71480 Cuiseaux",DECHETERIE DE CUISEAUX,DECHETERIE DE CUISEAUX,06 32 22 69 43,,,Valobat,Point d'apport volontaire
+fvm_0123,163-307 Rue des Bruyères,71290,Cuisery,"163-307 Rue des Bruyères, 71290 Cuisery",DECHETERIE DE CUISERY,DECHETERIE DE CUISERY,06 32 22 69 43,,,Valobat,Point d'apport volontaire
+fvm_0124,Rue Costes et Bellonte,39100,Dole,"Rue Costes et Bellonte, 39100 Dole",DECHETERIE DE DOLE,DECHETERIE DE DOLE,03 84 82 56 19,,,Valobat,Point d'apport volontaire
+fvm_0125,Rue des Coteaux de la Haute Seille,39210,Domblans,"Rue des Coteaux de la Haute Seille, 39210 Domblans",DECHETERIE DE DOMBLANS,DECHETERIE DE DOMBLANS,03 84 24 71 36,,,Valobat,Point d'apport volontaire
+fvm_0126,Rue des Fontaines,39460,Foncine-le-Haut,"Rue des Fontaines, 39460 Foncine-le-Haut",DECHETERIE DE FONCINE,DECHETERIE DE FONCINE,03 84 52 06 64,,,Valobat,Point d'apport volontaire
+fvm_0127,Av. Emile Zola,53120,Gorron,"Av. Emile Zola, 53120 Gorron",Déchèterie de Gorron,Déchèterie de Gorron,02 43 08 15 69,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0128,11 Rue des Colchiques,39400,Longchaumois,"11 Rue des Colchiques, 39400 Longchaumois",DECHETERIE DE LONGCHAUMOIS,DECHETERIE DE LONGCHAUMOIS,03 84 45 21 81,,,Valobat,Point d'apport volontaire
+fvm_0129,Rue de la Lième,39570,Perrigny,Rue de la Lième - 39570 Perrigny,DECHETERIE DE LONS NORD,DECHETERIE DE LONS NORD,03 84 24 50 09,,,Valobat,Point d'apport volontaire
+fvm_0130,"Zi, Rue Louis Remy",39570,Messia-sur-Sorne,"Zi, Rue Louis Remy, 39570 Messia-sur-Sorne",DECHETERIE DE LONS SUD,DECHETERIE DE LONS SUD,,,,Valobat,Point d'apport volontaire
+fvm_0131,Mnt de Saint-Claude,71500,Louhans,"Mnt de Saint-Claude, 71500 Louhans",DECHETERIE DE LOUHANS,DECHETERIE DE LOUHANS,06 32 22 69 43,,,Valobat,Point d'apport volontaire
+fvm_0132,La Chalopinnière,53170,Meslay-du-Maine,"La Chalopinnière, 53170 Meslay-du-Maine",Déchèterie de Meslay-du-maine,Déchèterie de Meslay-du-maine,02 43 64 24 52,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0133,24 Rue de Nozeroy,39250,Mignovillard,"24 Rue de Nozeroy, 39250 Mignovillard",DECHETERIE DE MIGNOVILLARD,DECHETERIE DE MIGNOVILLARD,03 84 52 06 64,,,Valobat,Point d'apport volontaire
+fvm_0134,Unnamed Road,39260,Moirans-en-Montagne,"Unnamed Road, 39260, Moirans-en-Montagne",DECHETERIE DE MOIRANS EN MONTAGNE,DECHETERIE DE MOIRANS EN MONTAGNE,03 84 42 63 32,,,Valobat,Point d'apport volontaire
+fvm_0135,18 Rte de Dole,39380,Mont-sous-Vaudrey,"18 Rte de Dole, 39380 Mont-sous-Vaudrey",DECHETERIE DE MONT SOUS VAUDREY,DECHETERIE DE MONT SOUS VAUDREY,03 84 82 56 19,,,Valobat,Point d'apport volontaire
+fvm_0136,Rue de l'Industrie,39160,Saint-Amour,"Rue de l'Industrie, 39160 Saint-Amour",DECHETERIE DE SAINT AMOUR,DECHETERIE DE SAINT AMOUR,03 84 48 81 99,,,Valobat,Point d'apport volontaire
+fvm_0137,3 Champtave,39110,Salins-les-Bains,"3 Champtave, 39110 Salins-les-Bains",DECHETERIE DE SALINS LES BAINS,DECHETERIE DE SALINS LES BAINS,06 83 44 39 25,,,Valobat,Point d'apport volontaire
+fvm_0138,Chemin de Moidesseules,39230,SELLIERES,Chemin de Moidesseules - 39230 SELLIERES,DECHETERIE DE SELLIERES,DECHETERIE DE SELLIERES,03 84 25 92 69,,,Valobat,Point d'apport volontaire
+fvm_0139,,39310,Septmoncel les Molunes,39310 Septmoncel les Molunes,DECHETERIE DE SEPTMONCEL,DECHETERIE DE SEPTMONCEL,03 84 45 52 98,,,Valobat,Point d'apport volontaire
+fvm_0140,10 Rue du Luxembourg,39500,Tavaux,"10 Rue du Luxembourg, 39500 Tavaux",DECHETERIE DE TAVAUX,DECHETERIE DE TAVAUX,03 84 82 56 19,,,Valobat,Point d'apport volontaire
+fvm_0141,2-8 Les Trois Coins,53300,Oisseau,2-8 Les Trois Coins - 53300 Oisseau,Déchèterie d'Oisseau,Déchèterie d'Oisseau,02 43 08 15 69,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0142,Rte de Lays,71270,Pierre-de-Bresse,"Rte de Lays, 71270 Pierre-de-Bresse",DECHETERIE PIERRE DE BRESSE,DECHETERIE PIERRE DE BRESSE,03 85 72 87 00,,,Valobat,Point d'apport volontaire
+fvm_0143,Rue Bois des Rampes,71330,Saint-Germain-du-Bois,"Rue Bois des Rampes, 71330 Saint-Germain-du-Bois",DECHETERIE SAINT GERMAIN DU BOIS,DECHETERIE SAINT GERMAIN DU BOIS,03 85 72 47 63,,,Valobat,Point d'apport volontaire
+fvm_0144,39 D31,53220,Saint-Mars-sur-la-Futaie,39 D31 - 53220 Saint-Mars-sur-la-Futaie,Déchèterie St Mars sur la  Futaie,Déchèterie St Mars sur la  Futaie,02 43 08 15 69,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0145,Route de,34650,Lunas,"Route de, 34650 Lunas",Déchetterie de Lunas,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0146,LA BASTIDE,34600,BEDARIEUX,LA BASTIDE 34600 BEDARIEUX,Déchetterie de Bédarieux,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0147,Chemin de Lauzières,30000,NÎMES,Chemin de Lauzières 30000 NÎMES,Dechetterie de Nîmes,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0148,Route de Manduel,30230,BOUILLARGUES,Route de Manduel 30230 BOUILLARGUES,Dechetterie de Bouillargues,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0149,Quartier St-Roman et la Roque,30300,COMPS,Quartier St-Roman et la Roque 30300 COMPS,Dechetterie de Comps,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0150,Avenue de Camargue,30132,Caissargues,Avenue de Camargue 30132 Caissargues,Dechetterie de Caissargues,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0151,Lieu dit Trahusse,30320,MARGUERITTES,Lieu dit Trahusse 30320 MARGUERITTES,Dechetterie de Marguerittes,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0152,30190 D18,30190,Sainte-Anastasie,"30190 D18, 30190 Sainte-Anastasie",Dechetterie de sainte Anastasie,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0153,CD 124,30350,ST BENEZET,CD 124 - 30350 ST BENEZET,Dechetterie Saint Benezet,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0154,,30320,BEZOUCE,30320 BEZOUCE,Dechetterie de Bezouce (Cabrières),DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0155,Chemin de Calvisson,30820,CAVEIRAC,Chemin de Calvisson 30820 CAVEIRAC,Dechetterie Caveirac,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0156,,30540,MILHAUD,30540 MILHAUD,Dechetterie Milhaud,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0157,Route de Fons,30290,LA ROUVIERE,Route de Fons 30290 LA ROUVIERE,Dechetterie La Rouvière,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0158,,30128,GARONS,30128 GARONS,Dechetterie de Garons,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0159,,30360,SAINTE CEZAIRE DE GAUZIGNAN,30360 SAINTE CEZAIRE DE GAUZIGNAN,Dechetterie Sainte Cézaire de Gauzignan,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0160,Mas de l'Avocat,30129,REDESSAN,Mas de l'Avocat - 30129 REDESSAN,Dechetterie Redessan,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0161,Les Arbousiers,30320,POULX,Les Arbousiers 30320 POULX,Dechetterie de Poulx,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0162,101 avenue du Docteur Fleming,30900,NÎMES,101 avenue du Docteur Fleming 30900 NÎMES,Dechetterie de Saint-Césaire,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0163,Route d'Aramon,30300,VALLABREGUES,Route d'Aramon 30300 VALLABREGUES,Dechetterie Vallabrègues,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0164,RD 114,30190,GARRIGUES SAINTE EULALIE,RD 114 - 30190 GARRIGUES SAINTE EULALIE,Dechetterie Garrigues Sainte Eulalie,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0165,Route de Beaucaire,30127,BELLEGARDE,Route de Beaucaire 30127 BELLEGARDE,Dechetterie Bellegarde,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0166,Les Roumettes,30840,MEYNES,Les Roumettes 30840 MEYNES,Dechetterie de Meynes,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0167,75 impasse de l'Ancienne Motte,30000,NÎMES,75 impasse de l'Ancienne Motte 30000 NÎMES,Dechetterie l'ancienne Motte,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0168,Zone artisanale li,30300,FOURQUES,Zone artisanale li 30300 FOURQUES,Dechetterie Fourques,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0169,Chemin de la Fontaine Giliène,30800,ST-GILLES,Chemin de la Fontaine Giliène- 30800 ST-GILLES,Dechetterie Saint Gilles,DECHETTERIE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0170,11 Av. de Londres,13127,Vitrolles,"11 Av. de Londres, 13127 Vitrolles",Déchèterie Vitrolles,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0171,Imp. de la Coopérative,13770,Venelles,"Imp. de la Coopérative, 13770 Venelles",Déchèterie Venelles,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0172,Unnamed Road,13126,Vauvenargues,"Unnamed Road, 13126 Vauvenargues",Déchèterie Vauvenargues,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0173,D19,13580,La Fare-les-Oliviers,"D19, 13580 La Fare-les-Oliviers",Déchèterie Vautubière,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0174,Quartier Radoubs,13150,Tarascon,"Quartier Radoubs, 13150 Tarascon",Déchèterie Tarascon,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0175,,13115,Saint-Paul-lez-Durance,13115 Saint-Paul-lez-Durance,Déchèterie St Paul Les Durance,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0176,Chem. de l'Arenier,13760,Saint-Cannat,"Chem. de l'Arenier, 13760 Saint-Cannat",Déchèterie St Cannat,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0177,Av. des 3 Communes,13960,Sausset-les-Pins,"Av. des 3 Communes, 13960 Sausset-les-Pins",Déchèterie Sausset les pins,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0178,Av. Luc Alabouvette,13300,Salon-de-Provence,"Av. Luc Alabouvette, 13300 Salon-de-Provence",Déchèterie Salon 2,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0179,,13790,Rousset,13790 Rousset,Déchèterie Rousset,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0180,"Quartier d'Antheron, Grand Rue",13640,La Roque-d'Anthéron,"Quartier d'Antheron, Grand Rue, 13640 La Roque-d'Anthéron",Déchèterie La roque d'anthéron,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0181,186 Chem. des Garrigues,13840,Rognes,"186 Chem. des Garrigues, 13840 Rognes",Déchèterie Rognes,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0182,D20F,13340,Rognac,"D20F, 13340 Rognac",Déchèterie Rognac Fouitades,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0183,D57D,13114,Puyloubier,"D57D, 13114 Puyloubier",Déchèterie Puyloubier,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0184,Chem. du Moulin,13610,Le Puy-Sainte-Réparade,"Chem. du Moulin, 13610 Le Puy-Sainte-Réparade",Déchèterie Puy St Réparade,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0185,23 Av. Max Dormoy,13230,Port-Saint-Louis-du-Rhône,"23 Av. Max Dormoy, 13230 Port-Saint-Louis-du-Rhône",Déchèterie Port St Louis du Rhone,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0186,D62A,13860,Peyrolles-en-Provence,"D62A, 13860 Peyrolles-en-Provence",Déchèterie Peyrolles,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0187,,13124,Peypin,13124 Peypin,Déchèterie Peypin,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0188,"Quartier Gourre d’Aure, route d’Aix",84120,Pertuis,"Quartier Gourre d’Aure, route d’Aix, 84120 Pertuis",Déchèterie Pertuis,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0189,,13170,Les Pennes-Mirabeau,13170 Les Pennes-Mirabeau,Déchèterie Les Pennes-Mirabeau,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0190,,13140,Miramas,13140 Miramas,Déchèterie Miramas,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0191,,13590,Meyreuil,13590 Meyreuil,Déchèterie Meyreuil,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0192,Chem. des Olives,13500,Martigues,"Chem. des Olives, 13500 Martigues",Déchèterie Martigues Vallon du fou,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0193,36 Av. Charles Moulet,13500,Martigues,"36 Av. Charles Moulet, 13500 Martigues",Déchèterie Martigues Croix sainte,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0194,5 Chem. des Macreuses,13700,Marignane,"5 Chem. des Macreuses, 13700 Marignane",Déchèterie Marignane,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0195,"Quartier du pont de la Tour, 13370",13370,Mallemort,"Quartier du pont de la Tour, 13370, 13370 Mallemort",Déchèterie Mallemort,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0196,Av. Fernand Julien,13410,Lambesc,"Av. Fernand Julien, 13410 Lambesc",Déchèterie Lambesc,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0197,Chemin du Vallon de Cavalas,13117,Martigues,"Chemin du Vallon de Cavalas, 13117 Martigues",Déchèterie La couronne,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0198,5 Rue Copernic,13800,Istres,"5 Rue Copernic, 13800 Istres",Déchèterie Istres,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0199,D19,13450,Grans,"D19, 13450 Grans",Déchèterie Grans Cornillon,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0200,Chem. des Pélicans,13180,Gignac-la-Nerthe,"Chem. des Pélicans, 13180 Gignac-la-Nerthe",Déchèterie Gignac,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0201,"Chemin des graviers, quartier de la grande vigne",13420,Gemenos,"Chemin des graviers, quartier de la grande vigne 13420 Gemenos",Déchèterie Gemenos,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0202,"Route de Gréasque, Quartier de la Malespine",13120,Gardanne,"Route de Gréasque, Quartier de la Malespine, 13120 Gardanne",Déchèterie Gardanne,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0203,,13270,Fos-sur-Mer,13270 Fos-sur-Mer,Déchèterie Fos sur mer,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0204,149 Av. de la Côte Bleue,13820,Ensuès-la-Redonne,"149 Av. de la Côte Bleue, 13820 Ensuès-la-Redonne",Déchèterie Ensues la redonne,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0205,1090B Chemin des Platrieres,13510,Éguilles,"1090B Chemin des Platrieres, 13510 Éguilles",Déchèterie Eguilles,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0206,Chemin de l'Espougnac,13650,Meyrargues,"Chemin de l'Espougnac, 13650 Meyrargues",Déchèterie Meyrargues,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0207,Chem. de Sainte-Catherine,13780,Cuges-les-Pins,"Chem. de Sainte-Catherine, 13780 Cuges-les-Pins",Déchèterie Cuges les pins,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0208,Chemin de patafloux,13220,Chateauneuf-les-Martigues,Chemin de patafloux 13220 Chateauneuf-les-Martigues,Déchèterie Chateauneuf les martigues,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0209,222 Rue Albert Einstein,13013,Marseille,"222 Rue Albert Einstein, 13013 Marseille",Déchèterie  Château Gombert,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0210,Vallon des Anglais,13260,Cassis,"Vallon des Anglais, 13260 Cassis",Déchèterie  Cassis,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0211,Lieu dit Sous le Crêt - CD 60 A,13320,Bouc-Bel-Air,"Lieu dit Sous le Crêt - CD 60 A, 13320 Bouc-Bel-Air",Déchèterie  Bouc Bel air,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0212,11 Bd Fernand Bonnefoy,13010,Marseille,"11 Bd Fernand Bonnefoy, 13010 Marseille",Déchèterie Marseille Bonnefoy,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0213,311 Chemin du Pont de St Claude,13390,Auriol,"311 Chemin du Pont de St Claude, 13390 Auriol",Déchèterie Auriol,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0214,620 Av. de la Roche Fourcade,13400,Aubagne,"620 Av. de la Roche Fourcade, 13400 Aubagne",Déchèterie Aubagne,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0215,247 Chem. du Château Lafarge,13090,Aix-en-Provence,"247 Chem. du Château Lafarge, 13090 Aix-en-Provence",Déchèterie Aix la Parade,Déchetterie,,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0216,Rue du general Mangin,38100,GRENOBLE,Rue du general Mangin - 38100 - GRENOBLE,Déchetterie Pro,DECHETTERIE DE GRENOBLE - VEOLIA MIN,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0217,Lieudit la mare houleuse,77700,Bailly Romainvilliers,"Lieudit la mare houleuse, 77700 Bailly Romainvilliers",Bailly Romainvilliers,Déchetteries,,,,Valobat,Point d'apport volontaire
+fvm_0218,Le trou de Chaillouet,77124,Cregy Les Meaux,"Le trou de Chaillouet, 77124 Cregy Les Meaux",Cregy Les Meaux,Déchetteries,,,,Valobat,Point d'apport volontaire
+fvm_0219,RD 66,77320,Jouy S/Morin,RD 66 - 77320 Jouy S/Morin,Jouy sur Morin,Déchetteries,,,,Valobat,Point d'apport volontaire
+fvm_0220,ZA de la Bauve,77100,Meaux,"ZA de la Bauve, 77100 Meaux",Meaux,Déchetteries,,,,Valobat,Point d'apport volontaire
+fvm_0221,Lieudit la croix gillet,77122,Monthyon,"Lieudit la croix gillet, 77122 Monthyon",Monthyon,Déchetteries,,,,Valobat,Point d'apport volontaire
+fvm_0222,ZA le fond du grand champ,77440,Ocquerre,"ZA le fond du grand champ, 77440 Ocquerre",Ocquerre,Déchetteries,,,,Valobat,Point d'apport volontaire
+fvm_0223,"D55, Av du chemin vert",77730,Saacy S/Marne,"D55, Av du chemin vert, 77730 Saacy S/Marne",Saacy,Déchetteries,,,,Valobat,Point d'apport volontaire
+fvm_0224,25 Rue du Ferrage,50430,LESSAY,25 Rue du Ferrage - 50430 LESSAY,Denis Matériaux Lessay,Denis Matériaux,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0225,Zone artisanale les rollandières,35120,DOL DE BRETAGNE,Zone artisanale les rollandières - 35120 DOL DE BRETAGNE,DENIS MATERIAUX,DENIS MATERIAUX . DOL DE BRETAGNE,,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0226,LE GUILY,56920,NOYAL PONTIVY,LE GUILY - 56920 NOYAL PONTIVY,DENIS MATERIAUX,DENIS MATERIAUX NOYAL PONTIVY,,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0227,ZA DE LAMBOUX,56250,ELVEN,ZA DE LAMBOUX - 56250 ELVEN,DENIS MATERIAUX,"DENIS MATERIAUX, ELVEN",,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0228,ZI CHÂTEAU GAILLARD,35470,BAIN DE BRETAGNE,ZI CHÂTEAU GAILLARD - 35470 BAIN DE BRETAGNE,DENIS MATERIAUX,"DENIS MATERIAUX,BDB",,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0229,12 RUE DE LA FONTAINE SALEE,44100,Nantes,"12 RUE DE LA FONTAINE SALEE, 44100 Nantes",DISPANO NANTES,DISPANO,06 44 63 44 91,,,,Point d'apport volontaire
+fvm_0230,Rte de Geneuille –,25870,Devecey,Rte de Geneuille – 25870 - Devecey,DOUBS RECYCLAGE - Ets. Lazar Levieux,DOUBS RECYCLAGE - Ets. Lazar Levieux,03 81 56 83 08,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0231,205 rue de la Garriguette,34130,SAINT-AUNES,205 rue de la Garriguette 34130 SAINT-AUNES,ECOPARC DE SAINT AUNES,ECOPARC,07 82 06 59 11,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0232,8 RUE PIERRE ET MARIE CURIE,44430,LE LOROUX-BOTTEREAU,8 RUE PIERRE ET MARIE CURIE - 44430 LE LOROUX-BOTTEREAU,Centre de recyclage,EPC COLIBRI (concession MENREC),02 41 26 27 29,Professionnels,,,Point d'apport volontaire
+fvm_0233,RUE MISENGRAIN,49520,SEGRE EN ANJOU,RUE MISENGRAIN - 49520 SEGRE EN ANJOU,Centre de recyclage,EPC COLIBRI (concession MENREC),02 41 26 27 29,Professionnels,,,Point d'apport volontaire
+fvm_0234,Quartier de l' Aiguille,13180,Gignac-la-Nerthe,"Quartier de l' Aiguille, 13180 Gignac-la-Nerthe",Epur Gignac-la-nerthe,Epur,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0235,6 rue Freycinet - Port de Lagny sur Marne,77400,Lagny-sur-Marne,6 rue Freycinet - Port de Lagny sur Marne - 77400 Lagny-sur-Marne,Espace Artisan Lagny,Espace Artisan,06 10 71 03 26,Professionnels,,,Point d'apport volontaire
+fvm_0236,11 allée de la Briarde,77184,Emerainville,11 allée de la Briarde - 77184  Emerainville,Espace Artisan Emerainville,Espace Artisan,06 28 93 79 19,Professionnels,,,Point d'apport volontaire
+fvm_0237,38 RUE DES BRODERIES,78310,COIGNIERES,38 RUE DES BRODERIES 78310 COIGNIERES,FFY-FENETRES & FERMETURES DES YVELINES,Espace Artisan,06 19 85 80 32,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0238,Route Ancenis,44430,Le Loroux-Bottereau,Route Ancenis - 44430 Le Loroux-Bottereau,JANNEAU LOGISTIQUE,Espace Artisan,08 09 54 00 00,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0239,86 Rue de Léry,27400,Incarville,"86 Rue de Léry, 27400 Incarville",Miroiterie Franconville,Espace Artisan,02 32 40 61 94,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0240,75 Rue Rateau Bat C5-C6,93120,La Courneuve,"75 Rue Rateau Bat C5-C6, 93120 La Courneuve",AEF Fenêtres,Espace Artisan,01 45 42 00 00,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0241,61 Av. Franklin Roosevelt,77260,La Ferté-sous-Jouarre,"61 Av. Franklin Roosevelt, 77260 La Ferté-sous-Jouarre",MENUISERIE DU GLAIRET,Espace Artisan,01 60 22 39 78,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0242,148-156 Rue gallieni,92100,Boulogne Billlancourt,"148-156 Rue gallieni, 92100 Boulogne Billlancourt",K par K,Espace Artisan,08 01 01 05 08,Professionnels,,Valdélia,Point d'apport volontaire
+fvm_0243,8 Rue Charles Martigny,94700,Maisons-Alfort,"8 Rue Charles Martigny, 94700 Maisons-Alfort",ACOUSSUR,Espace Artisan,01 71 33 17 71,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0244,"27 Route de Vernierfontaine, Rue du Gros Chêne –",25800,Valdahon,"27 Route de Vernierfontaine, Rue du Gros Chêne – 25800 - Valdahon",Espace Aubade Les Matériaux Comafranc Valdahon,Espace Aubade Les Matériaux Comafranc Valdahon,03 81 56 22 01,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0245,41 RUE ALAIN GERBAULT,56000,VANNES,41 RUE ALAIN GERBAULT - 56000 VANNES,ESPRIT CARRELAGE,ESPRIT CARRELAGE VANNES,02 90 79 20 20,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0246,Za la Bouysse,12500,Espalion,"Za la Bouysse, 12500 Espalion",Gedimat Espalion,GEDIMAT,05 65 44 05 20,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0247,109 Av de Rodez,12300,La Primaube,"109 Av de Rodez, 12300 La Primaube",Gedimat La Primaube,GEDIMAT,05 65 71 40 11,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0248,Chem. de la Meule,33680,LACANAU,Chem. de la Meule - 33680 LACANAU,GEDIMAT BATI Lacanau,GEDIMAT,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0249,1886 Rte Nationale,50380,Saint-Pair-sur-Mer,1886 Rte Nationale - 50380 Saint-Pair-sur-Mer,GEDIMAT Granville Matériaux,GEDIMAT,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0250,22 AVENUE DE LA GARE,43700,BRIVES CHARENSAC,22 AVENUE DE LA GARE - 43700 BRIVES CHARENSAC,GEDIMAT,GEDIMAT,471057400,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0251,ZI - 2 route de Delincourt,27140,GISORS,ZI - 2 route de Delincourt - 27140 GISORS,GEDIMAT Lunel,GEDIMAT,02 32 27 66 66,,,Valobat,Point d'apport volontaire
+fvm_0252,ZI LE CHAMP FLEURI,44840,LES SORINIERES,ZI LE CHAMP FLEURI 44840 LES SORINIERES,Etablissement LESIMPLE GEDIMAT,GEDIMAT,,,,Valobat,Point d'apport volontaire
+fvm_0253,70 Rue du Crêt de l'oeillet,42152,L'HORME,70 Rue du Crêt de l'oeillet - 42152 - L'HORME,negoce,GEDIMAT DELMONICO DOREL,07 77 22 25 30,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0254,RUE EDOUARD FOLLENS,59750,FEIGNIES,RUE EDOUARD FOLLENS - 59750 FEIGNIES,GEDIMAT FEIGNIES,GEDIMAT FEIGNIES,03 27 65 66 22,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0255,20 RUE MARCEAU BATTEUX,59610,FOURMIES,20 RUE MARCEAU BATTEUX - 59610 FOURMIES,GEDIMAT FOURMIES,GEDIMAT FOURMIES,03 27 60 83 60,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0256,Rue Blaise Pascal,39570,Lons-Le-Saunier,Rue Blaise Pascal - 39570 Lons-Le-Saunier,IA Dech Pro,GROUPE DEMAIN,03 84 47 00 60,Professionnels,,,Point d'apport volontaire
+fvm_0257,ZI DE LA GRANDE ROUILLAIS,35420,LOUVIGNE DU DESERT,ZI DE LA GRANDE ROUILLAIS - 35420 LOUVIGNE DU DESERT,GUENEE MATERIAUX,GUENEE MATERIAUX,02 99 98 01 47,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0258,33 avenue Louis Toussaint,61104,FLERS,33 avenue Louis Toussaint - 61104 FLERS,GUIBOUT Flers,GUIBOUT,02 33 65 65 00,,,Valobat,Point d'apport volontaire
+fvm_0259,La Brindossière,61600,MAGNY LE DESERT,La Brindossière - 61600 MAGNY LE DESERT,GUIBOUT Magny le desert,GUIBOUT,02 33 14 04 24,,,Valobat,Point d'apport volontaire
+fvm_0260,Parc des Gaillons,61400,SAINT HILAIRE LE CHATEL,Parc des Gaillons - 61400 SAINT HILAIRE LE CHATEL,GUIBOUT ST Hilaire le chatel,GUIBOUT,02 33 65 65 00,,,Valobat,Point d'apport volontaire
+fvm_0261,446 Bd François Mitterand,53100,Mayenne,446 Bd François Mitterand - 53100 Mayenne,GUIBOUT MATERIAUX - Mayenne,GUIBOUT MATERIAUX - Mayenne,02 43 04 32 47,,,Valobat,Point d'apport volontaire
+fvm_0262,13 rue des Tilleuls,27420,LES THILLIERS EN VEXIN,13 rue des Tilleuls - 27420 LES THILLIERS EN VEXIN,GUICHAUX MATERIAUX Thilliers en vexin,GUICHAUX,02 32 55 61 28,,,Valobat,Point d'apport volontaire
+fvm_0263,LANVINEC,22970,PLOUMAGOAR,LANVINEC - 22970 PLOUMAGOAR,DECHETERIE PROFESSIONNEL,GUYOT ENVIRONNEMENT GUINGAMP,02 96 43 77 75,Professionnels,,,Point d'apport volontaire
+fvm_0264,6 Rue Georges Clémenceau,57130,ARS-SUR-MOSELLE,6 Rue Georges Clémenceau - 57130 ARS-SUR-MOSELLE,Déchèterie La Mance,HAGANIS Environnement,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0265,Rue de la Houblonnière,57050,Metz,Rue de la Houblonnière - 57050 Metz,Déchèterie LA HOUBLONNIERE,HAGANIS Environnement,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0266,Rue Monceau,57000,Metz,Rue Monceau - 57000 Metz,Déchèterie de METZ-MAGNY,HAGANIS Environnement,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0267,Rue de la Gare,57155,MARLY,Rue de la Gare - 57155 MARLY,Déchèterie MARLY,HAGANIS Environnement,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0268,Rue du Haut-Rhêle (entre Moselle et A31),57950,MONTIGNY-LES-METZ,Rue du Haut-Rhêle (entre Moselle et A31) - 57950 MONTIGNY-LES-METZ,Déchèterie Le Haut-Rhêle,HAGANIS Environnement,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0269,RD 155B,57245,PELTRE,RD 155B - 57245 PELTRE,Déchèterie Le Saint Pierre,HAGANIS Environnement,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0270,Metz-Actipôle - Rue de la Mouée - ZAC de la Petite Voëvre (près de l'Actipôle),57070,Metz,Metz-Actipôle - Rue de la Mouée - ZAC de la Petite Voëvre (près de l'Actipôle) - 57070 Metz,DéchèterieLa Petite Voëvre,HAGANIS Environnement,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0271,Rue de la Mouee,57070,Metz,Rue de la Mouee - 57070 Metz,Déchèterie PRO PAVD de METZ,HAGANIS Environnement,,Professionnels,,,Point d'apport volontaire
+fvm_0272,Metz-Nord - D51 (après le stade de foot en direction d'Amanvillers),57130,VERNEVILLE,Metz-Nord - D51 (après le stade de foot en direction d'Amanvillers) - 57130  VERNEVILLE,Déchèterie La Houblonnière,HAGANIS Environnement,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0273,RN 57,54710,LUDRES,RN 57 - 54710 LUDRES,Déchèterie LUDRES,HAGANIS Environnement,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0274,Rue Jean Monnet - Proche Zénith,54320,Maxéville,Rue Jean Monnet - Proche Zénith - 54320 Maxéville,Déchèterie MAXEVILLE,HAGANIS Environnement,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0275,Boulevard Jean Moulin,54000,Nancy,Boulevard Jean Moulin - 54000 Nancy,Déchèterie NANCY,HAGANIS Environnement,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0276,3 rue du torpilleur Sirocco,63300,THIERS,3 rue du torpilleur Sirocco  - 63300 - THIERS,THIERS,HIRSCH RECYCLAGE,04 73 80 40 88,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0277,165 Rue de la Chanière,39570,Perrigny,"165 Rue de la Chanière, 39570 Perrigny",Hodelia Caseo Perrigny,Hodelia Caseo Perrigny,03 84 43 13 13,,,Valobat,Point d'apport volontaire
+fvm_0278,165 Rue de la Chanière,39570,Perrigny,"165 Rue de la Chanière, 39570 Perrigny",Hodelia Gedimat Perrigny,Hodelia Gedimat Perrigny,,,,Valobat,Point d'apport volontaire
+fvm_0279,700 rue Emile Zola,62940,HAILLICOURT,700 rue Emile Zola - 62940 - HAILLICOURT,DEPOT,ICM,03 21 53 92 62,Professionnels,,,Point d'apport volontaire
+fvm_0280,21 Av Jean Perrin,33700,MERIGNAC,21 Av Jean Perrin - 33700 MERIGNAC,La Plateforme du Bâtiment Mérignac,La Plateforme du Bâtiment,,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0281,20 rue René Magné,33300,BORDEAUX,20 rue René Magné - 33300 BORDEAUX,La Plateforme du Bâtiment Bordeaux,La Plateforme du Bâtiment,,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0282,85 Bd Félix Faure,93300,Aubervilliers,85 Bd Félix Faure - 93300 Aubervilliers,La Plateforme du Bâtiment Aubervillers,La Plateforme du Bâtiment,,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0283,ZI La Sphère,14200,HEROUVILLE ST CLAIR,ZI La Sphère - 14200 HEROUVILLE ST CLAIR,Larivière,LARIVIERE,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0284,"ZA du Château de la mare, 18 rue du Clos de la Fontaine",50200,Coutances,"ZA du Château de la mare, 18 rue du Clos de la Fontaine - 50200 Coutances",Larivière Matériaux,Larivière Coutances,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0285,Rue Sainte Barbe,54800,JARNY,Rue Sainte Barbe - 54800 JARNY,CMPM - Jarny,Les Matériaux,,Professionnels,,,Point d'apport volontaire
+fvm_0286,169 Rue Gutenberg,12000,RODEZ,169 Rue Gutenberg - 12000 RODEZ,Espace Aubade Malrieu Distribution Rodez,Malrieu Distribution,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0287,Route Merey,27640,BREUILPONT,Route Merey - 27640 BREUILPONT,MATERIAUX Gouery Breuilpont,MATERIAUX,02 32 36 30 14,,,Valobat,Point d'apport volontaire
+fvm_0288,5 Av. Albin Gilles,13210,Saint-Rémy-de-Provence,"5 Av. Albin Gilles, 13210 Saint-Rémy-de-Provence",Matériaux moderne St Rémy de provence,Matériaux moderne (Ciffreo Bonna),,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0289,"Z.I. de, Rue des Canesteu, Chem. de la Gandonne",13300,Salon-de-Provence,"Z.I. de, Rue des Canesteu, Chem. de la Gandonne, 13300 Salon-de-Provence",Matériaux moderne Salon de Provence,Matériaux moderne (Ciffreo Bonna),,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0290,154 Bd Mireille Lauze,13010,Marseille,"154 Bd Mireille Lauze, 13010 Marseille",Matériaux moderne Marseille Mireille Lauze,Matériaux moderne (Ciffreo Bonna),,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0291,468 Chem. du Littoral,13016,Marseille,"468 Chem. du Littoral, 13016 Marseille",Matériaux moderne Marseille Littoral,Matériaux moderne (Ciffreo Bonna),,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0292,"448-456, D5",13016,Marseille,"448-456, D5, 13016 Marseille",Matériaux moderne Marseille La Calade,Matériaux moderne (Ciffreo Bonna),,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0293,316bis Av. des Olives,13013,Marseille,"316bis Av. des Olives, 13013 Marseille",Matériaux moderne Fondacle,Matériaux moderne (Ciffreo Bonna),,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0294,"Quartier des Vaux, 444 Chem. du Merlançon",13400,Aubagne,"Quartier des Vaux, 444 Chem. du Merlançon, 13400 Aubagne",Matériaux moderne Aubagne,Matériaux moderne (Ciffreo Bonna),,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0295,17 Rue Nicolas Copernic,13200,Arles,"17 Rue Nicolas Copernic, 13200 Arles",Matériaux Moderne Arles 2,Matériaux moderne (Ciffreo Bonna),,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0296,1413 ROUTE DE St Gilles - ZAC Mas des Abeilles,30000,NÎMES,1413 ROUTE DE St Gilles - ZAC Mas des Abeilles 30000 NÎMES,MATERIAUX MODERNES NIMES,MATERIAUX MODERNES,04 66 40 60 20,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0297,Av. Ferdinand de Lesseps,13320,Bouc-Bel-Air,"Av. Ferdinand de Lesseps, 13320 Bouc-Bel-Air",Mat'Ild Bouc Bel Air,Mat'Ild,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0298,3 Rue Pierre Dravet,13011,Marseille,"3 Rue Pierre Dravet, 13011 Marseille",Mat'Ild  La Valentine,Mat'Ild,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0299,"Lieu Dit ""La Prise"" CD 556",13650,Meyrargues,"Lieu Dit ""La Prise"" CD 556, 13650 Meyrargues",Mat'Ild Meyrargues,Mat'Ild,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0300,170 Chem. de Payannet,13120,Gardanne,"170 Chem. de Payannet, 13120 Gardanne",Mat'Ild Gardanne,Mat'Ild,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0301,Bd Jean MOULIN,54000,NANCY,Bd Jean MOULIN  54000 NANCY,Dechetterie NANCY,Metropole NANCY,03 54 50 20 20,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0302,Rue de la Prat -Z.I du Coquet,03260,SEUILLET,Rue de la Prat -Z.I du Coquet - 03260 SEUILLET,Déchèterie Pro,MVG RECYCLAGE,07 83 74 95 45,Professionnels,Particuliers,Ecomaison,Point d'apport volontaire
+fvm_0303,Route nationale,54320,MAXEVILLE,Route nationale - 54320 - MAXEVILLE,DECH MAXEVILLE,NICOLLIN,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0304,Boulevard Jean Moulin,54000,NANCY,Boulevard Jean Moulin - 54000 - NANCY,DECH NANCY,NICOLLIN,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0305,1 Rue Ardant du Picq,54260,LONGUYON,1 Rue Ardant du Picq - 54260 LONGUYON,Déchèterie LONGUYON,ONYX EST,,Pro (sauf weekend et jours fériés),Particuliers,,Point d'apport volontaire
+fvm_0306,ZA - rue Charles Peccatte,54120,Baccarat,ZA - rue Charles Peccatte - 54120 Baccarat,Déchèterie DE BACCARAT,ONYX EST,,Pro (sauf weekend et jours fériés),Particuliers,,Point d'apport volontaire
+fvm_0307,D400,54450,Bénaménil,D400 - 54450 Bénaménil,Déchèterie DE BENAMENIL,ONYX EST,,Pro (sauf weekend et jours fériés),Particuliers,,Point d'apport volontaire
+fvm_0308,Route de maixe - parroy,54370,Einville-au-Jard,Route de maixe - parroy - 54370 Einville-au-Jard,Déchèterie d'Einville-au-jard,ONYX EST,,Pro (sauf weekend et jours fériés),Particuliers,,Point d'apport volontaire
+fvm_0309,11 Av. de la Libération,54300,Lunéville,11 Av. de la Libération - 54300 Lunéville,Déchèterie LUNEVILLE,ONYX EST,,Pro (sauf weekend et jours fériés),Particuliers,,Point d'apport volontaire
+fvm_0310,Zone Industrielle,39170,Coteaux du Lizon,"Zone Industrielle, 39170 Coteaux du Lizon",PAGANI DISTRIBUTION ST LUPICIN,PAGANI DISTRIBUTION ST LUPICIN,03 84 42 12 11,,,Valobat,Point d'apport volontaire
+fvm_0311,44 Rue du Mont Rivel,39300,Champagnole,"44 Rue du Mont Rivel, 39300 Champagnole",Pagot et Savoie Champagnole,Pagot et Savoie Champagnole,03 84 52 74 90,,,Valobat,Point d'apport volontaire
+fvm_0312,21 Rue des Chaucheux,39100,Foucherans,"21 Rue des Chaucheux, 39100 Foucherans",PAGOT ET SAVOIE FOUCHERANS,PAGOT ET SAVOIE FOUCHERANS,03 84 69 16 67,,,Valobat,Point d'apport volontaire
+fvm_0313,5 Rte des Buclets,39400,Morbier,"5 Rte des Buclets, 39400 Morbier",PAGOT ET SAVOIE MORBIER,PAGOT ET SAVOIE MORBIER,03 84 33 05 58,,,Valobat,Point d'apport volontaire
+fvm_0314,6 Rte de Blègny,39110,Salins-les-Bains,"6 Rte de Blègny, 39110 Salins-les-Bains",PAGOT ET SAVOIE SALINS LES BAINS,PAGOT ET SAVOIE SALINS LES BAINS,03 84 73 09 89,,,Valobat,Point d'apport volontaire
+fvm_0315,"397-399, 397 RTE DE CLISSON",44230,SAINT-SEBASTIEN-SUR-LOIRE,"397-399, 397 RTE DE CLISSON, 44230 SAINT-SEBASTIEN-SUR-LOIRE",PANOFRANCE NANTES,PANOFRANCE,"02 40 26 97 00
+06.79.80.57.25",,,,Point d'apport volontaire
+fvm_0316,ZAC DE KERGARADEC 165 RUE ALPHONSE PENAUD,29490,GUIPAVAS,ZAC DE KERGARADEC 165 RUE ALPHONSE PENAUD - 29490 GUIPAVAS,DECHETERIE PROFESSIONNEL,PAUL GRAND JOUAN SACO,02 97 87 26 93,Professionnels,,,Point d'apport volontaire
+fvm_0317,26 chemin de la poudrière,33700,MERIGNAC,26 chemin de la poudrière - 33700 - MERIGNAC,PENA METAUX,PENA METAUX,05 56 64 32 30,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0318,Route de Beuzeville,27260,EPAIGNES,Route de Beuzeville - 27260 EPAIGNES,PILLAUD Materiaux Epaignes,PILLAUD,06 32 62 74 09,,,Valobat,Point d'apport volontaire
+fvm_0319,371 rue de Gaillon,27500,PONT AUDEMER,371 rue de Gaillon - 27500 PONT AUDEMER,PILLAUD Materiaux Pont audemer,PILLAUD,,,,Valobat,Point d'apport volontaire
+fvm_0320,143 rue Patrice Lumumba,34070,MONTPELLIER,143 rue Patrice Lumumba 34070 MONTPELLIER,PLATEFORME DU BATIMENT,PLATEFORME DU BATIMENT,04 99 92 21 00,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0321,14 Avenue des Arnavaux Quatorzieme,13014,Marseille,"14 Avenue des Arnavaux Quatorzieme, 13014 Marseille",Plateforme du Bâtiment Marseille,Plateforme du Bâtiment,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0322,1755 Chemin de la Vallée,13400,Aubagne,"1755 Chemin de la Vallée, 13400 Aubagne, France",Plateforme du Bâtiment  Aubagne,Plateforme du Bâtiment,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0323,30 Rue Jean de Guiramand,13920,Aix,30 Rue Jean de Guiramand -13920 Aix,Plateforme du Bâtiment Aix,Plateforme du Bâtiment,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0324,5 rue du Seil,44400,REZE,"5 rue du Seil, 44400 REZE",PLATEFORME DU BÂTIMENT Nantes,PLATEFORME DU BÂTIMENT,06 33 04 71 86,,,Valobat,Point d'apport volontaire
+fvm_0325,30 RUE DE LA COUTURE,59290,WASQUEHAL,30 RUE DE LA COUTURE - 59290 WASQUEHAL,PLATEFORME DU BATIMENT WASQUEHAL,PLATEFORME DU BATIMENT WASQUEHAL,06 44 60 40 11,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0326,"Allée Pierre et Marie Curie, Za De L'aupretin",71500,Louhans,"Allée Pierre et Marie Curie, Za De L'aupretin, 71500 Louhans",PLATTARD LOUHANS,PLATTARD LOUHANS,385750682,,,Valobat,Point d'apport volontaire
+fvm_0327,LA VILLE MENO,56800,GUILLAC,LA VILLE MENO - 56800 GUILLAC,Déchèterie de GUILLAC,PLOERMEL COMMUNAUTE,02 97 74 22 74,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0328,PA DU BOIS VERT,56800,PLOERMEL,PA DU BOIS VERT 56800 PLOERMEL,Déchèterie de PLOERMEL,PLOERMEL COMMUNAUTE,02 97 72 33 02,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0329,Zi Les Fruchardieres - 6 Rue Clément Ader,85340,LES SABLES D'OLONNE,Zi Les Fruchardieres - 6 Rue Clément Ader - 85340 LES SABLES D'OLONNE,POINT P Olonne sur mer,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0330,QUARTIER CHANZY,55700,STENAY,"QUARTIER CHANZY, 55700 STENAY",Point.P Stenay,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0331,25 BIS RUE DU PUITS ROYAU,52100,ST DIZIER,"25 BIS RUE DU PUITS ROYAU, 52100 ST DIZIER",Point.P Saint-Dizier,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0332,Rue Henri Poincaré,27000,EVREUX,Rue Henri Poincaré - 27000 EVREUX,POINT P Evreux,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0333,81 Av. de Rouen,27200,VERNON,81 Av. de Rouen - 27200 VERNON,POINT P Vernon,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0334,Rue Jean Petit,27110,Crosville-la-Vieille,Rue Jean Petit - 27110 Crosville-la-Vieille,POINT P Crosville-la-vieille,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0335,Zi La Londe - 53 Av. Winston Churchill,27400,LOUVIERS,Zi La Londe - 53 Av. Winston Churchill - 27400 LOUVIERS,POINT P Louviers,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0336,Rue de la Céramique,27940,VAL D'HAZEY,Rue de la Céramique - 27940 VAL D'HAZEY,POINT P Aubevoye,POINT P,06 84 25 60 02,,,Valobat,Point d'apport volontaire
+fvm_0337,ZAC ST Ulfrant,27500,Pont AUDEMER,ZAC ST Ulfrant - 27500 Pont AUDEMER,POINT P Audemer,POINT P,02 32 42 32 32,,,Valobat,Point d'apport volontaire
+fvm_0338,Bd Sylla Lefèvre,27300,BERNAY,Bd Sylla Lefèvre -27300 BERNAY,POINT P Bernay,POINT P,06 74 97 94 20,,,Valobat,Point d'apport volontaire
+fvm_0339,Rue Saint Exupéry - ZAC de Quincangrogne,27310,BOURG ACHARD,Rue Saint Exupéry - ZAC de Quincangrogne - 27310 BOURG ACHARD,POINT P Bourg achard,POINT P,02 32 56 22 54,,,Valobat,Point d'apport volontaire
+fvm_0340,ZA 17 route de Louvriers,27190,BUREY,ZA 17 route de Louvriers - 27190 BUREY,POINT P Burey,POINT P,06 74 97 91 72,,,Valobat,Point d'apport volontaire
+fvm_0341,Route du Mans,28170,CHATEAUNEUF EN THYMERAIS,Route du Mans - 28170 CHATEAUNEUF EN THYMERAIS,POINT P Chateauneuf,POINT P,02 37 51 61 10,,,Valobat,Point d'apport volontaire
+fvm_0342,25 route Ethe Virton,28100,DREUX,25 route Ethe Virton - 28100 DREUX,POINT P Dreux,POINT P,02 37 46 31 97,,,Valobat,Point d'apport volontaire
+fvm_0343,Les ruisseaux d'Houdreville - avenu de l'Europe,28230,EPERNON,Les ruisseaux d'Houdreville - avenu de l'Europe - 28230 EPERNON,POINT P Epernon,POINT P,02 37 23 00 04,,,Valobat,Point d'apport volontaire
+fvm_0344,22 route de Dieppe,27140,GISORS,22 route de Dieppe - 27140 GISORS,POINT P Gisors,POINT P,02 32 55 26 65,,,Valobat,Point d'apport volontaire
+fvm_0345,5 Rue Olivier de Serres Zac,85500,LES HERBIERS,5 Rue Olivier de Serres Zac - 85500 LES HERBIERS,POINT P,POINT P,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0346,RTE DU RHIN,67230,BENFELD,"RTE DU RHIN, 67230 BENFELD",POINT P Benfeld,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0347,3 Rue du Doubs,67100,Strasbourg,3 Rue du Doubs - 67100 Strasbourg,POINT P Strasbourg La Meinau,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0348,493 Rte de Montauban,12000,Villefranche-de-Rouergue,493 Rte de Montauban - 12000 Villefranche-de-Rouergue,POINT P Villefranche-de-Rouergue,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0349,Rte d'Espalion,12850,ONET LE CHÂTEAU,Rte d'Espalion - 12850 ONET LE CHÂTEAU,POINT P Rodez,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0350,6 La Bouysse,12500,ESPALION,6 La Bouysse - 12500 ESPALION,POINT P Espalion,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0351,RD 54,12400,ST Affrique,RD 54 - 12400 ST Affrique,Point P,POINT P,05 65 98 21 22,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0352,ROC BLANC Avenue d'Albi,12170,Requiste,"ROC BLANC Avenue d'Albi, 12170 Requiste",Point P,POINT P,05 65 74 02 16,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0353,Rue Ferdinand de Lesseps,33700,MERIGNAC,Rue Ferdinand de Lesseps - 33700 MERIGNAC,POINT P Merignac,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0354,15 Bd de la Maison Blanche,13014,MARSEILLE,15 Bd de la Maison Blanche - 13014 MARSEILLE,POINT P Marseille Maison Blanche,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0355,"ZI, Av. René Cassin",13530,Trets,"ZI, Av. René Cassin, 13530 Trets",Point P Trets,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0356,550 All. de Szentendre,13300,Salon-de-Provence,"550 All. de Szentendre, 13300 Salon-de-Provence",Point P Salon de provence,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0357,10 Av. Albert Schweitzer,13210,Saint-Rémy-de-Provence,"10 Av. Albert Schweitzer, 13210 Saint-Rémy-de-Provence",Point P St Rémy de Provence,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0358,Bd de la Plage,13340,Rognac,"Bd de la Plage, 13340 Rognac",Point P Rognac,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0359,"Zi Ecopolis Sud, Rue James Joule",13500,Martigues,"Zi Ecopolis Sud, Rue James Joule, 13500 Martigues",Point P Martigues,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0360,RN 8 Av. Robert Daugey,13080,Aix-en-Provence,"RN 8 Av. Robert Daugey, 13080 Aix-en-Provence",Point P Luynes,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0361,Av. Jean Monnet,13410,Lambesc,"Av. Jean Monnet, 13410 Lambesc",Point P Lambesc,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0362,"Montée de la Valentine, Av de St Menet",13011,Marseille,"Montée de la Valentine, Av de St Menet 13011 Marseille",Point P Marseille la Valentine,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0363,11 Av. Regis Huillier,13800,Istres,"11 Av. Regis Huillier, 13800 Istres",Point P Istres,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0364,960 Av. Lino Ventura,13180,Gignac-la-Nerthe,"960 Av. Lino Ventura, 13180 Gignac-la-Nerthe",Point P Gignac Ventura,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0365,"Quartier Bricard, Av. Lino Ventura",13180,Gignac-la-Nerthe,"Quartier Bricard, Av. Lino Ventura, 13180 Gignac-la-Nerthe",Point P Gignac Bricard,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0366,"D46A, Allée de la Palun",13120,Gardanne,"D46A, Allée de la Palun, 13120 Gardanne",Point P Gardanne,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0367,Rte de Rognes,13510,Éguilles,"Rte de Rognes, 13510 Éguilles",Point P Eguilles,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0368,Rue Emile Zola,13130,Berre-l'Étang,Rue Emile Zola - 13130 Berre-l'Étang,Point P Berre l'étang,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0369,202 chemin de l'armée d'afrique,13010,Marseille,202 chemin de l'armée d'afrique 13010 Marseille,Point P Marseille Armée d'Afrique,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0370,Rue Nicolas Copernic ZI Nord,13200,Arles,"Rue Nicolas Copernic ZI Nord, 13200 Arles",Point P Arles,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0371,"RN 7, 1160 Av. Paul Jullien",13100,Le Tholonet,"RN 7, 1160 Av. Paul Jullien, 13100 Le Tholonet",Point P Aix palette,Point P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0372,110 Cr Montalivet,14000,CAEN,110 Cr Montalivet - 14000 CAEN,POINT P Caen,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0373,19 route D'Esquay Sur Seulles SAINT VIGOR LE GRAND,14000,BAYEUX,19 route D'Esquay Sur Seulles SAINT VIGOR LE GRAND - 14000 BAYEUX,POINT P Bayeux Saint Vigor,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0374,Route de Monptellier,34725,ST-ANDRE-DE-SAGONIS,Route de Monptellier 34725 ST-ANDRE-DE-SAGONIS,POINT P ST ANDRE DE SANGONIS,POINT P,04 67 57 80 52,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0375,100 avenue Robert Jonis,30000,NIMES,100 avenue Robert Jonis - 30000 NIMES,POINT P NIMES,POINT P,06 87 62 33 85,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0376,78 route de Bagnols,30100,ALES,78 route de Bagnols 30100 ALES,POINT P ALES,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0377,10 avenue du Languedoc,34370,CREISSAN,10 avenue du Languedoc 34370 CREISSAN,POINT P CREISSAN,POINT P,06 12 89 37 23,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0378,Route de Saint-Pons,34600,BEDARIEUX,Route de Saint-Pons 34600 BEDARIEUX,POINT P BEDARIEUX,POINT P,06 12 89 37 23,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0379,456 rue du Mas Saint-Pierre,34000,MONTPELLIER,456 rue du Mas Saint-Pierre 34000 MONTPELLIER,POINT P MONTPELLIER,POINT P,06 12 89 37 23,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0380,Route de Bagnols,30300,TRESQUES,Route de Bagnols 30300 TRESQUES,POINT P BAGNOLS,POINT P,04 66 89 55 62,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0381,Route de Montpellier,34725,ST-ANDRE-DE-SAGONIS,Route de Montpellier 34725 ST-ANDRE-DE-SAGONIS,POINT P ST-ANDRE-DE-SAGONIS,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0382,16 avenue Emmanuel d'Alzon - BP 51022,30123,LE VIGAN CEDEX,16 avenue Emmanuel d'Alzon - BP 51022 30123 LE VIGAN CEDEX,POINT P LE VIGAN,POINT P,04 67 81 81 81,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0383,14 rue du Menestrel,34190,GANGES,14 rue du Menestrel 34190 GANGES,POINT P GANGES,POINT P,04 67 73 90 39,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0384,ZAC LA DOMITIENNE - 4 avenue des Métiers d'Art,34534,BEZIERS CEDEX,ZAC LA DOMITIENNE - 4 avenue des Métiers d'Art 34534 BEZIERS CEDEX,POINT P BEZIERS,POINT P,04 67 11 67 11,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0385,546 rue du Mas St Pierre,,,546 rue du Mas St Pierre,POINT P MONTPELLIER,POINT P,06 12 89 37 23,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0386,ZONE ACTIVITE LE CAPITOUL,34700,LODEVE,ZONE ACTIVITE LE CAPITOUL 34700 LODEVE,POINT P Lodeve,POINT P,04 67 44 02 15,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0387,"ZAC LES JONCASSES, route de Murviel",34660,COURNONTERRAL,"ZAC LES JONCASSES, route de Murviel 34660 COURNONTERRAL",POINT P COURNONTERRAL,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0388,2 ZAE LA LIQUIERE,34380,ST MARTIN DE LONDRES,2 ZAE LA LIQUIERE 34380 ST MARTIN DE LONDRES,POINT P ST MARTIN DE LONDRES,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0389,1023 avenue des Eaux Blanches,34200,SETE,1023 avenue des Eaux Blanches 34200 SETE,POINT P SETE ZI DES EAUX BLANCHES,POINT P,04 67 46 67 67,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0390,ZA du Mingrelin,50500,Carentan-les-Marais,ZA du Mingrelin - 50500 Carentan-les-Marais,POINT P Carentan les Marais,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0391,ZA de la Mare aux Raines,50190,PERIERS,ZA de la Mare aux Raines - 50190 PERIERS,POINT P Périers,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0392,Rue Longue Mare,50110,TOURLAVILLE,Rue Longue Mare - 50110 TOURLAVILLE,POINT P Cherbourg Longue Mare,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0393,14 rue Baptiste Marcet,50110,Cherbourg-en Cotentin,14 rue Baptiste Marcet - 50110 Cherbourg-en Cotentin,POINT P Tourlaville Marcet,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0394,Les Prés du Pont -  Le Val Saint Père,50300,AVRANCHES,Les Prés du Pont -  Le Val Saint Père - 50300 AVRANCHES,POINT P Avranches Le Val Saint Père,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0395,la Lucerie,50370,Brécey,la Lucerie - 50370 Brécey,POINT P Brécey,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0396,route de Valognes,50260,Bricquebec-en-Cotentin,route de Valognes - 50260 Bricquebec-en-Cotentin,POINT P Bricquebec,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0397,4 av de Verdun,50200,Coutances,4 av de Verdun - 50200 Coutances,POINT P Coutances,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0398,"ZI rue de Torigny, la Chevalerie E",50000,Saint-Lô,"ZI rue de Torigny, la Chevalerie E - 50000 Saint-Lô",POINT P St Lô,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0399,32 route de Diélette,50340,Les Pieux,32 route de Diélette - 50340 Les Pieux,Point P les Pieux,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0400,13 rte de St-Lô,50160,Torigny-les-Villes,13 rte de St-Lô - 50160 Torigny-les-Villes,POINT P Torigny,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0401,30 rte de la Ferme,50700,Valognes,30 rte de la Ferme - 50700 Valognes,POINT P Valognes,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0402,ZI avenue des Matignon,50400,Granville,ZI avenue des Matignon - 50400 Granville,Point P Granville,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0403,Chemin de Cruscades,11200,Lézignan-Corbières,Chemin de Cruscades - 11200 Lézignan-Corbières,POINT P Lézignan-Corbières,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0404,Giratoire des Evadés de France - 42 Rue Blaise Pascal,11100,NARBONNE,Giratoire des Evadés de France - 42 Rue Blaise Pascal - 11100 NARBONNE,POINT P Narbonne,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0405,35 Rue de Gode,95100,ARGENTEUIL,35 Rue de Gode - 95100 ARGENTEUIL,POINT P Argenteuil,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0406,5 Allée de Madrid,93320,Les Pavillons-sous-Bois,"5 Allée de Madrid, 93320 Les Pavillons-sous-Bois",POINT P Les Pavillons-sous-Bos,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0407,"256 BD DU HAVRE, RN 14",95480,PIERRELAYE,"256 BD DU HAVRE, RN 14, 95480 PIERRELAYE",POINT P Pierrelaye,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0408,27 Avenue des Guilleraies,92000,Nanterre,"27 Avenue des Guilleraies, 92000 Nanterre",POINT P Nanterre,POINT P,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0409,29 Quai Lucien Lefranc,93300,Aubervilliers,29 Quai Lucien Lefranc 93300 Aubervilliers,POINT.P AUBERVILLIERS,POINT P,01 53 56 25 80,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0410,75 Rue du Parc,93130,Noisy-le-Sec,75 Rue du Parc 93130 Noisy-le-Sec,POINT.P NOISY LE SEC,POINT P,01 48 10 10 10,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0411,410 route de Clisson,44120,Vertou,"410 route de Clisson, 44120 Vertou",NANTES VERTOU POINT P,POINT P,06 32 11 16 38,,,Valobat,Point d'apport volontaire
+fvm_0412,RUE DES MINAIS,44340,BOUGUENAIS,"RUE DES MINAIS, 44340 BOUGUENAIS",NANTES BOUGUENAIS POINT P,POINT P,06 44 64 22 47,,,Valobat,Point d'apport volontaire
+fvm_0413,12 RUE DES COCHARDIERES,44805,St Herblain Cedex,"12 RUE DES COCHARDIERES, 44805 St Herblain Cedex",ST-HERBLAIN ATLANTIS POINT P,POINT P,02 40 79 84 81,,,Valobat,Point d'apport volontaire
+fvm_0414,1 RUE DES FORETS,44140,Montbert,"1 RUE DES FORETS, 44140 Montbert",MONTBERT POINT P,POINT P,"02 51 08 09 47 
+07 88 18 93 29",,,Valobat,Point d'apport volontaire
+fvm_0415,12 RUE GUSTAVE EIFFEL,44130,Blain,"12 RUE GUSTAVE EIFFEL, 44130 Blain",BLAIN POINT P,POINT P,,,,Valobat,Point d'apport volontaire
+fvm_0416,216 AVENUE DE LA DEFENSE PASSIVE,80136,RIVERY,216 AVENUE DE LA DEFENSE PASSIVE - 80136 RIVERY,POINT P AMIENS RIVERY,POINT P AMIENS RIVERY,03 22 70 90 00,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0417,87 RUE FENDALI,59580,ANICHE,87 RUE FENDALI - 59580 ANICHE,POINT P ANICHE,POINT P ANICHE,03 27 92 42 42,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0418,RUE DU PRESIDENT COTY,62232,ANNEZIN,RUE DU PRESIDENT COTY - 62232 ANNEZIN,POINT P ANNEZIN,POINT P ANNEZIN,03 21 57 99 60,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0419,41 RUE ROGER SALENGRO,59620,AULNOYE-AYMERIES,41 RUE ROGER SALENGRO - 59620 AULNOYE-AYMERIES,POINT P AULNOYE AYMERIES,POINT P AULNOYE AYMERIES,03 27 67 35 45,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0420,100 RUE JEAN JAURES,02110,BOHAIN EN VERMANDOIS,100 RUE JEAN JAURES - 02110 BOHAIN EN VERMANDOIS,POINT P BOHAIN EN VERMANDOIS,POINT P BOHAIN EN VERMANDOIS,03 23 07 14 52,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0421,68 AVENUE ANTOINE SAINT EXUPERY,62100,CALAIS,68 AVENUE ANTOINE SAINT EXUPERY - 62100 CALAIS,POINT P CALAIS,POINT P CALAIS,03 21 96 34 98,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0422,140 BOULEVARD FAIDHERBE,59400,CAMBRAI,140 BOULEVARD FAIDHERBE - 59400 CAMBRAI,POINT P CAMBRAI,POINT P CAMBRAI,03 27 72 04 04,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0423,401 ROUTE DE BEAUMONT,60230,CHAMBLY,401 ROUTE DE BEAUMONT - 60230 CHAMBLY,POINT P CHAMBLY,POINT P CHAMBLY,01 30 34 84 30,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0424,2 RUE DU MARAIS SEC,60180,NOGENT SUR OISE,2 RUE DU MARAIS SEC - 60180 NOGENT SUR OISE,POINT P CREIL,POINT P CREIL,03 44 66 88 88,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0425,5 RUE PIERRE CURIE,59272,DON,5 RUE PIERRE CURIE - 59272 DON,POINT P DON,POINT P DON,03 20 58 42 49,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0426,RUE EDMOND GOSSELIN,59500,DOUAI,RUE EDMOND GOSSELIN - 59500 DOUAI,POINT P DOUAI,POINT P DOUAI,03 27 08 75 45,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0427,"LA ZONE BP 22, ZI",80600,DOULLENS,"LA ZONE BP 22, ZI - 80600 DOULLENS",POINT P DOULLENS,POINT P DOULLENS,03 22 77 76 30,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0428,LA HAUTE BORNE,80420,FLIXECOURT,LA HAUTE BORNE - 80420 FLIXECOURT,POINT P FLIXECOURT,POINT P FLIXECOURT,03 22 51 50 50,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0429,51 RUE DE LA CHAPELLE,59190,HAZEBROUCK,51 RUE DE LA CHAPELLE - 59190 HAZEBROUCK,POINT P HAZEBROUCK,POINT P HAZEBROUCK,03 28 49 51 58,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0430,RUE DE LA HAIE PLOUVIER,59810,LESQUIN,RUE DE LA HAIE PLOUVIER - 59810 LESQUIN,POINT P LESQUIN,POINT P LESQUIN,03 20 16 90 20,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0431,LA GARMANIERE,56140,MALESTROIT,LA GARMANIERE -56140 MALESTROIT,POINT P,POINT P MALESTROIT,02 97 75 20 22,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0432,"RUE DES CHATEAUX, ZI LA PILATERIE",59700,MARCQ EN BAROEUL,"RUE DES CHATEAUX, ZI LA PILATERIE - 59700 MARCQ EN BAROEUL",POINT P MARCQ EN BAROEUL,POINT P MARCQ EN BAROEUL,03 20 20 07 30,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0433,424 AVENUE DE LA GIRONDE,59640,DUNKERQUE,424 AVENUE DE LA GIRONDE - 59640 DUNKERQUE,POINT P PETITE SYNTHE,POINT P PETITE SYNTHE,03 28 25 91 00,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0434,ZI DU BOIS VERT,56800,PLOERMEL,ZI DU BOIS VERT - 56800 PLOERMEL,POINT P,POINT P PLOERMEL,02 97 99 12 75,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0435,8 RUE LEON BOURGEOIS,60700,PONT SAINTE MAXENCE,8 RUE LEON BOURGEOIS - 60700 PONT SAINTE MAXENCE,POINT P PONT STE MAXENCE,POINT P PONT STE MAXENCE,03 44 72 20 66,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0436,Avenue Marc Lefrancq Za de L'aerodrome,59121,Prouvy,Avenue Marc Lefrancq Za de L'aerodrome - 59121 Prouvy,POINT P PROUVY,POINT P PROUVY,03 27 29 80 80,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0437,PARC DU LION,59223,RONCQ,PARC DU LION - 59223 RONCQ,POINT P RONCQ,POINT P RONcQ,03 20 27 94 60,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0438,63 RUE FELIX FAURE,59350,SAINT ANDRE LEZ LILLE,63 RUE FELIX FAURE - 59350 SAINT ANDRE LEZ LILLE,POINT P SAINT ANDRE LEZ LILLLE,POINT P SAINT ANDRE LEZ LILLLE,03 20 42 44 24,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0439,9 ROUTE DE CREIL,60340,SAINT LEU D'ESSEURENT,9 ROUTE DE CREIL - 60340 SAINT LEU D'ESSEURENT,POINT P SAINT LEU D'ESSEURENT,POINT P SAINT LEU D'ESSEURENT,03 44 64 49 60,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0440,AVENUE DU GENERAL FERRI,35400,SAINT MALO,AVENUE DU GENERAL FERRI - 35400 SAINT MALO,POINT P,POINT P SAINT MALO,,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0441,RUE DE L'HIPPODROME,62280,SAINT MARTIN BOULOGNE,RUE DE L'HIPPODROME - 62280 SAINT MARTIN BOULOGNE,POINT P SAINT MARTIN BOULOGNE,POINT P SAINT MARTIN BOULOGNE,03 21 10 96 60,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0442,QUAI DU VIEUX PORT,02100,SAINT QUENTIN,QUAI DU VIEUX PORT - 02100 SAINT QUENTIN,POINT P SAINT QUENTIN,POINT P SAINT QUENTIN,03 23 06 50 30,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0443,20 ROUTE DE COMPIEGNE,02200,SOISSONS,20 ROUTE DE COMPIEGNE - 02200 SOISSONS,POINT P SOISSONS,POINT P SOISSONS,03 23 75 65 55,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0444,13 AVENUE PASTEUR,59730,SOLESMES,13 AVENUE PASTEUR - 59730 SOLESMES,POINT P SOLESMES,POINT P SOLESMES,03 27 37 30 22,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0445,ZI SAINT LEONARD,56450,THEIX,ZI SAINT LEONARD - 56450 THEIX,POINT P,POINT P VANNES THEIX,02 97 54 05 22,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0446,ZI rue Blaise Pascal,39000,Lons le Saunier,ZI rue Blaise Pascal - 39000 Lons le Saunier,Point. P Lons-le-Saunier,Point. P,384861234,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0447,22 rue du 11 Novembre,71500,Louhans,22 rue du 11 Novembre - 71500 Louhans,Point. P Louhans,Point. P,03 95 75 15 52,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0448,3 rue Victor Grignard,91540,Mennecy,"3 rue Victor Grignard, 91540 Mennecy",Point. P Mennecy,Point. P,01 64 57 09 24,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0449,52 quai H.Rossignol,77000,Melun,"52 quai H.Rossignol, 77000 Melun",Melun,Point. P,01 64 39 35 22,,,Valobat,Point d'apport volontaire
+fvm_0450,4 place de l'Europe,77610,Fontenay Tresigny,"4 place de l'Europe, 77610 Fontenay Tresigny",Fontenay Tresigny,Point. P,01 64 25 93 42,,,Valobat,Point d'apport volontaire
+fvm_0451,13 Av de la foulée,77100,Nanteuil les Meaux,"13 Av de la foulée, 77100 Nanteuil les Meaux",Nanteuil les Meaux,Point. P,01 64 33 44 22,,,Valobat,Point d'apport volontaire
+fvm_0452,7/9 route d'Ozoir,77680,Roissy en Brie,"7/9 route d'Ozoir, 77680 Roissy en Brie",Roissy en Brie,Point. P,01 60 34 52 00,,,Valobat,Point d'apport volontaire
+fvm_0453,Rue du Moutier,77230,St Mard,"Rue du Moutier, 77230 St Mard",Saint Mard,Point. P,01 60 03 12 36,,,Valobat,Point d'apport volontaire
+fvm_0454,KERORIEN,56580,CREDIN,KERORIEN - 56580 CREDIN,Déchèterie CREDIN,PONTIVY COMMUNAUTE,02 97 79 13 23,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0455,BRANGUILY,56920,GUELTAS,BRANGUILY - 56920 GUELTAS,Déchèterie DE GUELTAS,PONTIVY COMMUNAUTE,02 97 79 13 23,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0456,RUE BERTHELOT,56300,PONTIVY,RUE BERTHELOT - 56300 PONTIVY,Déchèterie PONTIVY,PONTIVY COMMUNAUTE,02 97 79 13 23,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0457,"PA DE KERPONNER, la villeneuve",56920,NOYAL PONTIVY,"PA DE KERPONNER, la villeneuve - 56920 NOYAL PONTIVY",Déchèterie DE KERPONNER,PONTIVY COMMUNAUTE,02 97 79 13 23,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0458,BANN AR LANN,56480,CLEGUEREC,BANN AR LANN - 56480 CLEGUEREC,Déchèterie  CLEGUEREC,PONTIVY COMMUNAUTE,02 97 79 13 23,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0459,LE PETIT MENEC,56920,NOYAL PONTIVY,LE PETIT MENEC - 56920 NOYAL PONTIVY,Déchèterie NOYAL,PONTIVY COMMUNAUTE,02 97 79 13 23,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0460,13 RUE DE SIGNAN,56300,PONTIVY,13 RUE DE SIGNAN - 56300 PONTIVY,Déchèterie SIGNAN,PONTIVY COMMUNAUTE,02 97 79 13 23,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0461,RUE ABBE EDME MARIOTTE,56230,QUESTEMBERT,RUE ABBE EDME MARIOTTE - 56230 QUESTEMBERT,Déchèterie DE KERVAULT,QUESTEMBERT COMMUNAUTE,02 97 26 59 51,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0462,L'EPINE,56220,LIMERZEL,L'EPINE - 56220 LIMERZEL,Déchèterie DE L EPINE,QUESTEMBERT COMMUNAUTE,02 97 26 59 51,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0463,25 Chemin des fontaines,74100,VETRAZ-MONTHOUX,25 Chemin des fontaines - 74100 - VETRAZ-MONTHOUX,R.C.R.,R.C.R.,04 50 37 27 67,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0464,11 rue henri SELLIER,79000,NIORT,11 rue henri SELLIER - 79000 - NIORT,RAIVALOR,RAIVALOR,05 49 09 27 46,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0465,19 avenue Clément FAYAT,32500,Fleurance,19 avenue Clément FAYAT - 32500 - Fleurance,R2D2,Recyclage et Reemploi pour Developpement Durable,05 62 63 48 52,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0466,780 Rue du Maneguen,56850,Caudan,780 Rue du Maneguen - 56850 Caudan,Recycleurs Bretons Caudan,Recycleurs Bretons,02 97 81 60 82,Professionnels,Particuliers,"Ecomaison, Valobat",Point d'apport volontaire
+fvm_0467,ZAC de Kerdanvez,29160,Crozon,ZAC de Kerdanvez - 29160 Crozon,Recycleurs Bretons Crozon,Recycleurs Bretons,02 98 03 29 98,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0468,170 rue Jacqueline Auriol,29490,Guipavas,170 rue Jacqueline Auriol - 29490 Guipavas,Recycleurs Bretons Guipavas,Recycleurs Bretons,02 98 03 29 98,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0469,Rdpt de Ty Colo,29820,Guilers,Rdpt de Ty Colo - 29820 Guilers,Recycleurs Bretons Guilers,Recycleurs Bretons,02 98 36 61 61,Professionnels,Particuliers,"Ecomaison, Valobat, Valdelia",Point d'apport volontaire
+fvm_0470,ZI de Kerbriant,29610,Plouigneau,ZI de Kerbriant - 29610 Plouigneau,Recycleurs Bretons Plouigneau,Recycleurs Bretons,02 98 79 82 00,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0471,"ZA de Ruau, 30 rue des Hauts Fourneaux",,,"ZA de Ruau, 30 rue des Hauts Fourneaux",Déchèterie Pro,Renouveau Circulaire,05 32 52 89 10,Professionnels,,,Point d'apport volontaire
+fvm_0472,3 rue Jean MERMOZ,87270,COUZEIX,3 rue Jean MERMOZ  - 87270 - COUZEIX,REVIPLAST,REVIPLAST,05 55 09 77 80,Professionnels,,Valdélia,Point d'apport volontaire
+fvm_0473,16b Rte de Sottevast,50700,Yvetot-Bocage,16b Rte de Sottevast - 50700 Yvetot-Bocage,REVIVAL - DERICHEBOURG VALOGNES,REVIVAL,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0474,148 rue de Lomé,27000,EVREUX,148 rue de Lomé - 27000 EVREUX,REVIVAL Evreux,REVIVAL,02 36 62 46 00,,,Valobat,Point d'apport volontaire
+fvm_0475,Chaussée de Vexion,27400,LOUVIERS,Chaussée de Vexion - 27400 LOUVIERS,REVIVAL Louviers,REVIVAL,02 32 40 01 06,,,Valobat,Point d'apport volontaire
+fvm_0476,QUILLIVOUDEN,29400,PLOUGOURVEST,QUILLIVOUDEN - 29400 PLOUGOURVEST,Centre de recyclage,RMB (Concession MENREC),02 98 68 55 43,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0477,"Route nationale 580, 1064 chemin de la Begude",30126,SAINT-LAURENT-DES-ARBRES,"Route nationale 580, 1064 chemin de la Begude 30126 SAINT-LAURENT-DES-ARBRES",RUBIS SAINT LAURENT,RUBIS,06 78 41 91 30,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0478,"ZI Roubian, Route de St Remy",13150,Tarascon,"ZI Roubian, Route de St Remy 13150 Tarascon",Rubis matériaux Tarascon,Rubis matériau,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0479,LD ZA DE MARENGO,12160,BARAQUEVILLE,"LD ZA DE MARENGO, 12160 BARAQUEVILLE",SARL PUECHOULTRES,SARL PUECHOULTRES,05 65 69 02 70,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0480,19 allée de Toliere,36000,CHATEAUROUX,19 allée de Toliere - 36000 CHATEAUROUX,déchèterie professionnele dechet'pro36,sas,02 54 61 05 40,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0481,Le Point du Jour,56500,SAINT ALLOUESTRE,Le Point du Jour - 56500 SAINT ALLOUESTRE,SAS MENREC,SAS MENREC,07 87 25 57 67,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0482,"ZI, 180 RUE BLAISE PASCAL",39000,LONS-LE-SAUNIER,"ZI, 180 RUE BLAISE PASCAL, 39000 LONS-LE-SAUNIER",SAS PAGET,SAS PAGET,03 84 24 23 19,,,Valobat,Point d'apport volontaire
+fvm_0483,1 route de Mackwiller,67430,DIEMERINGEN,1 route de Mackwiller - 67430 DIEMERINGEN,SCHMIDT Frères,SCHMIDT Frères SAS,03 88 00 41 80,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0484,6 rue de Cherbourg,67026,Strasbourg,6 rue de Cherbourg - 67026 - Strasbourg,SCHROLL STRASBOURG,SCHROLL,03 88 40 58 40,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0485,44 route Industrielle de la Hardt,67120,Molsheim,44 route Industrielle de la Hardt - 67120 - Molsheim,SCHROLL MOLSHEIM,SCHROLL,03 67 07 99 19,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0486,26 rue Edouard Branly,68000,Colmar,26 rue Edouard Branly - 68000 - Colmar,SCHROLL COLMAR,SCHROLL,03 89 41 52 40,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0487,2A rue des Imprimés CS 40068,68120,Pfastatt,2A rue des Imprimés CS 40068 - 68120 Pfastatt,SCHROLL PFASTATT,SCHROLL,03 89 57 15 93,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0488,51 rue de la Frm Claus,67500,Haguenau,51 rue de la Frm Claus - 67500 Haguenau,SCHROLL HAGUENAU,SCHROLL,03 67 07 95 63,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0489,Zone Industrielle du Grand-Bois-Est,33750,SAINT-GERMAIN-DU-PUCH,Zone Industrielle du Grand-Bois-Est - 33750 SAINT-GERMAIN-DU-PUCH,Déchèterie Saint-Germain du Puch,SEMOCTOM,05 57 34 53 20,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0490,9 route de l'Allégret,33670,SAINT-LEON,9 route de l'Allégret - 33670 SAINT-LEON,Déchèterie Saint-Léon,SEMOCTOM,05 57 34 53 20,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0491,ZI de Lalande,33450,SAINT-LOUBES,ZI de Lalande - 33450 SAINT-LOUBES,Déchèterie Saint-Loubes,SEMOCTOM,05 57 34 53 20,,Particuliers,,Point d'apport volontaire
+fvm_0492,12 Zone Artisanale de Boisson,33410,BEGUEY,12 Zone Artisanale de Boisson - 33410 BEGUEY,Déchèterie Beguey,SEMOCTOM,05 57 34 53 20,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0493,20 rue de Fos sur Mer- Port Edouard Herriot,69007,Lyon,20 rue de Fos sur Mer- Port Edouard Herriot - 69007 Lyon,Centre de recyclage,Serfim recyclage,04 78 21 60 61,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0494,99 chemin du Charbonnier,69800,Saint-Priest,99 chemin du Charbonnier - 69800 - Saint-Priest,Centre de recyclage,Serfim recyclage,04 78 20 96 41,Professionnels,,"Ecomaison, Valdélia, Valobat",Point d'apport volontaire
+fvm_0495,6 impasse rené Varennes,42150,La Ricamarie,6 impasse rené Varennes - 42150 - La Ricamarie,Déchèterie professionnelle,Sermaco,04 77 80 83 80,Professionnels,Particuliers,Ecomaison,Point d'apport volontaire
+fvm_0496,17 Rue des Frères Lumière,39200,Saint-Claude,17 Rue des Frères Lumière - 39200 Saint-Claude,Décheterie SAINT CLAUDE,SICTOM du HAUT JURA,03 84 45 52 79,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0497,Col de la Savine,39400,Morbier,Col de la Savine - 39400 Morbier,Décheterie MORBIER,SICTOM du HAUT JURA,03 84 33 41 61,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0498,Rue Curé Marquis,39170,Saint-Lupicin,Rue Curé Marquis - 39170 Saint-Lupicin,Déchèterie SAINT LUPICIN,SICTOM du HAUT JURA,06 73 19 30 07,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0499,LES FROMENTAUX,43260,ST JULIEN CHAPTEUIL,LES FROMENTAUX - 43260 ST JULIEN CHAPTEUIL,Déchèterie de ST JULIEN CHAPTEUIL,SICTOM EMBLAVEZ MEYGAL,471013712,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0500,2 D103,43800,Saint-Vincent,"2 D103, 43800 Saint-Vincent",Déchèterie de ST VINCENT,SICTOM EMBLAVEZ MEYGAL,471085975,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0501,ROUTE DE CRAPONNE - LE CLAPIER,43130,RETOURNAC,ROUTE DE CRAPONNE - LE CLAPIER - 43130 RETOURNAC,Déchèterie de RETOURNAC,SICTOM EMBLAVEZ MEYGAL,471652342,,Particuliers,Valobat,Point d'apport volontaire
+fvm_0502,ZI PELLOUAILLE,35480,GUIPRY-MESSAC,ZI PELLOUAILLE - 35480 GUIPRY-MESSAC,Déchèterie GUIPRY-MESSAC,SMICTOM DES PAYS DE VILAINE,02 99 57 04 03,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0503,LES ROCHELLES,35330,VAL D ANAST,LES ROCHELLES - 35330 VAL D ANAST,Déchèterie de Val d'Anast,SMICTOM DES PAYS DE VILAINE,02 99 57 04 03,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0504,5 ROUTE DU PERRON COUPE,35470,PLECHATEL,5 ROUTE DU PERRON COUPE - 35470 PLECHATEL,Déchèterie de Bain de bretagne,SMICTOM DES PAYS DE VILAINE,02 99 57 04 03,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0505,ROUTE DE LA DOMINELAIS,35390,GRAND FOUGERAY,ROUTE DE LA DOMINELAIS - 35390 GRAND FOUGERAY,Déchèterie du Grand-Fougeray,SMICTOM DES PAYS DE VILAINE,02 99 57 04 03,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0506,RUE DES VALLES DU COUCHANT,35550,PIPRIAC,RUE DES VALLES DU COUCHANT - 35550 PIPRIAC,Déchèterie de Pipriac,SMICTOM DES PAYS DE VILAINE,02 99 57 04 03,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0507,ROUTE DE BRUC SUR AFF,35550,SIXT SUR AFF,ROUTE DE BRUC SUR AFF - 35550 SIXT SUR AFF,Déchèterie de Sixt sur Aff,SMICTOM DES PAYS DE VILAINE,02 99 57 04 03,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0508,LA PIGEONNAIS,35580,GUICHEN,LA PIGEONNAIS - 35580 GUICHEN,Déchèterie de Guichen,SMICTOM DES PAYS DE VILAINE,02 99 57 04 03,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0509,ZI,54920,Villers-la-Montagne,ZI - 54920 Villers-la-Montagne,Déchèterie VILLERS LA MONTAGNE,SMTOM SYNDICAT MIXTE TRAITEMENT ORDURES MENAGERES,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0510,20 chemin de jarapinard,43290,MONTFAUCON,20 chemin de jarapinard - 43290 MONTFAUCON,SRPM,société de recyclage du pays de Monfaucon,471593235,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0511,1450 route des Aulnes,74370,VILLAZ,1450 route des Aulnes - 74370 - VILLAZ,Société VIGNIER F.,Société VIGNIER F.,04 50 01 21 00,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0512,ZA BLEU,43000,POLIGNAC,ZA BLEU - 43000 POLIGNAC,SRV VACHER Déchèterie Professionnelle,SRV VACHER,471022294,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0513,RUE DU CHAMP MARTIN,35130,CHARTRES DE BRETAGNE,RUE DU CHAMP MARTIN - 35130 CHARTRES DE BRETAGNE,Déchètterie CAP VALO 35,SUEZ CAP VALO 35,0810 33 34 44,Professionnels,,,Point d'apport volontaire
+fvm_0514,310 rue de l'ile,44000,NANTES,310 rue de l'ile - 44000 NANTES,Déchèterie professionnelle,SUEZ RV. ECOPOLE DE CHEVIRE,02 40 57 08 08,Professionnels,,,Point d'apport volontaire
+fvm_0515,Rte de Bar le Duc,55300,CHAUVONCOURT,Rte de Bar le Duc - 55300 - CHAUVONCOURT,DECH CHAUVONCOURT,SYNDICAT MIXTE D'ETUDE ET DE TRAITEMENT,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0516,21 route de Varennes,55120,CLERMONT EN ARGONNE,21 route de Varennes - 55120 - CLERMONT EN ARGONNE,DECH CLERMONT EN ARGONNE,SYNDICAT MIXTE D'ETUDE ET DE TRAITEMENT,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0517,Les Grèves,55150,DAMVILLERS,Les Grèves - 55150 - DAMVILLERS,DECH DAMVILLERS,SYNDICAT MIXTE D'ETUDE ET DE TRAITEMENT,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0518,ZA Alamont,55230,SPINCOURT,ZA Alamont - 55230 - SPINCOURT,DECH SPINCOURT,SYNDICAT MIXTE D'ETUDE ET DE TRAITEMENT,,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0519,606 Rue du Petit Candol,50000,Saint-Lô,606 Rue du Petit Candol - 50000 Saint-Lô,Déchèterie de Saint-Lô,Syndicat Mixte du Point Fort (SMPF 50),,Pro (sauf samedi),Particuliers,,Point d'apport volontaire
+fvm_0520,Route du Focq,50890,Condé-sur-Vire,Route du Focq - 50890 Condé-sur-Vire,Déchèterie de Condé-sur-Vire,Syndicat Mixte du Point Fort (SMPF 50),,Pro (sauf samedi),Particuliers,,Point d'apport volontaire
+fvm_0521,Route de Villebaudon,50420,Tessy-Bocage,Route de Villebaudon - 50420 Tessy-Bocage,Déchèterie de Tessy-Bocage,Syndicat Mixte du Point Fort (SMPF 50),,Pro (sauf samedi),Particuliers,,Point d'apport volontaire
+fvm_0522,Route de Saint-Sauveur Lendelin,50570,MARIGNY,Route de Saint-Sauveur Lendelin - 50570 MARIGNY,Déchèterie de Marigny-le-Lozon,Syndicat Mixte du Point Fort (SMPF 50),,Pro (sauf samedi),Particuliers,,Point d'apport volontaire
+fvm_0523,D8,50620,Le Dézert,D8 - 50620 Le Dézert,Déchèterie de Le Dézert,Syndicat Mixte du Point Fort (SMPF 50),,Pro (sauf samedi),Particuliers,,Point d'apport volontaire
+fvm_0524,RD 77,50750,Saint-Martin-de-Bonfossé,RD 77 - 50750 Saint-Martin-de-Bonfossé,Déchèterie de St-Martin-de-Bonfossé,Syndicat Mixte du Point Fort (SMPF 50),,Pro (sauf samedi),Particuliers,,Point d'apport volontaire
+fvm_0525,3 Le Bas des Landes - ZA Le Bas des Landes,50680,Saint-Clair-sur-l'Elle,3 Le Bas des Landes - ZA Le Bas des Landes - 50680 Saint-Clair-sur-l'Elle,Déchèterie de St-Clair-sur-Elle,Syndicat Mixte du Point Fort (SMPF 50),,Pro (sauf samedi),Particuliers,,Point d'apport volontaire
+fvm_0526,166 Route de Cavigny,50880,Pont-Hébert,166 Route de Cavigny - 50880 Pont-Hébert,Déchèterie de Pont-Hébert,Syndicat Mixte du Point Fort (SMPF 50),,Pro (sauf samedi),Particuliers,,Point d'apport volontaire
+fvm_0527,D971 Les Terres rouges,50500,Carentan-les-Marais,D971 Les Terres rouges - 50500 Carentan-les-Marais,Déchèterie de Carentan,Syndicat Mixte du Point Fort (SMPF 50),,Pro (sauf samedi),Particuliers,,Point d'apport volontaire
+fvm_0528,Le Cacquevel,50800,Villedieu-les-Poêles-Rouffigny,Le Cacquevel - 50800 Villedieu-les-Poêles-Rouffigny,Déchèterie de Villedieu,Syndicat Mixte du Point Fort (SMPF 50),,Pro (sauf samedi),Particuliers,,Point d'apport volontaire
+fvm_0529,La Bergerie,50410,Percy-en-Normandie,La Bergerie - 50410 Percy-en-Normandie,Déchèterie de Percy,Syndicat Mixte du Point Fort (SMPF 50),,Pro (sauf samedi),Particuliers,,Point d'apport volontaire
+fvm_0530,60 Rue du Dr Laënnec,35550,Pipriac,60 Rue du Dr Laënnec - 35550 Pipriac,TEZEA,TEZEA,06 80 30 80 85,Professionnels,Particuliers,"Ecomaison, Valdélia, Valobat",Point d'apport volontaire
+fvm_0531,1 rue de la Tuilerie,27120,PACY SUR EURE,1 rue de la Tuilerie - 27120 PACY SUR EURE,TOUT FAIRE Pacy,TOUT FAIRE,02 32 36 04 33,,,Valobat,Point d'apport volontaire
+fvm_0532,zone de SAINT PAUL,22540,LOUARGAT,zone de SAINT PAUL - 22540 LOUARGAT,TREGOR MATERIAUX RECYCLAGE,TREGOR MATERIAUC RECYCLAGE (concession MENREC),02 96 92 00 89,Professionnels,,,Point d'apport volontaire
+fvm_0533,ZA la Louière,25620,L'Hôpital-du-Grosbois,ZA la Louière- 25620 L'Hôpital-du-Grosbois,TRIDOO,TRIDOO SOLUTIOND DECHET,00 01 23 45 67,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0534,ZA Les Acacias - 8 allée Blaise Pascal,85430,La Boissière-des-Landes,ZA Les Acacias - 8 allée Blaise Pascal - 85430 La Boissière-des-Landes,Tri'n'Collect La Roche-sur-Yon,Tri'n'Collect,,Professionnels,,,Point d'apport volontaire
+fvm_0535,35 RUE ROBERT SCHUMAN,44800,St-Herblain,"35 RUE ROBERT SCHUMAN, 44800 St-Herblain",TRI'N'COLLECT NANTES,TRI'N'COLLECT,,,,,Point d'apport volontaire
+fvm_0536,ZI Pré A Varois - 297 Chemin de l'écluse,54670,Custines,ZI Pré A Varois - 297 Chemin de l'écluse - 54670 - Custines,TTM Custines,TTM Environnement,03 83 24 97 19,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0537,6 rue Denis Papin,57690,Créhange,6 rue Denis Papin - 57690 - Créhange,TTM Créhange,TTM Environnement,03 87 04 16 11,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0538,287 avenue de Boirargues,34000,MONTPELLIER,287 avenue de Boirargues 34000 MONTPELLIER,Union Matériaux Montpellier,UNION MATERIAUX,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0539,257 avenue Charles de Gaulle,34400,LUNEL,257 avenue Charles de Gaulle 34400 LUNEL,Union Matériaux Lunel Est,UNION MATERIAUX,06 87 13 47 00,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0540,744 rue des Fournels,34400,LUNEL,744 rue des Fournels 34400 LUNEL,Union Matériaux Lunel ouest,UNION MATERIAUX,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0541,160 rue Michel Debre,30900,NÎMES,160 rue Michel Debre 30900 NÎMES,Union Matériaux Nîmes,UNION MATERIAUX,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0542,177 avenue de la Calmette,30250,VILLEVIEILLE,177 avenue de la Calmette 30250 VILLEVIEILLE,Union Matériaux Sommières,UNION MATERIAUX,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0543,1 route de Nîmes,30220,AIGUES-MORTE,1 route de Nîmes 30220 AIGUES-MORTE,Union Matériaux Aigues mortes,UNION MATERIAUX,06 87 13 47 00,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0544,325 route de Nîmes,34920,LE CRES,325 route de Nîmes 34920 LE CRES,Union Matériaux Le Cres,UNION MATERIAUX,07 76 23 59 20,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0545,"ZAE LES AVANTS NORD, 459 rue des Avants",34270,ST-MATHIER-DE-TREVIERS,"ZAE LES AVANTS NORD, 459 rue des Avants 34270 ST-MATHIER-DE-TREVIERS",Union Matériaux Saint-Mathieu-de-Treviers,UNION MATERIAUX,06 74 95 01 20,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0546,"ZONE INDUSTRIELLE BRUGES SUD, 75 rue Gramme",30100,ALES,"ZONE INDUSTRIELLE BRUGES SUD, 75 rue Gramme 30100 ALES",Union Matériaux Alès,UNION MATERIAUX,06 72 51 69 35,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0547,177 rue des charpentiers,13150,Tarascon,177 rue des charpentiers 13150 Tarascon,Union matériaux Tarascon,Union matériaux,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0548,30 av Auguste Marius Peyre,13110,Port de Bouc,30 av Auguste Marius Peyre 13110 Port de Bouc,Union matériaux Port de bouc,Union matériaux,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0549,128 Bd Romain Rolland,13010,Marseille,128 Bd Romain Rolland 13010 Marseille,Union matériaux Marseille,Union matériaux,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0550,8 rue phillipe lebon,13200,Arles,8 rue phillipe lebon 13200 Arles,Union matériaux Arles,Union matériaux,,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0551,2 rue Traversière,16200,BOURG CHARENTE,2 rue Traversière  - 16200 - BOURG CHARENTE,BOURG,VAL'HOMNIA,07 56 41 90 64,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0552,21 rue de la voie royale-Orval,50660,Orval sur sienne,21 rue de la voie royale-Orval - 50660 Orval sur sienne,Centre de recyclage,VALOREC SAS (concession MENREC),02 52 56 38 14,Professionnels,,,Point d'apport volontaire
+fvm_0553,quartier Mondy,26300,BOURG DE PEAGE,quartier Mondy - 26300 - BOURG DE PEAGE,Déchetterie Pro,Valorsol environnement,04-75-72-86-40,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0554,26 RUE LOUIS ARMAND,26800,PORTES LES VALENCE,26 RUE LOUIS ARMAND  - 26800 - PORTES LES VALENCE,Déchetterie Pro,Valorsol environnement,04-75-72-86-40,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0555,3 Rue d'espagne,69780,Mions - Grand LYON,3 Rue d'espagne - 69780 - Mions - Grand LYON,Déchetterie Pro,Valorsol environnement,04 81 09 02 41,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0556,121 CHEMIN DE VENTEBRANT,38550,SABLONS,121 CHEMIN DE VENTEBRANT - 38550 - SABLONS,Déchetterie Pro,Valorsol environnement,04 74 84 24 23,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0557,,26200,MONTELIMAR,26200 - MONTELIMAR,Déchetterie Pro,Valorsol environnement,04 75 01 53 45,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0558,1 Rue des Planches,25620,Étalans,1 Rue des Planches - 25620 Étalans,Vieille Matériaux,Vieille Matériaux,03 81 59 23 65,Professionnels,Particuliers,Valobat,Point d'apport volontaire
+fvm_0559,Rte de Saint-Gilles,85190,Aizenay,Rte de Saint-Gilles - 85190 Aizenay,VM Matériaux Aizenay,VM Distribution,,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0560,ZI Fruchardières - 7 Rue Clément Ader,85340,Les Sables-d'Olonne,ZI Fruchardières - 7 Rue Clément Ader - 85340 Les Sables-d'Olonne,VM Matériau Olonne sur mer,VM Distribution,,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0561,6 Rue Henri Farman,85180,Château d'Olonne,6 Rue Henri Farman - 85180 Château d'Olonne,VM Matériau Olonne sur mer,VM Distribution,,Professionnels,Particuliers,Valdélia,Point d'apport volontaire
+fvm_0562,Rue de Toutlemonde,49300,CHOLET,Rue de Toutlemonde - 49300 CHOLET,VM Matériaux,VM Distribution,,Professionnels,,,Point d'apport volontaire
+fvm_0563,1 rue de l’Ile Chupin,44340,BOUGUENAIS,"1 rue de l’Ile Chupin, 44340 BOUGUENAIS",VM Bouguenais,VM Matériaux,"02 28 01 71 20
+07 57 08 57 88",,,Valdélia,Point d'apport volontaire
+fvm_0564,La Sablonnais - BP 6 Grand Champ des Fontaines,44119,Treillieres,"La Sablonnais - BP 6 Grand Champ des Fontaines, 44119 Treillieres",VM distribution Treillières,VM Matériaux,02 40 28 21 08,,,Valdélia,Point d'apport volontaire
+fvm_0565,"50, boulevard Pierre & Marie CURIE",44152,Ancenis,"50, boulevard Pierre & Marie CURIE - 44152 Ancenis",VM Ancenis,VM Matériaux,06 52 21 17 42,,,Valdélia,Point d'apport volontaire
+fvm_0566,6 LE DERFF,22200,LOUARGAT,6 LE DERFF - 22200 LOUARGAT,ZIEGLER,ZIEGLER GUINGAMP,02 96 40 15 60,Professionnels,,Valobat,Point d'apport volontaire
+fvm_0567,127 rue des entreprises ZA le Moulin,84400,GARGAS,127 rue des entreprises ZA le Moulin - 84400 - GARGAS,Annexe demantelement,ZouVai,04 90 06 31 59,Professionnels,Particuliers,,Point d'apport volontaire
+fvm_0568,quartier Mondy,26300,BOURG DE PEAGE,quartier Mondy - 26300 - BOURG DE PEAGE,Valorsol environnement,,04 75 72 86 40,,,Valobat,Enlèvement sur chantier
+fvm_0569,3 Rue d'espagne,69780,Mions - Grand LYON,3 Rue d'espagne - 69780 - Mions - Grand LYON,Valorsol environnement,,04 81 09 02 41,,,Valobat,Enlèvement sur chantier
+fvm_0570,Chemin des leonards,26200,MONTELIMAR,Chemin des leonards 26200 MONTELIMAR,Valorsol environnement,,04 75 01 53 45,,,Valobat,Enlèvement sur chantier
+fvm_0571,1450 route des Aulnes,74370,VILLAZ,1450 route des Aulnes - 74370 - VILLAZ,Société VIGNIER F.,,04 50 01 21 00,,,,Enlèvement sur chantier
+fvm_0572,ZI BELLEVUE,10140,VENDEUVRE SUR BARSE,ZI BELLEVUE - 10140 - VENDEUVRE SUR BARSE,VEKA RECYCLAGE SAS,,06 80 42 92 48,,,,Enlèvement sur chantier
+fvm_0573,ZI BELLEVUE,10140,VENDEUVRE SUR BARSE,ZI BELLEVUE - 10140 - VENDEUVRE SUR BARSE,VEKA RECYCLAGE SAS,,06 72 88 34 97,,,,Enlèvement sur chantier
+fvm_0574,134 rue Felix Faure,59350,SAINT-ANDRE-LEZ-LILLE,134 rue Felix Faure -- 59350 - SAINT-ANDRE-LEZ-LILLE,COVANORD,,06 68 80 62 36,,,"Valobat, Valdélia, Ecomaison",Enlèvement sur chantier
+fvm_0575,6 rue de Cherbourg,67026,STRASBOURG,6 rue de Cherbourg - 67026 - STRASBOURG,Groupe SCHROLL,,03 88 40 58 40,,,,Enlèvement sur chantier
+fvm_0576,30 rue du Cardinal Sourdis,79700,Mauléon,30 rue du Cardinal Sourdis - 79700 Mauléon,ESIAM,,07 71 94 32 09,,,en-cours,Enlèvement sur chantier
+fvm_0577,9 rue Copernic,49240,AVRILLÉ,9 rue Copernic - 49240 - AVRILLÉ,REVIE-VERRE,,06 37 09 65 03,,,,Enlèvement sur chantier
+fvm_0578,1 route de Mackwiller,67430,DIEMERINGEN,1 route de Mackwiller - 67430 - DIEMERINGEN,SCHMIDT Frères SAS,,03 88 00 41 80,,,,Enlèvement sur chantier
+fvm_0579,18 allée des treize femmes,85200,Fontenay Le Comte,18 allée des treize femmes - 85200 - Fontenay Le Comte,SUD VENDEE RECYCLAGE,,07 56 38 07 11,,,,Enlèvement sur chantier
+fvm_0580,45 route du Quinquis-Leck,29800,Landerneau,45 route du Quinquis-Leck - 29800 - Landerneau,Valouest3R,,06 33 31 98 05,,,Valobat,Enlèvement sur chantier
+fvm_0581,73 rue du moulin bateau,94380,Bonneuil-sur-Marne,73 rue du moulin bateau - 94380 - Bonneuil-sur-Marne,Atelier sans frontières // Groupe Ares,,06 19 35 87 14,,,,Enlèvement sur chantier
+fvm_0582,ZI du Bois Imbert,85280,LA FERRIERE,ZI du Bois Imbert - 85280 - LA FERRIERE,BATI RECYCLAGE,,02 51 07 22 00,,,,Enlèvement sur chantier
+fvm_0583,24 Rue Du Moulin Neuf - La Davillière,85220,L'Aiguillon-sur-Vie,24 Rue Du Moulin Neuf - La Davillière - 85220 L'Aiguillon-sur-Vie,Recyfe - Tripapyrus,,06 67 48 14 24,,,,Enlèvement sur chantier
+fvm_0584,Rue Carnot,57190,Florange,Rue Carnot - 57190 - Florange,Recyfe - Valoprest,,07 48 88 59 18,,,,Enlèvement sur chantier
+fvm_0585,2 Chemin du Var,38110,Cessieu,2 Chemin du Var - 38110 - Cessieu,Recyfe - Tri-vallées,,06 69 46 34 81,,,,Enlèvement sur chantier
+fvm_0586,5 Rue Amédée Bollée - ZI La Folie Sud,85310,LA CHAIZE LE VICOMTE,5 Rue Amédée Bollée - ZI La Folie Sud - 85310 LA CHAIZE LE VICOMTE,BROYAGE FIN MICRONISATION,,06 23 03 17 11,,,,Enlèvement sur chantier
+fvm_0587,ZI Pré à Varois - 297 Chemin de l'écluse,54670,Custines,ZI Pré à Varois - 297 Chemin de l'écluse - 54670 Custines,TTM Environnement,,06 80 61 14 18,,,,Enlèvement sur chantier
+fvm_0588,Le Point du Jour,56500,SAINT ALLOUESTRE,Le Point du Jour - 56500 - SAINT ALLOUESTRE,SAS MENREC,,07 87 25 57 67,,,,Enlèvement sur chantier
+fvm_0589,Rue de la Prat - Z.I du Coquet,03260,SEUILLET,Rue de la Prat - Z.I du Coquet - 03260 - SEUILLET,MVG RECYCLAGE,,07 83 74 95 45,,,Ecomaison,Enlèvement sur chantier
+fvm_0590,60 Rue du Dr Laënnec,35550,Pipriac,60 Rue du Dr Laënnec - 35550 Pipriac,TEZEA,,680308085,,,"Valobat, Valdelia, Ecomaison",Enlèvement sur chantier
+fvm_0591,6 impasse rené Varennes,42150,La Ricamarie,6 impasse rené Varennes - 42150 - La Ricamarie,Sermaco,,04 77 80 83 80,,,"Ecomaison, Valobat",Enlèvement sur chantier
+fvm_0592,3 rue du torpilleur Sirocco,63300,THIERS,3 rue du torpilleur Sirocco - 63300 - THIERS,HIRSCH RECYCLAGE,,04 73 80 40 88,,,Valobat,Enlèvement sur chantier
+fvm_0593,17 rue de BAVIERE Batiment les GREBES,54500,Vandoeuvre,17 rue de BAVIERE Batiment les GREBES - 54500 - Vandoeuvre,C2I TCS Tricot couture services,,06 33 23 01 29,,,"Valobat, Valdélia",Enlèvement sur chantier
+fvm_0594,2020 Rue François Mitterand,16100,CHATEAUBERNARD,2020 Rue François Mitterand - 16100 - CHATEAUBERNARD,VAL'HOMNIA SAS,,07 56 41 90 64,,,,Enlèvement sur chantier
+fvm_0595,170 rue Jacqueline Auriol,29490,Guipavas,170 rue Jacqueline Auriol - 29490 Guipavas,Les Recycleurs Bretons - Guipavas & Crozon,,02 98 03 29 98,,,Valobat,Enlèvement sur chantier
+fvm_0596,ZI de Kerbriant,29610,Plouigneau,ZI de Kerbriant - 29610 Plouigneau,Les Recycleurs Bretons - Plouigneau,,02 98 79 82 00,,,Valobat,Enlèvement sur chantier
+fvm_0597,780 Rue du Maneguen,56850,Caudan,780 Rue du Maneguen - 56850 Caudan,Les Recycleurs Bretons - Caudan,,02 97 81 60 82,,,Valobat,Enlèvement sur chantier
+fvm_0598,Voies des Jumeaux,91320,Wissous,Voies des Jumeaux - 91320 - Wissous,Paprec Chantiers,,01 46 86 19 55,,,,Enlèvement sur chantier
+fvm_0599,10 rue de la Victoire ZI de la Molette,93150,Le Blanc-Mesnil,10 rue de la Victoire ZI de la Molette- 93150 - Le Blanc-Mesnil,Paprec IDF Nord - Le Blanc Mesnil,,01 55 81 13 20,,,,Enlèvement sur chantier
+fvm_0600,Parc d'entreprises de la Motte au Bois,62440,Harnes,Parc d'entreprises de la Motte au Bois - 62440 Harnes,Paprec Nord 62,,03 21 13 67 77,,,,Enlèvement sur chantier
+fvm_0601,Rue des 3 frères ZI des 3 frères,17000,La Rochelle,Rue des 3 frères ZI des 3 frères - 17000 - La Rochelle,Paprec Ouest 17,,05 46 30 17 50,,,,Enlèvement sur chantier
+fvm_0602,Rue Yvette Cauchois,44600,Saint-Nazaire,Rue Yvette Cauchois - 44600 - Saint-Nazaire,Paprec Ouest 44 Agence de Saint-Nazaire,,02 51 16 75 88,,,,Enlèvement sur chantier
+fvm_0603,ZI de la Coindrie,49340,TREMENTINES,ZI de la Coindrie - 49340 - TREMENTINES,PAPREC PLASTIQUES,,02 41 49 16 29,,,,Enlèvement sur chantier
+fvm_0604,Les Molies D1075,38760,Varces,Les Molies D1075 - 38760 Varces,Paprec Rhône-Alpes 38,,04 76 99 31 20,,,,Enlèvement sur chantier
+fvm_0605,11 chemin des Pierres,31500,Bruguières,11 chemin des Pierres - 31500 Bruguières,Paprec Sud-Ouest 31,,05 61 35 10 88,,,,Enlèvement sur chantier
+fvm_0606,ZAC Aiguelongue rue Gustave Eiffel,64121,Montardon,ZAC Aiguelongue rue Gustave Eiffel- 64121 Montardon,Paprec Sud-Ouest Atlantique,,05 59 12 63 23,,,,Enlèvement sur chantier
+fvm_0607,127 rue des entreprises,84400,GARGAS,127 rue des entreprises - 84400 - GARGAS,EBE ZouVai,,04 90 06 31 59,,,,Enlèvement sur chantier
+fvm_0608,3 rue Jean MERMOZ,87270,COUZEIX,3 rue Jean MERMOZ  - 87270 - COUZEIX,REVIPLAST,,05 55 09 77 80,,,,Enlèvement sur chantier
+fvm_0609,26 chemin de la poudrière,33700,MERIGNAC,26 chemin de la poudrière - 33700 - MERIGNAC,PENA,,05 56 64 32 30,,,,Enlèvement sur chantier
+fvm_0610,ZA Mont Saint Sébastien- Rue de mont,77111,Soignolles en Brie,ZA Mont Saint Sébastien- Rue de mont -  77111 Soignolles en Brie,BIG BENNES,,01 64 06 72 93,,,,Enlèvement sur chantier
+fvm_0611,870-905 Rue Blaise Pascal,39570,Lons-le-Saunier,870-905 Rue Blaise Pascal - 39570 - Lons-le-Saunier,Recyfe - Groupe Demain,,06 14 40 34 57,,,,Enlèvement sur chantier
+fvm_0612,Rue des Pommiers,77350,Boissise La Bertrand,Rue des Pommiers - 77350 - Boissise La Bertrand,Recyfe - Agissons,,07 81 63 33 12,,,,Enlèvement sur chantier
+fvm_0613,54 rue Robert Schuman,44800,Saint Herblin,54 rue Robert Schuman - 44800 Saint Herblin,Recyfe - Trait d'Union,,06 80 51 58 05,,,,Enlèvement sur chantier
+fvm_0614,15 Avenue Louise Michel,28500,VERNOUILLET,15 Avenue Louise Michel - 28500 - VERNOUILLET,Recyfe - SATRI,,06 03 80 48 98,,,,Enlèvement sur chantier
+fvm_0615,46 rue du Parc - ZA du parc,49280,Saint-Christophe-du-Bois,46 rue du Parc - ZA du parc - 49280 - Saint-Christophe-du-Bois,Recyfe - Fil d'Ariane,,06 70 63 83 52,,,,Enlèvement sur chantier
+fvm_0616,13 Rue du Maréchal Lefebvre,67100,Strasbourg,13 Rue du Maréchal Lefebvre - 67100 - Strasbourg,Recyfe - Réseau Origami,,06 98 92 47 07,,,,Enlèvement sur chantier
+fvm_0617,8B Rue Du 1er Mai,12110,Cransac,8B Rue Du 1er Mai - 12110 Cransac,Recyfe - Renouveau Isolation,,06 63 16 62 16,,,,Enlèvement sur chantier
+fvm_0618,2 rue Ray Janton - ZAC d'Anglumeau,33450,Izon,2 rue Ray Janton - ZAC d'Anglumeau - 33450 Izon,Recyfe - Valo' 33,,07 48 88 22 42,,,,Enlèvement sur chantier
+fvm_0619,410 Avenue du Passe Temps,13400,Aubagne,410 Avenue du Passe Temps - 13400 Aubagne,Recyfe - LVD Environnement,,06 58 63 12 51,,,Valobat/Valdelia/Ecomaison,Enlèvement sur chantier
+fvm_0620,1022 Rue Antoine de St-Exupéry,14760,Bretteville-sur-Odon,1022 Rue Antoine de St-Exupéry - 14760 - Bretteville-sur-Odon,Recyfe - Handyjob Caen,,07 81 79 16 50,,,,Enlèvement sur chantier
+fvm_0621,211 rue Louis Lumière,30900,Nîmes,211 rue Louis Lumière - 30900 Nîmes,Recyfe - LVD Environnement,,06 58 63 12 51,,,Valobat/Valdelia/Ecomaison,Enlèvement sur chantier
+fvm_0622,875 Chemin du Lobel,62510,Arques,875 Chemin du Lobel - 62510 - Arques,Recyfe - DMultiple,,07 60 25 30 56,,,,Enlèvement sur chantier
+fvm_0623,6 route le bout de la ville,50480,BLOSVILLE,6 route le bout de la ville - 50480 BLOSVILLE,Recyfe - Fil & Terre,,07 50 49 08 71,,,,Enlèvement sur chantier
+fvm_0624,29 Rue Ettore Bugatti,87280,Limoges,"29 Rue Ettore Bugatti, 87280 Limoges",Recyfe - La boite à papiers,,05 55 37 85 77,,,,Enlèvement sur chantier
+fvm_0625,8 avenue du Général de Gaulle,11200,Lézignan-Corbières,8 avenue du Général de Gaulle - 11200 Lézignan-Corbières,Recyfe - Les Recyclades,,07 89 21 05 31,,,,Enlèvement sur chantier
+fvm_0626,13/17 rue de l'Industrie,92230,Gennevilliers,13/17 rue de l'Industrie - 92230 - Gennevilliers,Recyfe - Tricycle Environnement,,06 07 87 84 11,,,,Enlèvement sur chantier
+fvm_0627,rue de la croix ignon,,,rue de la croix ignon,R'Min Activités - Re-nêtre,,06 08 91 73 61,,,,Enlèvement sur chantier
+fvm_0628,25 Chemin des fontaines,74100,VETRAZ-MONTHOUX,25 Chemin des fontaines - 74100 - VETRAZ-MONTHOUX,R.C.R.,,04 50 37 27 67,,,,Enlèvement sur chantier
+fvm_0629,19 avenue Clément FAYAT,32500,Fleurance,19 avenue Clément FAYAT - 32500 - Fleurance,Recyclage et Reemploi pour Developpement Durable (R2D2),,05 62 63 48 52,,,,Enlèvement sur chantier
+fvm_0630,2 chemin du Génie,69630,Vénissieux,2 chemin du Génie - 69630 Vénissieux,Serfim Recyclage,,04 78 89 42 87,,,"Valobat, Valdélia, Ecomaison",Enlèvement sur chantier
+fvm_0631,ZA,43000,POLIGNAC,ZA 43000 POLIGNAC,SRV VACHER,,471022294,,,,Enlèvement sur chantier
+fvm_0632,260 av Tours,36250,SAINT MAUR,260 av Tours - 36250 SAINT MAUR,Locabenne36,,02 54 07 30 60,,,,Enlèvement sur chantier
+fvm_0633,31 rue henri SELLIER,79000,NIORT,31 rue henri SELLIER - 79000 - NIORT,raivalor,,07 87 75 72 31,,,VALOBAT,Enlèvement sur chantier
+fvm_0634,6 rue Valéran,60690,Roy Boissy,6 rue Valéran - 60690 Roy Boissy,Recyfe - Recyc'Matériaux,,06 24 86 75 61,,,,Enlèvement sur chantier
+fvm_0635,9bis rue de la Croix Ignon,35310,Mordelles,"9bis rue de la Croix Ignon, 35310 Mordelles",Recyfe - R'Min Activités (Re-nêtre),,,,,,Enlèvement sur chantier
+fvm_0636,76 allées Jean Jaurès,31000,TOULOUSE,76 allées Jean Jaurès - 31000 TOULOUSE,Recyfe - Sobra,,,,,,Enlèvement sur chantier
+fvm_0637,Route nationale,80630,BEAUVAL,Route nationale - 80630 BEAUVAL,Recyfe - Vilbert Recyclage,,,,,,Enlèvement sur chantier
+fvm_0638,Rue des Guiraumeries,53940,Saint Berthevin,Rue des Guiraumeries - 53940 Saint Berthevin,Alternatri53,,"07 66 74 44 46
+07 69 54 62 99",,,,Enlèvement en entreprise
+fvm_0639,73 rue du moulin bateau,94380,Bonneuil-sur-Marne,73 rue du moulin bateau - 94380 - Bonneuil-sur-Marne,Atelier sans frontières // Groupe Ares,,06 19 35 87 14,,,,Enlèvement en entreprise
+fvm_0640,ZI du Bois Imbert,85280,LA FERRIERE,ZI du Bois Imbert - 85280 LA FERRIERE,BATI RECYCLAGE,,02 51 07 22 00,,,,Enlèvement en entreprise
+fvm_0641,ZA Mont Saint Sébastien - Rue de Mont,77111,Soignolles en Brie,ZA Mont Saint Sébastien - Rue de Mont - 77111 Soignolles en Brie,BIG BENNES,,01 64 06 72 93,,,,Enlèvement en entreprise
+fvm_0642,5 Rue Amédée Bollée - ZI La Folie Sud,85310,LA CHAIZE LE VICOMTE,5 Rue Amédée Bollée - ZI La Folie Sud - 85310 LA CHAIZE LE VICOMTE,BROYAGE FIN MICRONISATION,,06 23 03 17 11,,,,Enlèvement en entreprise
+fvm_0643,17 rue de BAVIERE - Batiment les GREBES,54500,Vandoeuvre,17 rue de BAVIERE - Batiment les GREBES - 54500 Vandoeuvre,C2I TCS,,06 33 23 01 29,,,,Enlèvement en entreprise
+fvm_0644,117 RUE PIERRE BERIOT,59220,DENAIN,117 RUE PIERRE BERIOT - 59220 DENAIN,COVANORD - GOSSELIN-DURIEZ,,06 99 54 78 84,,,,Enlèvement en entreprise
+fvm_0645,ZI Rue Ambroise Paré,59930,LA CHAPELLE D'ARMENTIERES,ZI Rue Ambroise Paré - 59930 LA CHAPELLE D'ARMENTIERES,COVANORD - RECUEPRATION DU NORD,,06 99 54 78 84,,,,Enlèvement en entreprise
+fvm_0646,134 RUE FELIX FAURE,59350,SAINT-ANDRE-LEZ-LILLE,134 RUE FELIX FAURE - 59350 SAINT-ANDRE-LEZ-LILLE,COVANORD - REMED,,06 99 54 78 84,,,,Enlèvement en entreprise
+fvm_0647,127 rue des entreprises,84400,GARGAS,127 rue des entreprises - 84400 GARGAS,EBE ZouVai,,04 90 06 31 59,,,,Enlèvement en entreprise
+fvm_0648,30 rue du Cardinal Sourdis,79700,Mauléon,30 rue du Cardinal Sourdis - 79700 - Mauléon,ESIAM,,07 71 94 32 09,,,,Enlèvement en entreprise
+fvm_0649,6 rue de Cherbourg,67026,STRASBOURG,6 rue de Cherbourg - 67026 STRASBOURG,Groupe SCHROLL,,03 88 40 58 40,,,,Enlèvement en entreprise
+fvm_0650,3 rue du torpilleur Sirocco,63300,THIERS,3 rue du torpilleur Sirocco - 63300 THIERS,HIRSCH RECYCLAGE,,04.73.80.40.88,,,,Enlèvement en entreprise
+fvm_0651,780 Rue du Maneguen,56850,Caudan,780 Rue du Maneguen - 56850 Caudan,Les Recycleurs Bretons - Caudan,,02 97 81 60 82,,,,Enlèvement en entreprise
+fvm_0652,170 rue Jacqueline Auriol,29490,Guipavas,170 rue Jacqueline Auriol - 29490 Guipavas,Les Recycleurs Bretons - Guipavas & Crozon,,02 98 03 29 98,,,,Enlèvement en entreprise
+fvm_0653,ZI de Kerbriant,29610,Plouigneau,ZI de Kerbriant - 29610 Plouigneau,Les Recycleurs Bretons - Plouigneau,,02 98 79 82 00,,,,Enlèvement en entreprise
+fvm_0654,260 av Tours,36250,SAINT MAUR,260 av Tours - 36250 SAINT MAUR,Locabenne36,,02 54 07 30 60,,,,Enlèvement en entreprise
+fvm_0655,Rue de la Prat - Z.I du Coquet,03260,SEUILLET,Rue de la Prat - Z.I du Coquet - 03260 - SEUILLET,MVG RECYCLAGE,,07 83 74 95 45,,,,Enlèvement en entreprise
+fvm_0656,Voies des Jumeaux,91320,Wissous,Voies des Jumeaux - 91320 Wissous,Paprec Chantiers,,01 46 86 19 55,,,,Enlèvement en entreprise
+fvm_0657,10 rue de la Victoire - ZI de la Molette,93150,Le Blanc-Mesnil,10 rue de la Victoire - ZI de la Molette - 93150 Le Blanc-Mesnil,Paprec IDF Nord Le Blanc Mesnil,,01 55 81 13 20,,,,Enlèvement en entreprise
+fvm_0658,Parc d'entreprise de la Motte au Bois,62440,Harnes,Parc d'entreprise de la Motte au Bois - 62440 Harnes,Paprec Nord 62,,03 21 13 67 77,,,,Enlèvement en entreprise
+fvm_0659,Rue des 3 frères - ZI des 3 frères,17000,La Rochelle,Rue des 3 frères - ZI des 3 frères - 17000 La Rochelle,Paprec Ouest 17,,05 46 30 17 50,,,,Enlèvement en entreprise
+fvm_0660,Rue Yvette Cauchois,44600,Saint-Nazaire,Rue Yvette Cauchois - 44600 Saint-Nazaire,Paprec Ouest 44 Agence de Saint-Nazaire,,02 51 16 75 88,,,,Enlèvement en entreprise
+fvm_0661,ZI DE LA COINDRIE,49340,TREMENTINES,ZI DE LA COINDRIE - 49340 TREMENTINES,PAPREC PLASTIQUES,,02 41 49 16 29,,,,Enlèvement en entreprise
+fvm_0662,ZAE DU SYCALA - 65 Rue Boutic,46230,FONTANES,ZAE DU SYCALA - 65 Rue Boutic - 46230 FONTANES,PAPREC PLASTIQUES,,02 41 49 16 29,,,,Enlèvement en entreprise
+fvm_0663,Les Molies RD1075,38760,Varces Allières-et-Risset,Les Molies RD1075 - 38760 Varces Allières-et-Risset,Paprec Rhône-Alpes 38,,04 76 99 31 20,,,,Enlèvement en entreprise
+fvm_0664,11 chemin des Pierres,31500,Bruguières,11 chemin des Pierres - 31500 Bruguières,Paprec Sud-Ouest 31,,05 61 35 10 88,,,,Enlèvement en entreprise
+fvm_0665,ZAC Aiguelongue rue Gustave Eiffel,64121,Montardon,ZAC Aiguelongue rue Gustave Eiffel - 64121 Montardon,Paprec Sud-Ouest Atlantique,,05 59 12 63 23,,,,Enlèvement en entreprise
+fvm_0666,26 chemin de la poudrière,33700,MERIGNAC,26 chemin de la poudrière - 33700 MERIGNAC,PENA,,05 56 64 32 30,,,,Enlèvement en entreprise
+fvm_0667,25 Chemin des fontaines,74100,VETRAZ-MONTHOUX,25 Chemin des fontaines - 74100 - VETRAZ-MONTHOUX,R.C.R.,,04 50 37 27 67,,,,Enlèvement en entreprise
+fvm_0668,31 rue henri SELLIER,79000,NIORT,31 rue henri SELLIER - 79000 - NIORT,raivalor,,07 87 75 72 31,,,,Enlèvement en entreprise
+fvm_0669,19 avenue Clément FAYAT,32500,Fleurance,19 avenue Clément FAYAT - 32500 - Fleurance,Recyclage et Reemploi pour Developpement Durable,,05 62 63 48 52,,,,Enlèvement en entreprise
+fvm_0670,Rue des Pommiers,77350,Boissise La Bertrand,Rue des Pommiers - 77350 Boissise La Bertrand,Recyfe - Agissons,,07 81 63 33 12,,,,Enlèvement en entreprise
+fvm_0671,875 Chemin du Lobel,62510,Arques,875 Chemin du Lobel - 62510 - Arques,Recyfe - DMultiple,,07 60 25 30 56,,,,Enlèvement en entreprise
+fvm_0672,6 route le bout de la ville,50480,BLOSVILLE,6 route le bout de la ville - 50480 - BLOSVILLE,Recyfe - Fil & Terre,,07 50 49 08 71,,,,Enlèvement en entreprise
+fvm_0673,46 rue du Parc - ZA du parc,49280,Saint-Christophe-du-Bois,46 rue du Parc - ZA du parc - 49280 Saint-Christophe-du-Bois,Recyfe - Fil d'Ariane,,06 70 63 83 52,,,,Enlèvement en entreprise
+fvm_0674,870-905 Rue Blaise Pascal,39570,Lons-le-Saunier,870-905 Rue Blaise Pascal - 39570 - Lons-le-Saunier,Recyfe - Groupe Demain,,06 14 40 34 57,,,,Enlèvement en entreprise
+fvm_0675,1022 Rue Antoine de St-Exupéry,14760,Bretteville-sur-Odon,1022 Rue Antoine de St-Exupéry - 14760 Bretteville-sur-Odon,Recyfe - Handyjob Caen,,07 81 79 16 50,,,,Enlèvement en entreprise
+fvm_0676,29 Rue Ettore Bugatti,87280,Limoges,"29 Rue Ettore Bugatti, 87280 Limoges",Recyfe - La boite à papiers,,05 55 37 85 77,,,,Enlèvement en entreprise
+fvm_0677,8 avenue du Général de Gaulle,11200,Lézignan-Corbières,8 avenue du Général de Gaulle - 11200 Lézignan-Corbières,Recyfe - Les Recyclades,,07 89 21 05 31,,,,Enlèvement en entreprise
+fvm_0678,211 rue Louis Lumière,30900,NIMES,211 rue Louis Lumière - 30900 NIMES,Recyfe - LVD Environnement,,06 07 44 03 64,,,,Enlèvement en entreprise
+fvm_0679,410 Avenue du Passe Temps,13400,Aubagne,410 Avenue du Passe Temps - 13400 Aubagne,Recyfe - LVD Environnement,,06 58 63 12 51,,,,Enlèvement en entreprise
+fvm_0680,6 rue Valéran,60690,Roy Boissy,6 rue Valéran - 60690 Roy Boissy,Recyfe - Recyc'Matériaux,,06 24 86 75 61,,,,Enlèvement en entreprise
+fvm_0681,8B Rue Du 1er Mai,12110,Cransac,8B Rue Du 1er Mai - 12110 Cransac,Recyfe - Renouveau Isolation,,06 63 16 62 16,,,,Enlèvement en entreprise
+fvm_0682,13 Rue du Maréchal Lefebvre,67100,Strasbourg,13 Rue du Maréchal Lefebvre - 67100 - Strasbourg,Recyfe - Réseau Origami,,06 98 92 47 07,,,,Enlèvement en entreprise
+fvm_0683,rue de la croix ignon,35200,Mordelles,rue de la croix ignon - 35200 Mordelles,Recyfe - R'Min Activités - Re-nêtre,,,,,,Enlèvement en entreprise
+fvm_0684,15 Avenue Louise Michel,28500,VERNOUILLET,15 Avenue Louise Michel - 28500 VERNOUILLET,Recyfe - SATRI,,06 03 80 48 98,,,,Enlèvement en entreprise
+fvm_0685,54 rue Robert Schuman,44800,Saint Herbalin,54 rue Robert Schuman - 44800 Saint Herbalin,Recyfe - Trait d'Union,,06 80 51 58 05,,,,Enlèvement en entreprise
+fvm_0686,13/17 rue de l'Industrie,92230,Gennevilliers,13/17 rue de l'Industrie - 92230 - Gennevilliers,Recyfe - Tricycle Environnement,,06 07 87 84 11,,,,Enlèvement en entreprise
+fvm_0687,24 Rue Du Moulin Neuf - La Davillière,85220,L'Aiguillon-sur-Vie,24 Rue Du Moulin Neuf - La Davillière - 85220 L'Aiguillon-sur-Vie,Recyfe - Tripapyrus,,06 67 48 14 24,,,,Enlèvement en entreprise
+fvm_0688,2 Chemin du Var,38110,Cessieu,2 Chemin du Var - 38110 Cessieu,Recyfe - Tri-vallées,,06 69 46 34 81,,,,Enlèvement en entreprise
+fvm_0689,2 rue Ray Janton - ZAC d'Anglumeau,33450,Izon,2 rue Ray Janton - ZAC d'Anglumeau - 33450 - Izon,Recyfe - Valo' 33,,07 48 88 22 42,,,,Enlèvement en entreprise
+fvm_0690,Rue Carnot,57190,Florange,Rue Carnot - 57190 - Florange,Recyfe - Valoprest,,07 48 88 59 18,,,,Enlèvement en entreprise
+fvm_0691,Route nationale,80630,BEAUVAL,Route nationale - 80630 BEAUVAL,Recyfe - Vilbert Recyclage,,,,,,Enlèvement en entreprise
+fvm_0692,9 rue Copernic,49240,AVRILLÉ,9 rue Copernic - 49240 - AVRILLÉ,REVIE-VERRE,,06 37 09 65 03,,,,Enlèvement en entreprise
+fvm_0693,3 rue Jean MERMOZ,87270,COUZEIX,3 rue Jean MERMOZ - 87270 - COUZEIX,REVIPLAST,,05 55 09 77 80,,,,Enlèvement en entreprise
+fvm_0694,Le Point du Jour,56500,SAINT ALLOUESTRE,Le Point du Jour - 56500 SAINT ALLOUESTRE,SAS MENREC,,07 87 25 57 67,,,,Enlèvement en entreprise
+fvm_0695,1 route de Mackwiller,67430,DIEMERINGEN,1 route de Mackwiller 67430 DIEMERINGEN,SCHMIDT Frères SAS,,03 88 00 41 80,,,,Enlèvement en entreprise
+fvm_0696,2 chemin du Génie,69630,Vénissieux,2 chemin du Génie - 69630 Vénissieux,Serfim Recyclage,,04 78 89 42 87,,,,Enlèvement en entreprise
+fvm_0697,6 impasse rené Varennes,42150,La Ricamarie,6 impasse rené Varennes - 42150 - La Ricamarie,Sermaco,,04 77 80 83 80,,,,Enlèvement en entreprise
+fvm_0698,76 allées Jean Jaurès,31000,TOULOUSE,76 allées Jean Jaurès - 31000 TOULOUSE,Sobra,,,,,,Enlèvement en entreprise
+fvm_0699,1450 route des Aulnes,74370,VILLAZ,1450 route des Aulnes - 74370 - VILLAZ,Société VIGNIER F.,,04 50 01 21 00,,,,Enlèvement en entreprise
+fvm_0700,ZA,43000,POLIGNAC,ZA 43000 POLIGNAC,SRV VACHER,,04 71 02 22 94,,,,Enlèvement en entreprise
+fvm_0701,18 allée des treize femmes,85200,Fontenay Le Comte,18 allée des treize femmes - 85200 - Fontenay Le Comte,SUD VENDEE RECYCLAGE,,07 56 38 07 11,,,,Enlèvement en entreprise
+fvm_0702,60 Rue du Dr Laënnec,35550,Pipriac,60 Rue du Dr Laënnec - 35550 - Pipriac,TEZEA,,06 80 30 80 85,,,,Enlèvement en entreprise
+fvm_0703,ZI Pré à Varois - 297 Chemin de l'écluse,54670,Custines,ZI Pré à Varois - 297 Chemin de l'écluse - 54670 Custines,TTM Environnement,,06 80 61 14 18,,,,Enlèvement en entreprise
+fvm_0704,2020 RUE François Mitterand,16100,CHATEAUBERNARD,2020 RUE François Mitterand- 16100 CHATEAUBERNARD,VAL'HOMNIA SAS,,07 56 41 90 64,,,,Enlèvement en entreprise
+fvm_0705,3 Rue d'espagne,69780,Mions - Grand LYON,3 Rue d'espagne - 69780 - Mions - Grand LYON,Valorsol environnement,,04 81 09 02 41,,,,Enlèvement en entreprise
+fvm_0706,quartier Mondy,26300,BOURG DE PEAGE,quartier Mondy - 26300 - BOURG DE PEAGE,Valorsol environnement,,04 75 72 86 40,,,,Enlèvement en entreprise
+fvm_0707,Chemin des leonards,26200,MONTELIMAR,Chemin des leonards 26200 MONTELIMAR,Valorsol Environnement,,04 75 01 53 45,,,,Enlèvement en entreprise
+fvm_0708,45 route du Quinquis-Leck,29800,Landerneau,45 route du Quinquis-Leck - 29800 - Landerneau,Valouest3R,,02 29 61 40 84,,,,Enlèvement en entreprise
+fvm_0709,ZI BELLEVUE,10140,VENDEUVRE SUR BARSE,ZI BELLEVUE - 10140 VENDEUVRE SUR BARSE,VEKA RECYCLAGE SAS,,06 80 42 92 48,,,,Enlèvement en entreprise
+fvm_0710,ZI BELLEVUE,10140,VENDEUVRE SUR BARSE,ZI BELLEVUE - 10140 VENDEUVRE SUR BARSE,VEKA RECYCLAGE SAS,,06 72 88 34 97,,,,Enlèvement en entreprise

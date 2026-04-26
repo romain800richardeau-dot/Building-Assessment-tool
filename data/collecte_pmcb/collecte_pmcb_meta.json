@@ -1,0 +1,139 @@
+{
+  "materials": {
+    "INERTES": {
+      "label": "Inertes (mélange)",
+      "color": "#9E9E9E",
+      "short": "INE"
+    },
+    "BETON": {
+      "label": "Béton",
+      "color": "#607D8B",
+      "short": "BET"
+    },
+    "BRIQUES": {
+      "label": "Briques",
+      "color": "#B71C1C",
+      "short": "BRI"
+    },
+    "TUILES": {
+      "label": "Tuiles",
+      "color": "#E65100",
+      "short": "TUI"
+    },
+    "VERRE_PLAT": {
+      "label": "Verre plat",
+      "color": "#4FC3F7",
+      "short": "VIT"
+    },
+    "ENROBES": {
+      "label": "Enrobés (non goudron)",
+      "color": "#212121",
+      "short": "ENR"
+    },
+    "CAILLOUX": {
+      "label": "Cailloux / pierres",
+      "color": "#8D6E63",
+      "short": "CAI"
+    },
+    "BOIS": {
+      "label": "Bois",
+      "color": "#6D4C41",
+      "short": "BOI"
+    },
+    "METAL": {
+      "label": "Métal",
+      "color": "#546E7A",
+      "short": "MET"
+    },
+    "PLATRE": {
+      "label": "Plâtre",
+      "color": "#90CAF9",
+      "short": "PLA"
+    },
+    "PLASTIQUES": {
+      "label": "Plastiques",
+      "color": "#43A047",
+      "short": "PLS"
+    },
+    "HUISSERIES": {
+      "label": "Huisseries",
+      "color": "#6A1B9A",
+      "short": "HUI"
+    },
+    "ISOL_LAINES": {
+      "label": "Isolants (laines)",
+      "color": "#FDD835",
+      "short": "ISO"
+    },
+    "MEMBRANES": {
+      "label": "Membranes bitumineuses",
+      "color": "#263238",
+      "short": "MEM"
+    },
+    "DECHETS_DANG": {
+      "label": "Déchets dangereux PMCB",
+      "color": "#D32F2F",
+      "short": "DGX"
+    }
+  },
+  "types": {
+    "DECHETERIE_PUBLIQUE": {
+      "label": "Déchèterie publique",
+      "color": "#1976D2"
+    },
+    "DECHETERIE_PRO": {
+      "label": "Déchèterie pro",
+      "color": "#00796B"
+    },
+    "DISTRIBUTEUR": {
+      "label": "Distributeur (négoce)",
+      "color": "#5E35B2"
+    },
+    "ZONE_REEMPLOI": {
+      "label": "Zone réemploi",
+      "color": "#2E7D32"
+    }
+  },
+  "audiences": {
+    "PRO": {
+      "label": "Professionnels",
+      "color": "#00796B"
+    },
+    "ARTISAN": {
+      "label": "Artisans",
+      "color": "#F57C00"
+    },
+    "PARTICULIER": {
+      "label": "Particuliers",
+      "color": "#7B1FA2"
+    }
+  },
+  "sources": {
+    "ECOMINERO": {
+      "label": "Ecominéro",
+      "color": "#00897B",
+      "org_type": "Éco-organisme REP PMCB (minéraux)"
+    },
+    "VALDELIA": {
+      "label": "Valdélia",
+      "color": "#0097A7",
+      "org_type": "Éco-organisme REP PMCB (multi-matériaux)"
+    },
+    "FERVAM": {
+      "label": "FERVAM",
+      "description": "Réseau de collecte menuiseries fin de vie (REP menuiseries)",
+      "url": "https://www.fervam.fr/",
+      "color": "#7B3F00"
+    }
+  },
+  "count": 4632,
+  "by_source": {
+    "ECOMINERO": 4252,
+    "VALDELIA": 380,
+    "FERVAM": 711
+  },
+  "generated": "2026-04-22",
+  "notes": "Ecominéro=CSV public markers.csv. Valdélia=KML Google MyMaps géocodé via BAN (api-adresse.data.gouv.fr). Valobat + Ecomaison non couverts (Cloudflare/SPA).",
+  "total_points": 5343,
+  "last_update": "2026-04-22"
+}

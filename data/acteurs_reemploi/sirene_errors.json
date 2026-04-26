@@ -1,0 +1,217 @@
+[
+ {
+  "id": "o8",
+  "name": "API'UP",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "pW",
+  "name": "Co-Recyclage",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "pu",
+  "name": "Didier Fanget",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "q4",
+  "name": "ELAN",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "qI",
+  "name": "ETH Zurich",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "qh",
+  "name": "Grand Huit",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "qk",
+  "name": "Association Gueules de Bois",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "r6",
+  "name": "L'Art et la Matière",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "ri",
+  "name": "Le Comptoir des rues",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "rm",
+  "name": "Le Parpaing",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "rt",
+  "name": "Legens",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "rz",
+  "name": "Les Ateliers de la Bergerette",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "sK",
+  "name": "Loxia Socia",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "sl",
+  "name": "Materiuum",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "tQ",
+  "name": "Opalis",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "u6",
+  "name": "R-Place by Caprionis",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "uR",
+  "name": "Reemploi construction brussels",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "ud",
+  "name": "Rotor Asbl",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "uf",
+  "name": "Rotor Deconstruction",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "ul",
+  "name": "Salza",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "v0",
+  "name": "Société Matériaux de Tradition",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "v9",
+  "name": "Superuse Studios",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "vA",
+  "name": "Syphon",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "wf",
+  "name": "Matériaux Authentiques",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "xl",
+  "name": "L'Atelier CNC",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "xu",
+  "name": "Apropå",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "y6",
+  "name": "AGYRE",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "yC",
+  "name": "La Ressourcerie",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "yD",
+  "name": "API-R Bois",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "yE",
+  "name": "Collectif Rond-Point",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "yK",
+  "name": "CORNERMAT",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "yk",
+  "name": "MUD",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "z1",
+  "name": "LUMIDAS (D&S International SA)",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "z3",
+  "name": "Jaunin SA",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "z4",
+  "name": "Studio TEC",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "z7",
+  "name": "Low Carbon Design (LCD)",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "zB",
+  "name": "Collectif ETC",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "zC",
+  "name": "Gilbard",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "zO",
+  "name": "ELAN",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "zl",
+  "name": "Idea Consult",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "10C",
+  "name": "L'archipel",
+  "error": "HTTP Error 400: Bad Request"
+ },
+ {
+  "id": "10i",
+  "name": "A place like you",
+  "error": "HTTP Error 429: Too Many Requests"
+ },
+ {
+  "id": "12m",
+  "name": "CIRKLA",
+  "error": "HTTP Error 400: Bad Request"
+ }
+]

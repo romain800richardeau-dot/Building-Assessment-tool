@@ -1,0 +1,121 @@
+{
+  "fvm_0022": {
+    "latitude": 47.270999,
+    "longitude": -1.619416,
+    "score": 0.9507290909090907,
+    "type": "municipality",
+    "label": "Orvault"
+  },
+  "fvm_0047": {
+    "latitude": 46.792112,
+    "longitude": 4.846002,
+    "score": 0.95281,
+    "type": "municipality",
+    "label": "Chalon-sur-Saône"
+  },
+  "fvm_0094": {
+    "latitude": 48.857844,
+    "longitude": 1.44517,
+    "score": 0.940050909090909,
+    "type": "municipality",
+    "label": "Anet"
+  },
+  "fvm_0247": {
+    "latitude": 44.299916,
+    "longitude": 2.53498,
+    "score": 0.9436772727272728,
+    "type": "municipality",
+    "label": "Luc-la-Primaube"
+  },
+  "fvm_0258": {
+    "latitude": 48.737426,
+    "longitude": -0.563453,
+    "score": 0.9476309090909091,
+    "type": "municipality",
+    "label": "Flers"
+  },
+  "fvm_0323": {
+    "latitude": 43.541369,
+    "longitude": 5.406124,
+    "score": 0.9582627272727272,
+    "type": "municipality",
+    "label": "Aix-en-Provence"
+  },
+  "fvm_0380": {
+    "latitude": 44.122339,
+    "longitude": 4.596703,
+    "score": 0.9382481818181817,
+    "type": "municipality",
+    "label": "Tresques"
+  },
+  "fvm_0382": {
+    "latitude": 43.989777,
+    "longitude": 3.630375,
+    "score": 0.9416427272727271,
+    "type": "municipality",
+    "label": "Le Vigan"
+  },
+  "fvm_0384": {
+    "latitude": 43.343264,
+    "longitude": 3.233465,
+    "score": 0.9555018181818182,
+    "type": "municipality",
+    "label": "Béziers"
+  },
+  "fvm_0413": {
+    "latitude": 47.227082,
+    "longitude": -1.625284,
+    "score": 0.9533654545454545,
+    "type": "municipality",
+    "label": "Saint-Herblain"
+  },
+  "fvm_0484": {
+    "latitude": 48.579831,
+    "longitude": 7.761454,
+    "score": 0.9613272727272727,
+    "type": "municipality",
+    "label": "Strasbourg"
+  },
+  "fvm_0565": {
+    "latitude": 47.385541,
+    "longitude": -1.197594,
+    "score": 0.8557290909090909,
+    "type": "municipality",
+    "label": "Ancenis-Saint-Géréon"
+  },
+  "fvm_0575": {
+    "latitude": 48.579831,
+    "longitude": 7.761454,
+    "score": 0.9613272727272727,
+    "type": "municipality",
+    "label": "Strasbourg"
+  },
+  "fvm_0630": {
+    "latitude": 45.707095,
+    "longitude": 4.881379,
+    "score": 0.9545054545454543,
+    "type": "municipality",
+    "label": "Vénissieux"
+  },
+  "fvm_0649": {
+    "latitude": 48.579831,
+    "longitude": 7.761454,
+    "score": 0.9613272727272727,
+    "type": "municipality",
+    "label": "Strasbourg"
+  },
+  "fvm_0696": {
+    "latitude": 45.707095,
+    "longitude": 4.881379,
+    "score": 0.9545054545454543,
+    "type": "municipality",
+    "label": "Vénissieux"
+  },
+  "fvm_0157": {
+    "latitude": 43.931534,
+    "longitude": 4.237252,
+    "score": 0.934,
+    "type": "municipality",
+    "label": "La Rouvière 30190"
+  }
+}

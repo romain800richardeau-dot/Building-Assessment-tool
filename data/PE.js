@@ -1,0 +1,1 @@
+const PE={"Construction":{QDV:.45,ENV:.45,ECO:.10,SMR_PIL:.10},"Rénovation":{QDV:.45,ENV:.45,ECO:.10,SMR_PIL:.10},"Exploitation axe Bâtiment":{QDV:.45,ENV:.45,ECO:.10,SMR_PIL:.10},"Exploitation axe Gestion":{QDV:.25,ENV:.25,ECO:.10,SMR_PIL:.50}};

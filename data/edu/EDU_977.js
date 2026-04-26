@@ -1,0 +1,3 @@
+// Etablissements scolaires - Departement 977 (8 etabs)
+// Source : Annuaire de l'Education Nationale (data.gouv.fr)
+var SA_EDU_977 = [["Collège Mireille Choisy",17.898658,-62.84944,"Cu"],["Ecole secondaire privée Caméléon Bleu",17.895464,-62.848964,"Cv"],["Ecole élémentaire privée HC Caméléon Bleu",17.895464,-62.848964,"Ev"],["Ecole élémentaire privée hors contrat We Care SBH",17.90701,-62.802514,"Ev"],["Collège-Lycée Pourquoi Parce que",17.895457,-62.808915,"Lv"],["Ecole primaire Gustavia",17.898658,-62.84944,"Pu"],["Ecole primaire privée Saint Joseph",17.906048,-62.83221,"Pv"],["Ecole primaire privée Sainte Marie",17.912433,-62.85315,"Pv"]];

@@ -28,6 +28,7 @@
     <script src="data/FONCT_PARTS_FR.js"></script>
     <script src="data/METH_TABLES_EN.js"></script>
     <script src="data/FICHE_MAPPING.js"></script>
+    <script src="data/HQE_FICHE_MAPPING.js"></script>
     <!-- Fiche HTML templates (BP_T1.js a BP_T15.js, total ~2,7 Mo) :
          charges paresseusement par _saLoadBPFiches() a l'ouverture de l'onglet
          Bonnes Pratiques, via la recherche BP ou a partir de openFicheContent().
@@ -74,6 +75,10 @@
     <script src="data/EVIDENCE_DOCS.js"></script>
     <script src="data/HQE_EVIDENCE_DOCS.js"></script>
     <script src="data/HQE_FONCT_PARTS.js"></script>
+    <script src="data/BBCA_NEUF_CONFIG.js"></script>
+    <script src="data/BBCA_NEUF_EVIDENCE.js"></script>
+    <script src="data/BBCA_NEUF_FONCT_PARTS.js"></script>
+    <script src="data/BBCA_NEUF_GLOSS.js"></script>
     <script src="data/RFO_METHODOLOGY_EN.js"></script>
     <script src="data/RFO_METHODOLOGY_FR.js"></script>
     <script src="data/RFO_METH_TABLES_EN.js"></script>
@@ -316,10 +321,22 @@ function switchSubTab(subIdx,btn){
     if(cat==='HEADING'){
       const hasGuide=!!QD[ic];
       const lp=hasGuide?`<span class="ex-loupe" onclick="event.stopPropagation();openGuide('${ic}')" title="Voir le guide" style="margin-left:8px">\uD83D\uDD0D</span>`:'';
+      // Pastille "X fiches" pour les sous-themes l=1 (HQE_FICHE_MAPPING)
+      let fbadge='';
+      if(lv===1 && typeof window.HQE_FICHE_MAPPING!=='undefined'){
+        const fArr=window.HQE_FICHE_MAPPING[ic]||[];
+        if(fArr.length>0){
+          const fJson=JSON.stringify(fArr).replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+          const bk='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
+          const lbl=fArr.length+' fiche'+(fArr.length>1?'s':'');
+          const sIc=ic.replace(/'/g,"\\'");
+          fbadge=' <span class="fiche-section-badge" onclick="event.stopPropagation(); openFicheListPanel(\''+sIc+'\', this.getAttribute(\'data-fiches\'))" data-fiches="'+fJson+'" title="Voir les fiches pedagogiques associees">'+bk+lbl+'</span>';
+        }
+      }
       if(lv<=0){
         h+=`<div class="ex-group-title">${fmtCode(ic)} \u2014 ${esc(nm)}${lp}</div>`;
       } else if(lv===1){
-        h+=`<div class="ex-sub-title"><b>${fmtCode(ic)}</b> ${esc(nm)}${lp}</div>`;
+        h+=`<div class="ex-sub-title"><b>${fmtCode(ic)}</b> ${esc(nm)}${lp}${fbadge}</div>`;
       } else {
         h+=`<div class="ex-sub-title" style="padding-left:${20*lv}px;font-size:12px;color:#64748B">${fmtCode(ic)} ${esc(nm)}${lp}</div>`;
       }
@@ -20085,6 +20102,16 @@ body.carto-immersive .sa-carto-workshop { flex: 1; height: auto; min-height: 0; 
 /* ============================================================ */
 #hqeContainer { display:none; flex:1; overflow-y:auto; }
 #hqeContainer.open { display:block; }
+#bbcaNeufContainer { display:none; flex:1; overflow-y:auto; }
+#bbcaNeufContainer.open { display:block; }
+#bbcaNeufDashboardContainer { display:none; }
+#bbcaNeufDashboardContainer.open { display:block; }
+#bbcaNeufDossierContainer { display:none; }
+#bbcaNeufDossierContainer.open { display:block; }
+#bbcaNeufFonctionnementContainer { display:none; flex:1; overflow:hidden; }
+#bbcaNeufFonctionnementContainer.open { display:flex; flex-direction:column; height:calc(100vh - 200px); }
+.bbca-wrap { display:flex; flex-direction:column; }
+.bbca-main { flex:1; padding:0 20px 20px 7px; }
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=DM+Sans:wght@400;500;600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
@@ -21200,8 +21227,16 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
 
             <!-- BBCA -->
             <div class="eval-tree-group">
-                <div class="eval-tree-root coming-soon">BBCA <span class="avenir-tag">A venir</span></div>
+                <div class="eval-tree-root">BBCA</div>
+                <div class="eval-tree-sub">
+                    <div class="eval-tree-items">
+                        <div class="eval-tree-item" data-eval="bbca-neuf" onclick="toggleEvalItem(this)"><span class="tree-check"></span>BBCA Neuf V3.2</div>
+                        <div class="eval-tree-item coming-soon"><span class="tree-check"></span>BBCA Rénovation V1.1 <span class="avenir-tag">A venir</span></div>
+                        <div class="eval-tree-item coming-soon"><span class="tree-check"></span>BBCA Exploitation V1.1 <span class="avenir-tag">A venir</span></div>
+                    </div>
+                </div>
             </div>
+
 
             <!-- BEPOS -->
             <div class="eval-tree-group">
@@ -21379,6 +21414,21 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
                     <button class="nav-tree-child" id="navHQEAssessment" data-cert="hqe" onclick="switchView('hqe')">Évaluation</button>
                 </div>
             </div>
+            <!-- BBCA Neuf -->
+            <button class="nav-tree-toggle" id="navBbcaNeufToggle" data-cert="bbca-neuf" onclick="toggleBbcaNeufTree()">
+                <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19.2 2.96a1 1 0 0 1 1.8.55c0 1.51-.06 4.84-2.5 8.49C16.4 14.7 14.5 17 11 20z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg></span>
+                <span class="nav-btn-label">BBCA Neuf</span>
+                <span class="nav-tree-chevron">&#9654;</span>
+                <span class="sidebar-info-wrap" onclick="event.stopPropagation();switchView('bbcaNeufFonctionnement')" style="cursor:pointer;display:flex;align-items:center;margin-left:-6px;opacity:0.5;transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'" title="Informations sur le référentiel"><svg style="width:13px;height:13px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+            </button>
+            <div class="nav-tree-children" id="bbcaNeufTreeChildren" data-cert="bbca-neuf">
+                <div class="nav-tree-children-inner">
+                    <button class="nav-tree-child" id="navBbcaNeufDashboard" data-cert="bbca-neuf" onclick="switchView('bbcaNeufDashboard')">Tableau de bord</button>
+                    <button class="nav-tree-child" id="navBbcaNeufAssessment" data-cert="bbca-neuf" onclick="switchView('bbcaNeuf')">Évaluation</button>
+                    <button class="nav-tree-child" id="navBbcaNeufDossier" data-cert="bbca-neuf" onclick="switchView('bbcaNeufDossier')">Dossier Certivea</button>
+                </div>
+            </div>
+
 
             <!-- MISE EN ŒUVRE — Bonnes Pratiques + Actions MOA -->
             <div id="breeamNcV7MiseEnOeuvre" style="display:none; margin-top:12px;">
@@ -22813,6 +22863,69 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
   <div class="glossp-body" id="glosspRightBody"></div>
 </div>
 
+
+</div>
+
+
+<!-- ============================================================ -->
+<!-- ===== BBCA NEUF V3.2 — INJECTED HTML ======================= -->
+<!-- ============================================================ -->
+
+<div class="dashboard-container" id="bbcaNeufDashboardContainer">
+    <div id="bbcaNeufDashboardContent" style="padding:20px;">
+        <h2 style="color:#1A2E2A;">Tableau de bord BBCA Neuf</h2>
+        <p style="color:#64748B;">Le tableau de bord sera disponible une fois les données ACV saisies.</p>
+    </div>
+</div>
+
+<div id="bbcaNeufContainer">
+    <div class="bbca-wrap">
+        <div class="bbca-main">
+            <!-- BBCA Hero Banner -->
+            <div class="hero-banner" id="bbcaNeufHeroBanner" style="background:linear-gradient(135deg,#1A2E2A 0%,#2D5F4E 50%,#4FAA8B 100%);overflow:visible;">
+                <div class="hero-banner-content">
+                    <div style="display:flex;align-items:center;gap:6px;">
+                        <span style="color:white;font-size:13px;font-weight:700;letter-spacing:0.5px;opacity:0.85;text-transform:uppercase;">BBCA NEUF V3.2</span>
+                        <svg class="info-icon" onclick="switchView('bbcaNeufFonctionnement')" title="Fonctionnement du référentiel BBCA Neuf" style="cursor:pointer;opacity:0.7;transition:opacity 0.2s;pointer-events:auto;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    </div>
+                    <span class="hero-banner-label">Score BBCA</span>
+                    <div class="hero-banner-score">
+                        <span id="bbcaNeufHeroScore">0</span> pts
+                        <span class="hero-pct" id="bbcaNeufHeroLevel">Niveau : —</span>
+                    </div>
+                </div>
+            </div>
+            <div id="bbcaNeufContent" style="padding:24px;color:#1F2937;">
+                <h2 style="color:#1A2E2A;margin-top:0;">Évaluation BBCA Neuf</h2>
+                <p style="color:#64748B;">Module en construction. Les sections suivantes seront disponibles dans les prochaines étapes :</p>
+                <ul style="color:#64748B;line-height:1.8;">
+                    <li>Identité & Éligibilité (typologie, SDP, prérequis E1/C1)</li>
+                    <li>Import résultats ACV (Elodie / COMETH)</li>
+                    <li>Modulations BBCA (Mstationnement, Magrément, fondations spéciales, livré en blanc, Titre V)</li>
+                    <li>Innovation Climat (max 10 points)</li>
+                    <li>Résultats & Score (Standard / Performance / Excellence)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="bbcaNeufDossierContainer">
+    <div style="padding:24px;color:#1F2937;">
+        <h2 style="color:#1A2E2A;margin-top:0;">Dossier Certivea</h2>
+        <p style="color:#64748B;">Cette vue intégrera : planning des jalons Conception/Réalisation, check-list des livrables attendus, suivi des écarts et points sensibles.</p>
+    </div>
+</div>
+
+<div id="bbcaNeufFonctionnementContainer">
+    <div class="fonct-tabs" id="bbcaNeufFonctTabs"></div>
+    <div class="fonct-body">
+        <div class="fonct-toc" id="bbcaNeufFonctToc">
+            <div class="fonct-toc-title">Sommaire</div>
+        </div>
+        <div class="fonct-content" id="bbcaNeufFonctContent"></div>
+    </div>
+</div>
 
 </div>
 
@@ -24364,7 +24477,7 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
     </div>
 
     <!-- ═══════════════ FICHE PEDAGOGIQUE PANEL (left) ═══════════════ -->
-    <div class="fiche-panel-overlay" id="ficheOverlay" onclick="closeFichePanel()"></div>
+    <div class="fiche-panel-overlay" id="ficheOverlay" onclick="onFicheOverlayClick(event)"></div>
     <div class="fiche-panel" id="fichePanel">
         <div class="fiche-panel-header">
             <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span id="fichePanelTitle">Fiche pédagogique</span></h2>
@@ -39595,6 +39708,7 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
             const bpEl = document.getElementById('bpContainer');
             const plubEl = document.getElementById('plubContainer');
         const hqeEl = document.getElementById('hqeContainer');
+        const bbcaNeufEl = document.getElementById('bbcaNeufContainer');
             const heroEl = document.getElementById('heroBanner');
             const rfoHeroEl = document.getElementById('rfoHeroBanner');
             const lockBar = document.getElementById('lockBar');
@@ -39679,6 +39793,13 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
             bpEl.classList.remove('open');
             plubEl.classList.remove('open');
         if (hqeEl) hqeEl.classList.remove('open');
+            if (bbcaNeufEl) bbcaNeufEl.classList.remove('open');
+            var bbcaNeufDashElR = document.getElementById('bbcaNeufDashboardContainer');
+            if (bbcaNeufDashElR) bbcaNeufDashElR.classList.remove('open');
+            var bbcaNeufDossElR = document.getElementById('bbcaNeufDossierContainer');
+            if (bbcaNeufDossElR) bbcaNeufDossElR.classList.remove('open');
+            var bbcaNeufFonctElR = document.getElementById('bbcaNeufFonctionnementContainer');
+            if (bbcaNeufFonctElR) bbcaNeufFonctElR.classList.remove('open');
             var siteEl = document.getElementById('siteAnalysisContainer');
             if (siteEl) siteEl.classList.remove('open');
             // Hide TOC sommaire when leaving siteAnalysis
@@ -39998,6 +40119,51 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
                 // Hide BREEAM Ressources panel (HQE doesn't have one yet — handled by sync)
                 if (breeamResEl) breeamResEl.style.display = 'none';
                 renderHqeFonctionnement();
+            } else if (view === 'bbcaNeuf') {
+                if (bbcaNeufEl) bbcaNeufEl.classList.add('open');
+                var bbcaNavBtn = document.getElementById('navBbcaNeufAssessment');
+                if (bbcaNavBtn) bbcaNavBtn.classList.add('active');
+                var bt = document.getElementById('navBbcaNeufToggle');
+                var bc = document.getElementById('bbcaNeufTreeChildren');
+                if (bt && !bt.classList.contains('open')) { bt.classList.add('open'); bc.classList.add('open'); }
+                if (typeof buildBbcaNeufGrid === 'function') buildBbcaNeufGrid();
+                if (typeof recalcBbcaNeuf === 'function') recalcBbcaNeuf();
+            } else if (view === 'bbcaNeufDashboard') {
+                var bbcaDashEl = document.getElementById('bbcaNeufDashboardContainer');
+                if (bbcaDashEl) bbcaDashEl.classList.add('open');
+                var navBbcaDash = document.getElementById('navBbcaNeufDashboard');
+                if (navBbcaDash) navBbcaDash.classList.add('active');
+                var bt2 = document.getElementById('navBbcaNeufToggle');
+                var bc2 = document.getElementById('bbcaNeufTreeChildren');
+                if (bt2 && !bt2.classList.contains('open')) { bt2.classList.add('open'); bc2.classList.add('open'); }
+                if (typeof renderBbcaNeufDashboard === 'function') renderBbcaNeufDashboard();
+            } else if (view === 'bbcaNeufDossier') {
+                var bbcaDossEl = document.getElementById('bbcaNeufDossierContainer');
+                if (bbcaDossEl) bbcaDossEl.classList.add('open');
+                var navBbcaDoss = document.getElementById('navBbcaNeufDossier');
+                if (navBbcaDoss) navBbcaDoss.classList.add('active');
+                var bt3 = document.getElementById('navBbcaNeufToggle');
+                var bc3 = document.getElementById('bbcaNeufTreeChildren');
+                if (bt3 && !bt3.classList.contains('open')) { bt3.classList.add('open'); bc3.classList.add('open'); }
+                if (typeof renderBbcaNeufDossier === 'function') renderBbcaNeufDossier();
+            } else if (view === 'bbcaNeufFonctionnement') {
+                var bbcaFonctEl = document.getElementById('bbcaNeufFonctionnementContainer');
+                if (bbcaFonctEl) bbcaFonctEl.classList.add('open');
+                // Hide NC/RFO/HQE heroes; place BBCA hero above the Fonctionnement container
+                if (heroEl) heroEl.style.display = 'none';
+                if (rfoHeroEl) rfoHeroEl.style.display = 'none';
+                var hqeHeroBb = document.getElementById('hqeHeroBanner');
+                if (hqeHeroBb) hqeHeroBb.style.display = 'none';
+                var bbcaHero = document.getElementById('bbcaNeufHeroBanner');
+                if (bbcaHero && bbcaFonctEl) {
+                    bbcaFonctEl.parentNode.insertBefore(bbcaHero, bbcaFonctEl);
+                    bbcaHero.style.display = '';
+                }
+                // Auto-open BBCA tree in sidebar
+                var btf = document.getElementById('navBbcaNeufToggle');
+                var bcf = document.getElementById('bbcaNeufTreeChildren');
+                if (btf && !btf.classList.contains('open')) { btf.classList.add('open'); bcf.classList.add('open'); }
+                if (typeof renderBbcaNeufFonctionnement === 'function') renderBbcaNeufFonctionnement();
             } else if (view === 'rfoMethodology') {
                 var rfoMethTreeEl = document.getElementById('rfoMethodologyTreeContainer');
                 if (rfoMethTreeEl) rfoMethTreeEl.classList.add('open');
@@ -40193,6 +40359,13 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
 function toggleHQETree() {
     var toggle = document.getElementById('navHQEToggle');
     var children = document.getElementById('hqeTreeChildren');
+    if (toggle) toggle.classList.toggle('open');
+    if (children) children.classList.toggle('open');
+}
+
+function toggleBbcaNeufTree() {
+    var toggle = document.getElementById('navBbcaNeufToggle');
+    var children = document.getElementById('bbcaNeufTreeChildren');
     if (toggle) toggle.classList.toggle('open');
     if (children) children.classList.toggle('open');
 }
@@ -42951,12 +43124,14 @@ try { plu_onProjectChange(); } catch(e) { console.warn('PLU init deferred:', e.m
             var hasBreeamRfo = selectedCerts.has('breeam-rfo');
             var hasPlub = selectedCerts.has('plub');
             var hasHqe = selectedCerts.has('hqe');
+            var hasBbcaNeuf = selectedCerts.has('bbca-neuf');
             document.querySelectorAll('.sidebar [data-cert]').forEach(function(el) {
                 var cert = el.getAttribute('data-cert');
                 if (cert === 'breeam') el.classList.toggle('cert-hidden', !hasBreeam);
                 else if (cert === 'breeam-rfo') el.classList.toggle('cert-hidden', !hasBreeamRfo);
                 else if (cert === 'plub') el.classList.toggle('cert-hidden', !hasPlub);
                 else if (cert === 'hqe') el.classList.toggle('cert-hidden', !hasHqe);
+                else if (cert === 'bbca-neuf') el.classList.toggle('cert-hidden', !hasBbcaNeuf);
             });
             // Hide/show RESSOURCES section title based on BREEAM (either scheme)
             var resTitle = document.querySelectorAll('.sidebar .nav-section-title');
@@ -43128,11 +43303,13 @@ try { plu_onProjectChange(); } catch(e) { console.warn('PLU init deferred:', e.m
             var hasBreeam = proj.certs.has('breeam');
             var hasBreeamRfo = proj.certs.has('breeam-rfo');
             var hasPlub = proj.certs.has('plub');
+            var hasBbcaNeuf = proj.certs.has('bbca-neuf');
             document.querySelectorAll('.sidebar [data-cert]').forEach(function(el) {
                 var cert = el.getAttribute('data-cert');
                 if (cert === 'breeam') el.classList.toggle('cert-hidden', !hasBreeam);
                 else if (cert === 'breeam-rfo') el.classList.toggle('cert-hidden', !hasBreeamRfo);
                 else if (cert === 'plub') el.classList.toggle('cert-hidden', !hasPlub);
+                else if (cert === 'bbca-neuf') el.classList.toggle('cert-hidden', !hasBbcaNeuf);
             });
         }
 
@@ -45086,4 +45263,1618 @@ try { plu_onProjectChange(); } catch(e) { console.warn('PLU init deferred:', e.m
         if (panel) {
             panel.style.transition = 'none';
             panel.classList.remove('open');
-            panel.classList.a
+            panel.classList.add('fiche-panel-right');
+            // Force un reflow pour appliquer instantanement la nouvelle position (translateX(100%))
+            void panel.offsetWidth;
+            // Reactive la transition avant d'ajouter .open (declenchee plus bas)
+            panel.style.transition = '';
+        }
+        // Remplissage + animation : on reimplemente ici au lieu d'appeler openFicheListPanel
+        // pour eviter son 'remove(fiche-panel-right)' qui casserait la direction d'entree.
+        var fiches = typeof fichesJson === 'string' ? JSON.parse(fichesJson) : fichesJson;
+        _fichePanelCurrentList = fiches;
+        _fichePanelCreditCode = creditCode;
+        var overlay = document.getElementById('ficheOverlay');
+        var nav = document.getElementById('fichePanelNav');
+        var content = document.getElementById('fichePanelContent');
+        var title = document.getElementById('fichePanelTitle');
+        if (!panel || !overlay || !nav || !content || !title) return;
+        title.textContent = 'Fiches pédagogiques – ' + creditCode;
+        nav.innerHTML = '<span style="color:#065F46;font-weight:600;">' + fiches.length + ' fiche' + (fiches.length > 1 ? 's' : '') + ' associée' + (fiches.length > 1 ? 's' : '') + '</span>';
+        var listHtml = '';
+        var arrowSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>';
+        fiches.forEach(function(ref) {
+            var ficheId = 'bpFiche' + ref.fiche.replace('-', '');
+            var ficheEl = document.getElementById(ficheId);
+            var ficheTheme = '';
+            if (ficheEl) {
+                var bannerTitle = ficheEl.querySelector('.ms-banner-title');
+                ficheTheme = bannerTitle ? bannerTitle.textContent.trim() : '';
+            }
+            listHtml += '<div class="fiche-list-item" onclick="openFicheContent(\'' + ref.fiche + '\',\'' + ref.chap + '\')">' +
+                '<div class="fiche-list-code">' + ficheDisplayLabel(ref.fiche) + '</div>' +
+                '<div class="fiche-list-info">' +
+                    '<div class="fiche-list-title">' + (ficheTheme || ref.title) + '</div>' +
+                    '<div class="fiche-list-chap">Chapitre ' + ref.chap + ' – ' + ref.title + '</div>' +
+                '</div>' +
+                '<div class="fiche-list-arrow">' + arrowSvg + '</div>' +
+            '</div>';
+        });
+        content.innerHTML = listHtml;
+        // Force un reflow pour synchroniser avant l'animation slide-in
+        void panel.offsetWidth;
+        panel.classList.add('open');
+        overlay.classList.add('open');
+    }
+
+    // ── Bouton "Liste" : retour à la liste en préservant le côté d'ouverture ──
+    // Sans cela, openFicheListPanel re-collerait le volet à gauche (caché derrière le panneau SA),
+    // ce qui donne l'impression que le volet se ferme.
+    function ficheBackToList(creditCode, fichesJson) {
+        var panel = document.getElementById('fichePanel');
+        var isRight = panel && panel.classList.contains('fiche-panel-right');
+        if (isRight) {
+            openSaFicheListPanel(creditCode, fichesJson);
+        } else {
+            openFicheListPanel(creditCode, fichesJson);
+        }
+    }
+
+    // ── Open the fiche panel in CONTENT mode (single fiche) ──
+    function openFicheContent(ficheCode, romanChap) {
+        // Lazy-load des fiches BP si pas encore charge (reappelle une fois pret)
+        if (typeof window._saLoadBPFiches === 'function' && !window._saBPFichesState.loaded) {
+            window._saLoadBPFiches().then(function(){ openFicheContent(ficheCode, romanChap); });
+            return;
+        }
+
+        var panel = document.getElementById('fichePanel');
+        var overlay = document.getElementById('ficheOverlay');
+        var nav = document.getElementById('fichePanelNav');
+        var content = document.getElementById('fichePanelContent');
+        var title = document.getElementById('fichePanelTitle');
+
+        var ficheId = 'bpFiche' + ficheCode.replace('-', '');
+        var ficheEl = document.getElementById(ficheId);
+
+        if (!ficheEl) {
+            title.textContent = ficheDisplayLabel(ficheCode);
+            nav.innerHTML = '<button class="fiche-panel-back" onclick="ficheBackToList(\'' + _fichePanelCreditCode + '\', JSON.stringify(_fichePanelCurrentList))">← Retour à la liste</button>';
+            content.innerHTML = '<div style="padding:20px;color:#64748B;text-align:center;">Le contenu de cette fiche n\'est pas disponible.</div>';
+            return;
+        }
+
+        var bannerTitle = ficheEl.querySelector('.ms-banner-title');
+        var ficheTitle = bannerTitle ? bannerTitle.textContent.trim() : ficheCode;
+
+        title.textContent = ficheDisplayLabel(ficheCode) + ' – ' + ficheTitle;
+
+        // Detect SA (Environnement) mode : continuous scroll + scrollspy
+        var isSaMode = panel.classList.contains('fiche-panel-right');
+
+        // Find all chapter markers + collect their bodies
+        var chapters = ficheEl.querySelectorAll('.ms-chap');
+        var chapData = []; // { num, title, bodies: [HTMLElement] }
+
+        chapters.forEach(function(chap) {
+            var numEl = chap.querySelector('.ms-chap-num strong');
+            var titleEl = chap.querySelector('.ms-chap-title');
+            if (!numEl) return;
+            var num = numEl.textContent.trim();
+            var chapTitle = titleEl ? titleEl.textContent.trim().replace(/^[IVXLC]+\.\s*/, '') : '';
+            var bodies = [];
+            var next = chap.nextElementSibling;
+            while (next && !next.classList.contains('ms-chap')) {
+                if (next.classList.contains('ms-body')) {
+                    bodies.push(next);
+                }
+                next = next.nextElementSibling;
+            }
+            chapData.push({ num: num, title: chapTitle, bodies: bodies });
+        });
+
+        // Build nav: back button + chapter pills
+        var navHtml = '<button class="fiche-panel-back" onclick="ficheBackToList(\'' + _fichePanelCreditCode + '\', JSON.stringify(_fichePanelCurrentList))">← Liste</button>';
+        chapData.forEach(function(ct) {
+            var isActive = ct.num === romanChap;
+            if (isSaMode) {
+                // SA mode : pills scroll to section instead of re-rendering
+                navHtml += '<span class="fiche-chap-pill" data-chap="' + ct.num + '" style="cursor:pointer;padding:2px 8px;border-radius:10px;transition:all 0.15s;font-weight:' +
+                    (isActive ? '700' : '400') + ';background:' +
+                    (isActive ? '#DCFCE7' : 'transparent') + ';color:' +
+                    (isActive ? '#065F46' : '#64748B') +
+                    ';" onclick="saScrollToFicheChap(\'' + ct.num + '\')">' +
+                    ct.num + '</span>';
+            } else {
+                navHtml += '<span style="cursor:pointer;padding:2px 8px;border-radius:10px;font-weight:' +
+                    (isActive ? '700' : '400') + ';background:' +
+                    (isActive ? '#DCFCE7' : 'transparent') + ';color:' +
+                    (isActive ? '#065F46' : '#64748B') +
+                    ';" onclick="openFicheContent(\'' + ficheCode + '\',\'' + ct.num + '\')">' +
+                    ct.num + '</span>';
+            }
+        });
+        nav.innerHTML = navHtml;
+
+        // Helper : transform margin-boxes to full-width inline blocks
+        function _ficheCloneBody(bodyEl) {
+            var clone = bodyEl.cloneNode(true);
+            var marges = clone.querySelectorAll('.ms-marge');
+            marges.forEach(function(marge) {
+                marge.style.float = 'none';
+                marge.style.width = '100%';
+                marge.style.margin = '0 0 16px 0';
+            });
+            return clone.innerHTML;
+        }
+
+        if (isSaMode) {
+            // ── SA mode : render ALL chapters continuously, with anchor sections ──
+            var allHtml = '';
+            chapData.forEach(function(ct) {
+                var bodyHtml = '';
+                ct.bodies.forEach(function(b) { bodyHtml += _ficheCloneBody(b); });
+                allHtml += '<section class="fiche-chap-section" id="fiche-chap-' + ct.num + '" data-chap="' + ct.num + '" style="scroll-margin-top:12px;">' +
+                    '<div style="margin:8px 0 10px;font-weight:700;color:#065F46;font-size:15px;padding-bottom:6px;border-bottom:1px solid #D1FAE5;">' +
+                    ct.num + '. ' + ct.title +
+                    '</div>' + bodyHtml + '</section>';
+            });
+            content.innerHTML = allHtml || '<div style="padding:20px;color:#64748B;text-align:center;">Aucun chapitre disponible.</div>';
+
+            // Attach scrollspy : highlight pill whose section is at the top of the viewport
+            // Optimisation : snapshot des offsets 1× au render (+ ResizeObserver pour invalider
+            // si le contenu change : polices, images async, resize fenêtre). Zéro sync read
+            // DOM dans la boucle de scroll → évite le layout thrashing sur panneau fiche.
+            var _ficheScrollRaf = null;
+            var _ficheSections = content.querySelectorAll('.fiche-chap-section');
+            var _fichePills = nav.querySelectorAll('.fiche-chap-pill');
+            var _ficheOffsets = [];
+            var _ficheContentH = 0;
+            var _ficheScrollH = 0;
+            var _ficheLastActive = null;
+            function _ficheBuildOffsets() {
+                _ficheOffsets.length = 0;
+                for (var i = 0; i < _ficheSections.length; i++) {
+                    _ficheOffsets.push({
+                        chap: _ficheSections[i].getAttribute('data-chap'),
+                        top: _ficheSections[i].offsetTop
+                    });
+                }
+                _ficheContentH = content.clientHeight;
+                _ficheScrollH = content.scrollHeight;
+            }
+            _ficheBuildOffsets();
+            function _ficheUpdateActivePill() {
+                _ficheScrollRaf = null;
+                if (!_ficheOffsets.length) return;
+                var scrollTop = content.scrollTop;
+                var threshold = 80; // offset from top to trigger activation
+                var activeNum = _ficheOffsets[0].chap;
+                for (var i = 0; i < _ficheOffsets.length; i++) {
+                    if (_ficheOffsets[i].top - threshold <= scrollTop) {
+                        activeNum = _ficheOffsets[i].chap;
+                    } else {
+                        break;
+                    }
+                }
+                // If user has scrolled to the very bottom, force last section active
+                if (scrollTop + _ficheContentH >= _ficheScrollH - 4) {
+                    activeNum = _ficheOffsets[_ficheOffsets.length - 1].chap;
+                }
+                if (activeNum === _ficheLastActive) return; // pas de write si pas de change
+                _ficheLastActive = activeNum;
+                for (var j = 0; j < _fichePills.length; j++) {
+                    var p = _fichePills[j];
+                    var isAct = p.getAttribute('data-chap') === activeNum;
+                    p.style.fontWeight = isAct ? '700' : '400';
+                    p.style.background = isAct ? '#DCFCE7' : 'transparent';
+                    p.style.color = isAct ? '#065F46' : '#64748B';
+                }
+            }
+            // Invalide le cache si la hauteur du contenu change (images chargées, resize…)
+            if (content._ficheResizeObs) { try { content._ficheResizeObs.disconnect(); } catch (e) {} }
+            if (typeof ResizeObserver !== 'undefined') {
+                var _ficheRO = new ResizeObserver(function() { _ficheBuildOffsets(); });
+                try { _ficheRO.observe(content); } catch (e) {}
+                content._ficheResizeObs = _ficheRO;
+            }
+            // Debounced via rAF
+            if (content._ficheScrollHandler) {
+                content.removeEventListener('scroll', content._ficheScrollHandler);
+            }
+            content._ficheScrollHandler = function() {
+                if (_ficheScrollRaf) return;
+                _ficheScrollRaf = requestAnimationFrame(_ficheUpdateActivePill);
+            };
+            content.addEventListener('scroll', content._ficheScrollHandler, { passive: true });
+
+            // Initial scroll to the requested chapter (if any) + prime active pill
+            requestAnimationFrame(function() {
+                var target = romanChap ? document.getElementById('fiche-chap-' + romanChap) : null;
+                if (target) {
+                    content.scrollTop = Math.max(0, target.offsetTop - 4);
+                } else {
+                    content.scrollTop = 0;
+                }
+                _ficheUpdateActivePill();
+            });
+        } else {
+            // ── Assessment mode : unchanged single-chapter rendering ──
+            var targetChap = chapData.find(function(c) { return c.num === romanChap; });
+            if (targetChap && targetChap.bodies.length > 0) {
+                var allHtml = '';
+                targetChap.bodies.forEach(function(b) { allHtml += _ficheCloneBody(b); });
+                content.innerHTML = '<div style="margin-bottom:10px;font-weight:600;color:#065F46;font-size:14px;">' +
+                    romanChap + '. ' + targetChap.title +
+                    '</div>' + allHtml;
+            } else {
+                content.innerHTML = '<div style="padding:20px;color:#64748B;text-align:center;">Chapitre ' + romanChap + ' non trouvé dans cette fiche.</div>';
+            }
+        }
+
+        panel.classList.add('open');
+        overlay.classList.add('open');
+    }
+
+    // ── SA helper : scroll the fiche content to a specific chapter section ──
+    function saScrollToFicheChap(romanChap) {
+        var content = document.getElementById('fichePanelContent');
+        if (!content) return;
+        var target = document.getElementById('fiche-chap-' + romanChap);
+        if (!target) return;
+        content.scrollTo({ top: Math.max(0, target.offsetTop - 4), behavior: 'smooth' });
+    }
+
+    // ── Legacy alias for direct fiche opening ──
+    function openFichePanel(ficheCode, romanChap) {
+        _fichePanelCurrentList = [{ fiche: ficheCode, chap: romanChap, title: '' }];
+        _fichePanelCreditCode = '';
+        openFicheContent(ficheCode, romanChap);
+    }
+
+    /* Click sur l'overlay des fiches : si la position pointe sur le panneau
+       d'évaluation/détail ouvert à droite (dpPanel ou detailPanel), on ne ferme
+       QUE le panneau des fiches. Si le clic est dans la bande "entre" (overlay
+       sombre non couvert par aucun panneau), on ferme tout. */
+    function onFicheOverlayClick(e) {
+        var rightPanelIds = ['dpPanel', 'detailPanel'];
+        var isOverRight = false;
+        for (var i = 0; i < rightPanelIds.length; i++) {
+            var p = document.getElementById(rightPanelIds[i]);
+            if (p && p.classList.contains('open')) {
+                var r = p.getBoundingClientRect();
+                // r.left peut être hors écran si transform pas encore appliqué — on teste sur la largeur visible
+                if (r.width > 50
+                 && e.clientX >= r.left && e.clientX <= r.right
+                 && e.clientY >= r.top  && e.clientY <= r.bottom) {
+                    isOverRight = true;
+                    break;
+                }
+            }
+        }
+        closeFichePanel();
+        if (!isOverRight) {
+            if (typeof closePanel === 'function') closePanel();
+            if (typeof closeGuide === 'function') closeGuide();
+            if (typeof closeDetailPanel === 'function') closeDetailPanel();
+        }
+    }
+
+    function closeFichePanel() {
+        var fichePanelEl = document.getElementById('fichePanel');
+        // En mode SA (fiche-panel-right), ferme aussi le panneau de détail SA sous-jacent
+        // afin que le clic sur l'overlay assombri referme les deux volets en même temps.
+        var wasSaMode = fichePanelEl && fichePanelEl.classList.contains('fiche-panel-right');
+        // IMPORTANT : on retire SEULEMENT .open pour que la transition CSS
+        // ramene le panneau vers sa position initiale (droite si fiche-panel-right,
+        // gauche sinon). Le retrait de fiche-panel-right est differe apres la transition
+        // (sinon le panneau snap a gauche et glisse dans le mauvais sens).
+        fichePanelEl.classList.remove('open');
+        document.getElementById('ficheOverlay').classList.remove('open');
+        if (wasSaMode) {
+            // Apres la transition, retirer fiche-panel-right SANS animer
+            // (sinon transform passe de translateX(100%) a translateX(-100%) visiblement).
+            setTimeout(function () {
+                fichePanelEl.style.transition = 'none';
+                fichePanelEl.classList.remove('fiche-panel-right');
+                void fichePanelEl.offsetWidth;
+                fichePanelEl.style.transition = '';
+            }, 320);
+        } else {
+            fichePanelEl.classList.remove('fiche-panel-right');
+        }
+        if (wasSaMode) {
+            var saPanel = document.getElementById('saDetailPanel');
+            if (saPanel && saPanel.classList.contains('open') && typeof closeSaDetailPanel === 'function') {
+                closeSaDetailPanel();
+            }
+        }
+        // Ferme aussi le panneau droit (bpFichePanel) s'il est ouvert
+        var bp = document.getElementById('bpFichePanel');
+        if (bp && bp.classList.contains('open')) {
+            bp.classList.remove('open');
+            var bpOvl = document.getElementById('bpFicheOverlay');
+            if (bpOvl) bpOvl.classList.remove('open');
+            var bpC = document.getElementById('bpContainer');
+            if (bpC) bpC.classList.remove('shifted');
+            document.querySelectorAll('.bp-tree-credit-header').forEach(function(h) {
+                h.classList.remove('bp-credit-active');
+            });
+        }
+    }
+
+    // Add to closeAllPanels
+    (function() {
+        var _origCloseAll = closeAllPanels;
+        closeAllPanels = function() {
+            _origCloseAll();
+            closeFichePanel();
+        };
+    })();
+
+
+    // ══════════════════════════════════════════════════════════════
+    // RFO FICHE BADGE SYSTEM
+    // Mirrors the NC V7 badge system for BREEAM RFO credits
+    // ══════════════════════════════════════════════════════════════
+
+    // ── RFO Fiche Mapping: credit → point → [{fiche, chap, title}] ──
+    var RFO_FICHE_MAPPING = {
+        "Man01": {
+            "1": [{fiche:"T1-C1",chap:"II",title:"Responsabilités du MOA"},{fiche:"T1-C4",chap:"II",title:"Cadrer le projet, contenu du programme"}],
+            "2": [{fiche:"T1-C2",chap:"I",title:"Rôles et montages"},{fiche:"T1-C3",chap:"I",title:"AMO et conducteur d'opération"}],
+            "3": [{fiche:"T1-C2",chap:"I",title:"Rôles et montages"},{fiche:"T1-C3",chap:"I",title:"AMO et conducteur d'opération"}],
+            "4": [{fiche:"T1-C2",chap:"I",title:"Rôles et montages"},{fiche:"T1-C3",chap:"I",title:"AMO et conducteur d'opération"}],
+            "5": [{fiche:"T1-C4",chap:"V",title:"Concertation et programmation"},{fiche:"T1-C2",chap:"VIII",title:"Utilisateurs et usagers"}],
+            "6": [{fiche:"T1-C4",chap:"V",title:"Concertation et programmation"},{fiche:"T1-C2",chap:"VIII",title:"Utilisateurs et usagers"}],
+            "7": [{fiche:"T1-C4",chap:"V",title:"Concertation et programmation"},{fiche:"T1-C2",chap:"VIII",title:"Utilisateurs et usagers"}],
+            "8": [{fiche:"T1-C4",chap:"V",title:"Concertation et programmation"},{fiche:"T1-C2",chap:"VIII",title:"Utilisateurs et usagers"}],
+            "9": [{fiche:"T1-C3",chap:"II",title:"AMO spécialisé"},{fiche:"T1-C6",chap:"I",title:"Le MOA pilote, il ne conçoit pas"}],
+            "10": [{fiche:"T1-C3",chap:"II",title:"AMO spécialisé"},{fiche:"T1-C6",chap:"I",title:"Le MOA pilote"}],
+            "11": [{fiche:"T1-C3",chap:"II",title:"AMO spécialisé"},{fiche:"T1-C6",chap:"I",title:"Le MOA pilote"}],
+            "12": [{fiche:"T1-C3",chap:"II",title:"AMO spécialisé"},{fiche:"T1-C6",chap:"I",title:"Le MOA pilote"}],
+            "13": [{fiche:"T1-C3",chap:"II",title:"AMO spécialisé"},{fiche:"T1-C6",chap:"I",title:"Le MOA pilote"}],
+            "14": [{fiche:"T1-C3",chap:"II",title:"AMO spécialisé"},{fiche:"T1-C6",chap:"I",title:"Le MOA pilote"}]
+        },
+        "Man02": {
+            "1": [{fiche:"T1-C5",chap:"I",title:"Coût global et enveloppe financière"},{fiche:"T4-C1",chap:"III",title:"Composantes du coût global"}],
+            "2": [{fiche:"T1-C5",chap:"I",title:"Coût global et enveloppe financière"},{fiche:"T4-C1",chap:"III",title:"Composantes du coût global"}],
+            "3": [{fiche:"T1-C5",chap:"III",title:"Postes fréquemment oubliés"},{fiche:"T9-C4",chap:"II",title:"Coûts de référence géothermie"}],
+            "4": [{fiche:"T1-C5",chap:"III",title:"Postes fréquemment oubliés"},{fiche:"T9-C4",chap:"II",title:"Coûts de référence géothermie"}],
+            "5": [{fiche:"T1-C5",chap:"II",title:"Ratio TDC/travaux HT"}]
+        },
+        "Man03": {
+            "1": [{fiche:"T6-C1",chap:"V",title:"Labels et normes du bois (PEFC, FSC)"}],
+            "2": [{fiche:"T1-C7",chap:"II",title:"Préparation de chantier"}],
+            "3": [{fiche:"T1-C7",chap:"III",title:"Suivi de chantier et gestion des aléas"}],
+            "4": [{fiche:"T1-C7",chap:"III",title:"Suivi de chantier et gestion des aléas"}],
+            "5": [{fiche:"T1-C7",chap:"III",title:"Suivi de chantier et gestion des aléas"}],
+            "6": [{fiche:"T1-C7",chap:"III",title:"Suivi de chantier et gestion des aléas"}],
+            "7": [{fiche:"T1-C7",chap:"III",title:"Suivi de chantier et gestion des aléas"}],
+            "8": [{fiche:"T1-C7",chap:"III",title:"Suivi de chantier et gestion des aléas"}]
+        },
+        "Man04": {
+            "1": [{fiche:"T1-C8",chap:"I",title:"Réception : acte juridique"},{fiche:"T1-C8",chap:"V",title:"Mise en route des équipements"}],
+            "2": [{fiche:"T1-C8",chap:"I",title:"Réception : acte juridique"},{fiche:"T1-C8",chap:"V",title:"Mise en route des équipements"}],
+            "3": [{fiche:"T1-C8",chap:"I",title:"Réception : acte juridique"},{fiche:"T1-C8",chap:"V",title:"Mise en route des équipements"}],
+            "4": [{fiche:"T1-C8",chap:"I",title:"Réception : acte juridique"},{fiche:"T1-C8",chap:"V",title:"Mise en route des équipements"}],
+            "5": [{fiche:"T1-C8",chap:"V",title:"Mise en route des équipements"},{fiche:"T1-C3",chap:"II",title:"AMO spécialisé"}],
+            "6": [{fiche:"T1-C8",chap:"V",title:"Mise en route des équipements"},{fiche:"T1-C3",chap:"II",title:"AMO spécialisé"}],
+            "7": [{fiche:"T2-C4",chap:"III",title:"Étanchéité à l'air et infiltrométrie"},{fiche:"T1-C8",chap:"II",title:"OPR — opérations préalables à la réception"}],
+            "8": [{fiche:"T2-C4",chap:"III",title:"Étanchéité à l'air et infiltrométrie"},{fiche:"T1-C8",chap:"II",title:"OPR — opérations préalables à la réception"}],
+            "9": [{fiche:"T1-C8",chap:"V",title:"DOE — dossier des ouvrages exécutés"}],
+            "10": [{fiche:"T1-C8",chap:"V",title:"Formation des utilisateurs"}]
+        },
+        "Man05": {
+            "1": [{fiche:"T1-C9",chap:"I",title:"GPA — garantie de parfait achèvement"},{fiche:"T1-C9",chap:"III",title:"Suivi pendant la GPA"}],
+            "2": [{fiche:"T1-C9",chap:"III",title:"Suivi pendant la GPA"},{fiche:"T1-C8",chap:"V",title:"Mise en route des équipements"},{fiche:"T3-C7",chap:"II",title:"Plan d'entretien ventilation"}],
+            "3": [{fiche:"T1-C9",chap:"III",title:"Suivi pendant la GPA"},{fiche:"T1-C8",chap:"V",title:"Mise en route des équipements"},{fiche:"T3-C7",chap:"II",title:"Plan d'entretien ventilation"}],
+            "4": [{fiche:"T1-C9",chap:"IV",title:"Responsabilités du MOA après réception"}],
+            "5": [{fiche:"T1-C9",chap:"IV",title:"Responsabilités du MOA après réception"}],
+            "6": [{fiche:"T11-C4",chap:"I",title:"Benchmark OID et consommations observées"}]
+        },
+        "Hea01": {
+            "1": [{fiche:"T2-C6",chap:"IV",title:"Protections solaires (BSO, Fs 0.08–0.12)"},{fiche:"T14-C1",chap:"IV",title:"Protections solaires extérieures"}],
+            "2": [{fiche:"T2-C6",chap:"IV",title:"Protections solaires (BSO, Fs 0.08–0.12)"},{fiche:"T14-C1",chap:"IV",title:"Protections solaires extérieures"}],
+            "3": [{fiche:"T14-C1",chap:"III",title:"Apports solaires et surfaces vitrées"},{fiche:"T2-C3",chap:"IV",title:"Performance du vitrage (Ug, Uw)"}],
+            "4": [{fiche:"T14-C1",chap:"III",title:"Apports solaires et surfaces vitrées"},{fiche:"T2-C3",chap:"IV",title:"Performance du vitrage (Ug, Uw)"}],
+            "5": [{fiche:"T14-C1",chap:"IV",title:"Optimisation des surfaces vitrées"},{fiche:"T12-C6",chap:"IV",title:"Doubles façades ventilées (DFV)"}],
+            "6": [{fiche:"T14-C1",chap:"IV",title:"Optimisation des surfaces vitrées"},{fiche:"T12-C6",chap:"IV",title:"Doubles façades ventilées (DFV)"}],
+            "7": [{fiche:"T14-C1",chap:"IV",title:"Optimisation des surfaces vitrées"},{fiche:"T12-C6",chap:"IV",title:"Doubles façades ventilées (DFV)"}],
+            "8": [{fiche:"T14-C1",chap:"IV",title:"Optimisation des surfaces vitrées"},{fiche:"T12-C6",chap:"IV",title:"Doubles façades ventilées (DFV)"}]
+        },
+        "Hea02": {
+            "1": [{fiche:"T3-C2",chap:"IV",title:"Polluants physiques : amiante"}],
+            "2": [{fiche:"T3-C1",chap:"I",title:"Enjeux de la qualité de l'air intérieur"},{fiche:"T3-C2",chap:"VI",title:"Hiérarchiser les actions correctives"}],
+            "4": [{fiche:"T3-C3",chap:"I",title:"Principe de balayage et ventilation"}],
+            "5": [{fiche:"T3-C5",chap:"IV",title:"Filtration VMC double flux (ePM2.5)"}],
+            "6": [{fiche:"T3-C3",chap:"III",title:"Contrôle des débits VMC"},{fiche:"T3-C1",chap:"III",title:"Cadre réglementaire QAI"}],
+            "8": [{fiche:"T3-C2",chap:"III",title:"COV des matériaux, étiquetage A+"}],
+            "9": [{fiche:"T3-C2",chap:"III",title:"COV et formaldéhyde (VGAI 30 µg/m³)"}],
+            "10": [{fiche:"T3-C2",chap:"III",title:"COV et formaldéhyde"}],
+            "11": [{fiche:"T3-C2",chap:"III",title:"COV et formaldéhyde"}],
+            "12": [{fiche:"T3-C2",chap:"III",title:"COV et formaldéhyde"}],
+            "13": [{fiche:"T3-C2",chap:"III",title:"COV et formaldéhyde"}],
+            "14": [{fiche:"T3-C3",chap:"II",title:"Ventilation naturelle : tirage, vent"}],
+            "15": [{fiche:"T3-C3",chap:"II",title:"Ventilation naturelle"}],
+            "17": [{fiche:"T3-C2",chap:"III",title:"Émissions COV des matériaux (Table 20)"}]
+        },
+        "Hea04": {
+            "1": [{fiche:"T14-C6",chap:"I",title:"Indicateurs confort (DH, Givoni, EN 16798)"},{fiche:"T14-C7",chap:"I",title:"Outil STD et garde-fous"}],
+            "2": [{fiche:"T14-C6",chap:"I",title:"Indicateurs de confort"},{fiche:"T14-C7",chap:"I",title:"Outil STD"}],
+            "3": [{fiche:"T14-C6",chap:"I",title:"Indicateurs de confort"},{fiche:"T14-C7",chap:"I",title:"Outil STD"}],
+            "4": [{fiche:"T14-C6",chap:"I",title:"Indicateurs de confort"},{fiche:"T14-C7",chap:"I",title:"Outil STD"}],
+            "5": [{fiche:"T14-C6",chap:"I",title:"Indicateurs de confort"},{fiche:"T14-C7",chap:"I",title:"Outil STD"}],
+            "6": [{fiche:"T14-C4",chap:"I",title:"Fichiers météo et climat futur"},{fiche:"T14-C5",chap:"I",title:"DJU et canicules"}],
+            "7": [{fiche:"T14-C4",chap:"I",title:"Fichiers météo et climat futur"},{fiche:"T14-C5",chap:"I",title:"DJU et canicules"}],
+            "8": [{fiche:"T14-C4",chap:"I",title:"Fichiers météo et climat futur"},{fiche:"T14-C5",chap:"I",title:"DJU et canicules"}],
+            "9": [{fiche:"T14-C4",chap:"I",title:"Fichiers météo et climat futur"},{fiche:"T14-C5",chap:"I",title:"DJU et canicules"}],
+            "10": [{fiche:"T14-C2",chap:"I",title:"Rafraîchissement passif vs actif"},{fiche:"T2-C6",chap:"III",title:"Inertie, protections solaires, ventilation nocturne"}],
+            "11": [{fiche:"T14-C2",chap:"I",title:"Rafraîchissement passif vs actif"},{fiche:"T2-C6",chap:"III",title:"Inertie et protections solaires"}],
+            "12": [{fiche:"T14-C2",chap:"I",title:"Rafraîchissement passif vs actif"},{fiche:"T2-C6",chap:"III",title:"Inertie et protections solaires"}]
+        },
+        "Hea05": {
+            "2": [{fiche:"T3-C6",chap:"II",title:"Dimensionnement conduits et acoustique"},{fiche:"T5-C3",chap:"II",title:"Acoustique PAC (45–60 dB)"}],
+            "3": [{fiche:"T3-C6",chap:"II",title:"Dimensionnement conduits et acoustique"},{fiche:"T5-C3",chap:"II",title:"Acoustique PAC (45–60 dB)"}],
+            "4": [{fiche:"T12-C6",chap:"IV",title:"DFV : réduction acoustique –10 à –15 dB"}],
+            "5": [{fiche:"T12-C6",chap:"IV",title:"DFV : réduction acoustique –10 à –15 dB"}]
+        },
+        "Hea07": {
+            "1": [{fiche:"T13-C3",chap:"I",title:"Gestion eaux pluviales et risques"},{fiche:"T14-C1",chap:"I",title:"Confort d'été : enjeu climatique"}],
+            "2": [{fiche:"T13-C3",chap:"III",title:"Noues, perméables, toitures stockantes"},{fiche:"T14-C2",chap:"I",title:"Rafraîchissement passif"}]
+        },
+        "Ene01": {
+            "1": [{fiche:"T11-C1",chap:"I",title:"Méthodologie 3CL-DPE 2021"},{fiche:"T11-C2",chap:"I",title:"Diagnostic rapide depuis factures"}],
+            "2": [{fiche:"T11-C1",chap:"I",title:"Méthodologie 3CL-DPE"},{fiche:"T11-C2",chap:"I",title:"Diagnostic depuis l'existant"}],
+            "2.a": [{fiche:"T2-C1",chap:"I",title:"Fondamentaux de l'isolation"},{fiche:"T2-C3",chap:"I",title:"λ, R, U — conductivité et résistance"},{fiche:"T2-C4",chap:"I",title:"Étanchéité à l'air (Q4Pa)"},{fiche:"T2-C5",chap:"I",title:"Isolation et gestion de l'humidité"}],
+            "2.b": [{fiche:"T4-C1",chap:"I",title:"Choix de l'énergie de chauffage"},{fiche:"T4-C3",chap:"I",title:"Chaudière condensation"},{fiche:"T4-C5",chap:"I",title:"ECS : production et distribution"},{fiche:"T4-C6",chap:"I",title:"Chauffe-eau thermodynamique"},{fiche:"T5-C1",chap:"I",title:"Principe PAC et COP"},{fiche:"T5-C2",chap:"I",title:"Typologies de PAC"},{fiche:"T5-C3",chap:"I",title:"Dimensionnement PAC"},{fiche:"T3-C4",chap:"I",title:"VMC simple flux"},{fiche:"T3-C5",chap:"I",title:"VMC double flux"},{fiche:"T3-C6",chap:"I",title:"Dimensionnement ventilation"}],
+            "2.c": [{fiche:"T4-C2",chap:"I",title:"Chauffage électrique et radiateurs"}],
+            "3": [{fiche:"T2-C7",chap:"I",title:"Rénovation bâti ancien"},{fiche:"T2-C8",chap:"I",title:"Pisé et matériaux traditionnels"}],
+            "4": [{fiche:"T2-C7",chap:"I",title:"Rénovation bâti ancien"},{fiche:"T2-C8",chap:"I",title:"Pisé et matériaux traditionnels"}],
+            "5": [{fiche:"T2-C7",chap:"I",title:"Rénovation bâti ancien"},{fiche:"T2-C8",chap:"I",title:"Pisé et matériaux traditionnels"}],
+            "6": [{fiche:"T2-C7",chap:"I",title:"Rénovation bâti ancien"},{fiche:"T2-C8",chap:"I",title:"Pisé et matériaux traditionnels"}],
+            "7": [{fiche:"T2-C7",chap:"I",title:"Rénovation bâti ancien"},{fiche:"T2-C8",chap:"I",title:"Pisé et matériaux traditionnels"}],
+            "8": [{fiche:"T11-C3",chap:"I",title:"Label BEPOS-Effinergie"},{fiche:"T8-C1",chap:"I",title:"PV : principe et composants"},{fiche:"T8-C2",chap:"I",title:"Gisement solaire et productivité"},{fiche:"T8-C3",chap:"I",title:"Autoconsommation et raccordement"}],
+            "9": [{fiche:"T11-C3",chap:"I",title:"Label BEPOS-Effinergie"},{fiche:"T8-C1",chap:"I",title:"PV : principe"},{fiche:"T8-C2",chap:"I",title:"Gisement solaire"}],
+            "10": [{fiche:"T11-C3",chap:"I",title:"Label BEPOS-Effinergie"},{fiche:"T8-C1",chap:"I",title:"PV"},{fiche:"T8-C2",chap:"I",title:"Gisement solaire"}],
+            "11": [{fiche:"T11-C3",chap:"I",title:"Label BEPOS-Effinergie"},{fiche:"T8-C1",chap:"I",title:"PV"}],
+            "12": [{fiche:"T11-C3",chap:"I",title:"Label BEPOS-Effinergie"},{fiche:"T8-C1",chap:"I",title:"PV"}]
+        },
+        "Ene02": {
+            "1": [{fiche:"T11-C4",chap:"I",title:"Benchmark OID et obligations DEET"}],
+            "2": [{fiche:"T11-C4",chap:"I",title:"Benchmark OID et obligations DEET"}],
+            "3": [{fiche:"T11-C4",chap:"IV",title:"Comptage par usage et monitoring OPERAT"}],
+            "4": [{fiche:"T11-C4",chap:"IV",title:"Comptage par usage et monitoring"}],
+            "5": [{fiche:"T11-C4",chap:"IV",title:"Comptage par usage et monitoring"}]
+        },
+        "Ene04": {
+            "2": [{fiche:"T2-C6",chap:"III",title:"Inertie, déphasage, protections solaires"},{fiche:"T14-C2",chap:"I",title:"Refroidissement passif"}],
+            "3": [{fiche:"T2-C6",chap:"III",title:"Inertie, protections solaires"},{fiche:"T14-C2",chap:"I",title:"Refroidissement passif"}],
+            "4": [{fiche:"T3-C3",chap:"II",title:"Ventilation naturelle"},{fiche:"T14-C2",chap:"I",title:"Free cooling"},{fiche:"T2-C6",chap:"V",title:"Ventilation nocturne"}],
+            "5": [{fiche:"T3-C3",chap:"II",title:"Ventilation naturelle"},{fiche:"T14-C2",chap:"I",title:"Free cooling"},{fiche:"T2-C6",chap:"V",title:"Ventilation nocturne"}],
+            "6": [{fiche:"T3-C3",chap:"II",title:"Ventilation naturelle"},{fiche:"T14-C2",chap:"I",title:"Free cooling"}],
+            "7": [{fiche:"T8-C1",chap:"I",title:"PV : principe"},{fiche:"T8-C2",chap:"I",title:"Gisement solaire et rentabilité"},{fiche:"T7-C1",chap:"I",title:"Solaire thermique"},{fiche:"T7-C2",chap:"I",title:"Dimensionnement CESI/SSC"},{fiche:"T5-C1",chap:"I",title:"PAC : principe et COP"},{fiche:"T9-C1",chap:"I",title:"Géothermie principes"},{fiche:"T10-C1",chap:"I",title:"Réseaux de chaleur"},{fiche:"T6-C4",chap:"I",title:"Chaufferie automatique bois"}],
+            "8": [{fiche:"T8-C1",chap:"I",title:"PV"},{fiche:"T7-C1",chap:"I",title:"Solaire thermique"},{fiche:"T5-C1",chap:"I",title:"PAC"},{fiche:"T9-C1",chap:"I",title:"Géothermie"},{fiche:"T10-C1",chap:"I",title:"Réseaux de chaleur"},{fiche:"T6-C4",chap:"I",title:"Chaufferie bois"}],
+            "9": [{fiche:"T8-C1",chap:"I",title:"PV"},{fiche:"T7-C1",chap:"I",title:"Solaire thermique"},{fiche:"T5-C1",chap:"I",title:"PAC"}],
+            "10": [{fiche:"T8-C1",chap:"I",title:"PV"},{fiche:"T7-C1",chap:"I",title:"Solaire thermique"}],
+            "11": [{fiche:"T8-C1",chap:"I",title:"PV"},{fiche:"T8-C2",chap:"I",title:"Gisement solaire"}]
+        },
+        "Wat01": {
+            "1": [{fiche:"T13-C1",chap:"I",title:"Repères de consommation (150 L/j/pers)"},{fiche:"T13-C2",chap:"II",title:"Ratios de consommation tertiaire"}],
+            "2": [{fiche:"T13-C1",chap:"I",title:"Repères de consommation"},{fiche:"T13-C2",chap:"II",title:"Ratios par secteur"}],
+            "3": [{fiche:"T13-C1",chap:"III",title:"Équipements hydro-économes (WC, douche, robinet)"}],
+            "4": [{fiche:"T13-C3",chap:"IV",title:"Récupération eaux de pluie"},{fiche:"T13-C2",chap:"IV",title:"Ressources alternatives"}],
+            "5": [{fiche:"T13-C3",chap:"IV",title:"Récupération eaux de pluie"},{fiche:"T13-C2",chap:"IV",title:"Ressources alternatives"}]
+        },
+        "Wat02": {
+            "1": [{fiche:"T13-C2",chap:"IV",title:"Suivi et chasse aux fuites"},{fiche:"T13-C1",chap:"V",title:"Diagnostic et suivi"}],
+            "2": [{fiche:"T13-C2",chap:"IV",title:"Suivi et comptage"}],
+            "3": [{fiche:"T13-C2",chap:"IV",title:"Sous-comptage par zone"}],
+            "4": [{fiche:"T13-C2",chap:"IV",title:"Sous-comptage"}],
+            "5": [{fiche:"T13-C1",chap:"V",title:"Diagnostic et suivi"}]
+        },
+        "Wat03": {
+            "1": [{fiche:"T13-C1",chap:"II",title:"Repérer et réparer les fuites"},{fiche:"T13-C2",chap:"IV",title:"Suivi et chasse aux fuites"}],
+            "2": [{fiche:"T13-C2",chap:"IV",title:"Équipements hydro-économes"}]
+        },
+        "Wat04": {
+            "1": [{fiche:"T13-C3",chap:"I",title:"Gestion des eaux pluviales à la parcelle"},{fiche:"T13-C6",chap:"III",title:"Restrictions sécheresse et bâtiment"}],
+            "2": [{fiche:"T13-C3",chap:"I",title:"Gestion des eaux pluviales"},{fiche:"T13-C6",chap:"III",title:"Restrictions sécheresse"}]
+        },
+        "Mat01": {
+            "1": [{fiche:"T12-C3",chap:"II",title:"ACV dès l'esquisse, Ic, FDES"},{fiche:"T12-C2",chap:"V",title:"Scope 3 dominant : 70–90 % matériaux"}],
+            "2": [{fiche:"T12-C3",chap:"II",title:"ACV dès l'esquisse"},{fiche:"T12-C2",chap:"V",title:"Scope 3 matériaux"}],
+            "3": [{fiche:"T12-C3",chap:"II",title:"ACV et leviers construction"},{fiche:"T12-C2",chap:"V",title:"Scope 3 matériaux"}],
+            "4": [{fiche:"T12-C3",chap:"II",title:"ACV"},{fiche:"T12-C2",chap:"V",title:"Scope 3"}],
+            "5": [{fiche:"T12-C5",chap:"I",title:"Carbone du béton : 4 familles de solutions"},{fiche:"T2-C2",chap:"I",title:"Isolants : énergie grise, cycle de vie"},{fiche:"T12-C4",chap:"II",title:"Carbone incarné rénovation"}],
+            "6": [{fiche:"T12-C5",chap:"I",title:"Béton bas carbone"},{fiche:"T2-C2",chap:"I",title:"Isolants biosourcés vs synthétiques"},{fiche:"T12-C4",chap:"II",title:"Temps de retour carbone"}],
+            "7": [{fiche:"T12-C5",chap:"I",title:"Béton bas carbone"},{fiche:"T12-C4",chap:"II",title:"Carbone incarné"}],
+            "8": [{fiche:"T12-C5",chap:"V",title:"INIES, FDES, cadre normatif béton"},{fiche:"T12-C1",chap:"II",title:"Séquestration et comptabilisation carbone"}],
+            "9": [{fiche:"T12-C5",chap:"V",title:"INIES, FDES"},{fiche:"T12-C1",chap:"II",title:"Comptabilisation carbone"}],
+            "10": [{fiche:"T12-C5",chap:"V",title:"INIES et FDES"},{fiche:"T12-C1",chap:"II",title:"Séquestration carbone"}]
+        },
+        "Mat03": {
+            "1": [{fiche:"T6-C1",chap:"V",title:"Labels bois (PEFC, FSC, Flamme Verte)"}],
+            "2": [{fiche:"T1-C7",chap:"I",title:"Clauses environnementales dans les marchés"}],
+            "3": [{fiche:"T1-C7",chap:"I",title:"Clauses environnementales"},{fiche:"T12-C5",chap:"III",title:"Chaîne d'approvisionnement béton"}],
+            "4": [{fiche:"T1-C7",chap:"I",title:"Clauses environnementales"},{fiche:"T12-C5",chap:"III",title:"Chaîne d'approvisionnement béton"}],
+            "5": [{fiche:"T12-C5",chap:"III",title:"Liant et approvisionnement béton"}],
+            "6": [{fiche:"T12-C5",chap:"III",title:"Liant et approvisionnement"}],
+            "7": [{fiche:"T12-C5",chap:"III",title:"Alternatives de liant"}]
+        },
+        "Mat05": {
+            "2": [{fiche:"T2-C7",chap:"V",title:"Durabilité bâti ancien, isolants compatibles"},{fiche:"T2-C8",chap:"IV",title:"Pathologies pisé et restauration"}]
+        },
+        "Mat06": {
+            "1": [{fiche:"T12-C4",chap:"II",title:"Rénovation bas carbone et réemploi"},{fiche:"T12-C3",chap:"II",title:"Leviers de décarbonation"}],
+            "2": [{fiche:"T12-C4",chap:"II",title:"Hiérarchiser les leviers"},{fiche:"T12-C3",chap:"II",title:"Réemploi et biosourcés"}]
+        },
+        "Wst01": {
+            "1": [{fiche:"T1-C7",chap:"II",title:"Préparation de chantier"}]
+        },
+        "Wst05": {
+            "1": [{fiche:"T14-C4",chap:"I",title:"Fichiers météo et intensité caniculaire"},{fiche:"T14-C5",chap:"I",title:"DJU et canicules"},{fiche:"T13-C3",chap:"II",title:"Cadre réglementaire eaux pluviales"}],
+            "2": [{fiche:"T14-C1",chap:"I",title:"Confort d'été et indicateurs RE2020"},{fiche:"T13-C4",chap:"I",title:"Désimperméabilisation et SFN"}]
+        },
+        "Lue02": {
+            "1": [{fiche:"T13-C5",chap:"II",title:"Biodiversité dans les projets de bâtiments"}],
+            "2": [{fiche:"T13-C5",chap:"II",title:"Biodiversité dans les projets"}],
+            "3": [{fiche:"T13-C5",chap:"II",title:"Biodiversité et végétalisation"}]
+        },
+        "Lue03": {
+            "1": [{fiche:"T13-C4",chap:"I",title:"Désimperméabilisation et cycle naturel"},{fiche:"T13-C5",chap:"II",title:"Biodiversité dans les projets"}],
+            "2": [{fiche:"T13-C4",chap:"I",title:"Solutions fondées sur la nature"},{fiche:"T13-C5",chap:"II",title:"Végétalisation et toitures écologiques"}]
+        },
+        "Lue04": {
+            "1": [{fiche:"T13-C5",chap:"II",title:"Toitures végétalisées, végétalisation"},{fiche:"T13-C4",chap:"III",title:"Nature comme modèle, SFN"}],
+            "2": [{fiche:"T13-C5",chap:"II",title:"Toitures végétalisées"},{fiche:"T13-C4",chap:"III",title:"Solutions fondées sur la nature"}]
+        },
+        "Lue05": {
+            "1": [{fiche:"T13-C5",chap:"II",title:"Gestion toitures végétalisées (25 ans)"}],
+            "2": [{fiche:"T13-C5",chap:"IV",title:"Sensibilisation usagers, gestion long terme"}]
+        },
+        "Pol01": {
+            "2": [{fiche:"T5-C1",chap:"V",title:"Fluides frigorigènes et cadre F-Gas"}],
+            "3": [{fiche:"T5-C1",chap:"V",title:"Fluides frigorigènes et GWP"}],
+            "4": [{fiche:"T5-C1",chap:"V",title:"Cadre F-Gas"}],
+            "5": [{fiche:"T5-C1",chap:"V",title:"Cadre F-Gas"}],
+            "6": [{fiche:"T5-C1",chap:"V",title:"Cadre F-Gas"}],
+            "7": [{fiche:"T5-C1",chap:"V",title:"Cadre F-Gas"}],
+            "8": [{fiche:"T5-C1",chap:"V",title:"Cadre F-Gas"}]
+        },
+        "Pol02": {
+            "1": [{fiche:"T4-C3",chap:"II",title:"Chaudière condensation et NOx"},{fiche:"T6-C1",chap:"III",title:"Qualité air : particules bois énergie"}],
+            "2": [{fiche:"T6-C1",chap:"V",title:"Flamme Verte : seuils NOx et PM"}]
+        },
+        "Pol03": {
+            "1": [{fiche:"T13-C3",chap:"I",title:"Pourquoi gérer les EP à la parcelle"}],
+            "2": [{fiche:"T13-C3",chap:"I",title:"Cadre réglementaire EP"}],
+            "3": [{fiche:"T13-C3",chap:"I",title:"Cadre réglementaire EP"}],
+            "4": [{fiche:"T13-C3",chap:"I",title:"Cadre réglementaire"}],
+            "5": [{fiche:"T13-C3",chap:"I",title:"Cadre réglementaire"}],
+            "6": [{fiche:"T13-C3",chap:"I",title:"Cadre réglementaire"}],
+            "7": [{fiche:"T13-C3",chap:"III",title:"Noues, revêtements perméables, toitures"},{fiche:"T13-C4",chap:"I",title:"Désimperméabilisation"}],
+            "8": [{fiche:"T13-C3",chap:"III",title:"Solutions SUDS"},{fiche:"T13-C4",chap:"I",title:"Coefficient de concentration"}],
+            "9": [{fiche:"T13-C3",chap:"III",title:"Solutions SUDS"},{fiche:"T13-C4",chap:"I",title:"Désimperméabilisation"}],
+            "10": [{fiche:"T13-C3",chap:"III",title:"Tranchées d'infiltration"},{fiche:"T13-C4",chap:"I",title:"Désimperméabilisation"}],
+            "11": [{fiche:"T13-C3",chap:"III",title:"Solutions perméables"},{fiche:"T13-C4",chap:"I",title:"Retours d'expérience"}],
+            "12": [{fiche:"T13-C5",chap:"III",title:"Gestion alternative EP et filtration"}],
+            "13": [{fiche:"T13-C5",chap:"III",title:"Filtration naturelle EP"}],
+            "14": [{fiche:"T13-C5",chap:"III",title:"Traitement par dispositifs"}],
+            "15": [{fiche:"T13-C5",chap:"III",title:"Maintenance des dispositifs EP"}]
+        },
+        "Pol05": {
+            "1": [{fiche:"T5-C3",chap:"II",title:"Acoustique PAC de voisinage"}],
+            "2": [{fiche:"T5-C3",chap:"II",title:"Distances et supports anti-vibratiles PAC"}],
+            "3": [{fiche:"T5-C3",chap:"II",title:"Acoustique PAC"}],
+            "4": [{fiche:"T5-C3",chap:"II",title:"Acoustique PAC"}],
+            "5": [{fiche:"T5-C3",chap:"II",title:"Acoustique PAC"}]
+        }
+    };
+
+    // ── RFO: Collect unique fiches for a credit + array of point numbers ──
+    function collectFichesForPointsRFO(creditCode, pointNums) {
+        if (!RFO_FICHE_MAPPING[creditCode]) return [];
+        var seen = {};
+        var result = [];
+        pointNums.forEach(function(pt) {
+            var refs = RFO_FICHE_MAPPING[creditCode][pt];
+            if (!refs) return;
+            refs.forEach(function(ref) {
+                var key = ref.fiche + '|' + ref.chap;
+                if (!seen[key]) {
+                    seen[key] = true;
+                    result.push(ref);
+                }
+            });
+        });
+        return result;
+    }
+
+    // ── RFO: Build green badge for a section title ──
+    function buildRfoSectionFicheBadge(creditCode, pointNums) {
+        var fiches = collectFichesForPointsRFO(creditCode, pointNums);
+        if (fiches.length === 0) return '';
+        var bookIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
+        var count = fiches.length;
+        var label = count + ' fiche' + (count > 1 ? 's' : '');
+        var fichesJson = JSON.stringify(fiches).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        return '<span class="fiche-section-badge" onclick="event.stopPropagation(); openFicheListPanel(\'' +
+            creditCode + '\', this.getAttribute(\'data-fiches\'))" data-fiches="' + fichesJson + '" title="Voir les fiches pédagogiques associées">' +
+            bookIcon + label + '</span>';
+    }
+
+    // ── RFO: Inject badges on each section title in rfoRenderAimContent ──
+    (function() {
+        var _origRfoRenderAim = rfoRenderAimContent;
+        rfoRenderAimContent = function(creditCode) {
+            var html = _origRfoRenderAim(creditCode);
+            if (!RFO_FICHE_MAPPING[creditCode]) return html;
+
+            var tmp = document.createElement('div');
+            tmp.innerHTML = html;
+
+            var sections = tmp.querySelectorAll('.criteria-item');
+            sections.forEach(function(section) {
+                var pointNums = [];
+                var items = section.querySelectorAll('.criterion-item');
+                items.forEach(function(li) {
+                    var num = li.getAttribute('data-num');
+                    if (num) pointNums.push(num);
+                    var subs = li.querySelectorAll('.criterion-subitems > li .sub-num');
+                    subs.forEach(function(sn) {
+                        var subKey = sn.textContent.trim();
+                        if (subKey) pointNums.push(subKey);
+                    });
+                });
+
+                if (pointNums.length === 0) return;
+
+                var badge = buildRfoSectionFicheBadge(creditCode, pointNums);
+                if (!badge) return;
+
+                var titleDiv = section.querySelector('.criteria-points');
+                if (titleDiv) {
+                    titleDiv.insertAdjacentHTML('beforeend', badge);
+                }
+            });
+
+            return tmp.innerHTML;
+        };
+    })();
+    </script>
+
+<!-- ============================================================ -->
+<!-- ===== BBCA NEUF V3.2 — INJECTED JS MODULE ================== -->
+<!-- ============================================================ -->
+<script>
+(function() {
+    'use strict';
+
+    // ─── État persistant ─────────────────────────────────────
+    var STORAGE_KEY = 'bbcaNeufExtra';
+    function loadBbcaState() {
+        try {
+            var raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return defaultBbcaState();
+            var st = JSON.parse(raw);
+            return Object.assign(defaultBbcaState(), st);
+        } catch (e) { return defaultBbcaState(); }
+    }
+    function saveBbcaState(st) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(st)); } catch (e) {}
+    }
+    function defaultBbcaState() {
+        return {
+            identite: {
+                typologie: '',           // bureaux | residentiel-collectif | hotels | autres-rt
+                versionRef: '3.2',
+                sdp: 0,
+                zoneClimatique: '',      // H1a..H3
+                niveauVise: '',          // standard | performance | excellence
+                phase: 'conception',     // conception | realisation
+                datePV: '',
+                horsMetropole: false,
+                hotelChambres: 0,
+                hotelEtoiles: 3,
+                hotelSurfaceMoyenne: 28
+            },
+            acv: {
+                egesDeconstruction: 0,
+                egesPceParLot: {},       // { '01': 50, '02': 100, ... }
+                egesChantier: 0,
+                egesEau: 0,
+                egesEnergie: 0,
+                stockageCarbone: 0,
+                bilanBepos: 0
+            },
+            modulations: {
+                mStationnement: { actif: false, surface: 0 },
+                mAgrementExt:   { actif: false, surface: 0 },
+                fondationsSpeciales: { actif: false },
+                livreEnBlanc: { cas: '' },   // '' | 'cas1' | 'cas2'
+                titreV: { actif: false, valeur: 0, justification: '' }
+            },
+            innovationClimat: {
+                deconstructionSelective: false,
+                reemploi: { masseKg: 0 },
+                mutualisationParkings: { surfaceEvitee: 0 },
+                mutualisationEspaces: { surfaceComplem: 0 },
+                changementUsage: 0,        // 0 | 1 | 2 | 3
+                extensionBatiment: { surfaceComplem: 0 },
+                sed: false,
+                commissionnement: false,
+                sensibilisation: false
+            },
+            resultats: {
+                egesPCEbbca: 0,
+                egesEnergieBBCA: 0,
+                egesProjet: 0,
+                pointsCarbone: 0,
+                pointsIC: 0,
+                score: 0,
+                niveauAtteint: '—'
+            }
+        };
+    }
+
+    // ─── Rendu : Page Fonctionnement (à partir de BBCA_NEUF_FONCT_PARTS.js) ───
+    // ─── Rendu : Page Fonctionnement (5 onglets thématiques, pattern NCV7) ───
+    // ─── Rendu : Page Fonctionnement (pattern strict NCV7, structure array de tabs) ───
+    function renderBbcaNeufFonctionnement() {
+        var tabsEl = document.getElementById('bbcaNeufFonctTabs');
+        if (!tabsEl) return;
+        var parts = window.BBCA_NEUF_FONCT_PARTS;
+        if (!parts || !parts.length) return;
+        tabsEl.innerHTML = ''; // reset pour re-rendu compatible avec changements de structure
+
+        // Build tabs
+        for (var i = 0; i < parts.length; i++) {
+            var tab = document.createElement('div');
+            tab.className = 'fonct-tab' + (i === 0 ? ' active' : '');
+            tab.textContent = parts[i].tab;
+            tab.setAttribute('data-idx', i);
+            tab.onclick = function() { switchBbcaFonctTab(parseInt(this.getAttribute('data-idx'))); };
+            tabsEl.appendChild(tab);
+        }
+
+        // Render premier onglet
+        switchBbcaFonctTab(0);
+    }
+
+    function switchBbcaFonctTab(idx, skipScrollReset) {
+        var parts = window.BBCA_NEUF_FONCT_PARTS;
+        if (!parts || idx < 0 || idx >= parts.length) return;
+        var p = parts[idx];
+
+        // Update active tab
+        var tabs = document.querySelectorAll('#bbcaNeufFonctTabs .fonct-tab');
+        tabs.forEach(function(t) { t.classList.remove('active'); });
+        if (tabs[idx]) tabs[idx].classList.add('active');
+
+        // Build content
+        var contentEl = document.getElementById('bbcaNeufFonctContent');
+        if (!contentEl) return;
+        var h = '';
+        h += '<div class="fonct-content-header-meta"><span>Section ' + (idx + 1) + ' / ' + parts.length + '</span></div>';
+        h += '<div class="fonct-content-title">' + p.title + '</div>';
+        h += '<div class="fonct-content-subtitle">' + p.subtitle + '</div>';
+        h += '<div class="fonct-content-divider"></div>';
+
+        var itemCounter = 0;
+        for (var g = 0; g < p.groups.length; g++) {
+            var grp = p.groups[g];
+            h += '<div class="fonct-section" id="bbcaFonctSec_' + idx + '_' + g + '">';
+            h += '<div class="fonct-section-title">' + grp.name + '</div>';
+            h += '<div class="fonct-section-items">';
+            for (var k = 0; k < grp.items.length; k++) {
+                var itm = grp.items[k];
+                h += '<div class="fonct-section-item" id="bbcaFonctItem_' + idx + '_' + itemCounter + '">';
+                h += '<div class="fonct-item-title">' + itm.title + '</div>';
+                if (itm.content) {
+                    h += '<div class="fonct-item-content">' + itm.content + '</div>';
+                } else {
+                    h += '<div class="fonct-item-content" style="color:#94A3B8;font-style:italic;padding:12px 0;">Contenu à intégrer ultérieurement.</div>';
+                }
+                h += '</div>';
+                itemCounter++;
+            }
+            h += '</div>';
+            h += '</div>';
+        }
+        contentEl.innerHTML = h;
+
+        // Build TOC : groupes + items de l'onglet courant
+        var tocEl = document.getElementById('bbcaNeufFonctToc');
+        if (!tocEl) return;
+        tocEl.innerHTML = '<div class="fonct-toc-title">Sommaire</div>';
+        var tocItemCounter = 0;
+        for (var g2 = 0; g2 < p.groups.length; g2++) {
+            var grp2 = p.groups[g2];
+            var tocGroup = document.createElement('div');
+            tocGroup.className = 'fonct-toc-group';
+            tocGroup.textContent = grp2.name;
+            tocEl.appendChild(tocGroup);
+
+            for (var k2 = 0; k2 < grp2.items.length; k2++) {
+                var tocItem = document.createElement('div');
+                tocItem.className = 'fonct-toc-item';
+                tocItem.textContent = grp2.items[k2].title;
+                tocItem.setAttribute('data-item', 'bbcaFonctItem_' + idx + '_' + tocItemCounter);
+                tocItem.onclick = function() {
+                    var itemId = this.getAttribute('data-item');
+                    var target = document.getElementById(itemId);
+                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    document.getElementById('bbcaNeufFonctToc').querySelectorAll('.fonct-toc-item').forEach(function(t) { t.classList.remove('active'); });
+                    this.classList.add('active');
+                };
+                tocEl.appendChild(tocItem);
+                tocItemCounter++;
+            }
+        }
+
+        // Track scroll to highlight TOC items dynamically
+        contentEl.onscroll = function() {
+            var items = contentEl.querySelectorAll('.fonct-section-item');
+            var tocItems = tocEl.querySelectorAll('.fonct-toc-item');
+            var activeIdx = 0;
+            var containerTop = contentEl.getBoundingClientRect().top;
+            items.forEach(function(s, i) {
+                if (s.getBoundingClientRect().top - containerTop < 60) activeIdx = i;
+            });
+            tocItems.forEach(function(t, i) { t.classList.toggle('active', i === activeIdx); });
+            if (tocItems[activeIdx]) tocItems[activeIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            var groupHeaders = tocEl.querySelectorAll('.fonct-toc-group');
+            var secs = contentEl.querySelectorAll('.fonct-section');
+            var activeSecIdx = 0;
+            secs.forEach(function(s, i) {
+                if (s.getBoundingClientRect().top - containerTop < 60) activeSecIdx = i;
+            });
+            groupHeaders.forEach(function(gh, i) { gh.classList.toggle('active', i === activeSecIdx); });
+        };
+
+        // Reset scroll
+        if (!skipScrollReset) {
+            contentEl.scrollTop = 0;
+            tocEl.scrollTop = 0;
+        }
+    }
+    window.switchBbcaFonctTab = switchBbcaFonctTab;
+    var BBCA_LOTS = [
+        { code: '01', name: 'VRD et aménagements extérieurs' },
+        { code: '02', name: 'Fondations et infrastructures' },
+        { code: '03', name: 'Superstructure et maçonnerie' },
+        { code: '04', name: 'Couverture, étanchéité, charpente' },
+        { code: '05', name: 'Cloisonnement, doublage, plafonds, menuiseries int.' },
+        { code: '06', name: 'Façades et menuiseries extérieures' },
+        { code: '07', name: 'Revêtements sols/murs/plafonds, peintures' },
+        { code: '08', name: 'CVC (chauffage, ventilation, refroidissement, ECS)' },
+        { code: '09', name: 'Installations sanitaires' },
+        { code: '10', name: 'Réseaux d\'énergie (courant fort)' },
+        { code: '11', name: 'Réseaux de communication (courant faible)' },
+        { code: '12', name: 'Appareils élévateurs et transport intérieur' },
+        { code: '13', name: 'Production locale d\'électricité (PV, etc.)' },
+        { code: '14', name: 'Fluides frigorigènes' }
+    ];
+
+    function injectBbcaEvalCss() {
+        if (document.getElementById('bbca-eval-css')) return;
+        var style = document.createElement('style');
+        style.id = 'bbca-eval-css';
+        style.textContent = `
+            .bbca-eval-wrap { padding: 24px 28px 60px; max-width: 1200px; margin: 0 auto; color: #1E293B; }
+            .bbca-section { background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; margin-bottom: 18px; overflow: hidden; }
+            .bbca-section[open] > summary::after { content: '▼'; }
+            .bbca-section > summary { padding: 14px 20px; background: #F8FAFC; cursor: pointer; font-weight: 700; color: #1A2E2A; font-size: 14px; list-style: none; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+            .bbca-section > summary::-webkit-details-marker { display: none; }
+            .bbca-section > summary::after { content: '▶'; color: #94A3B8; font-size: 11px; transition: transform 0.15s; }
+            .bbca-section[open] > summary { border-bottom: 1px solid #E2E8F0; }
+            .bbca-section-body { padding: 20px 24px; }
+            .bbca-section-intro { color: #64748B; font-size: 13px; margin: 0 0 16px 0; line-height: 1.5; }
+            .bbca-form-row { display: grid; grid-template-columns: 240px 1fr; gap: 14px; align-items: center; padding: 8px 0; }
+            .bbca-form-label { font-size: 13px; color: #475569; font-weight: 500; }
+            .bbca-form-label .req { color: #DC2626; margin-left: 3px; }
+            .bbca-form-input, .bbca-form-select { padding: 7px 10px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px; color: #1E293B; background: #FFFFFF; max-width: 360px; }
+            .bbca-form-input:focus, .bbca-form-select:focus { outline: none; border-color: #2D5F4E; box-shadow: 0 0 0 3px rgba(45,95,78,0.15); }
+            .bbca-form-input[type="number"] { max-width: 180px; }
+            .bbca-form-radio-group { display: flex; gap: 18px; }
+            .bbca-form-radio-group label { font-size: 13px; color: #475569; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+            .bbca-elig { margin-top: 16px; padding: 12px 16px; background: #F8FAFC; border-left: 3px solid #2D5F4E; border-radius: 4px; }
+            .bbca-elig-title { font-weight: 700; color: #1A2E2A; font-size: 13px; margin-bottom: 6px; }
+            .bbca-elig-item { font-size: 13px; color: #475569; padding: 3px 0; }
+            .bbca-elig-item.ok::before { content: '✓ '; color: #059669; font-weight: 700; }
+            .bbca-elig-item.ko::before { content: '✗ '; color: #DC2626; font-weight: 700; }
+            .bbca-elig-item.todo::before { content: '○ '; color: #94A3B8; font-weight: 700; }
+            .bbca-acv-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+            .bbca-acv-table th { background: #1A2E2A; color: #FFFFFF; padding: 8px 12px; text-align: left; font-weight: 600; }
+            .bbca-acv-table td { border: 1px solid #E2E8F0; padding: 6px 10px; }
+            .bbca-acv-table input { width: 100px; padding: 4px 8px; border: 1px solid #CBD5E1; border-radius: 4px; font-size: 13px; text-align: right; }
+            .bbca-acv-table tr.subtotal { background: #F1F5F9; font-weight: 700; }
+            .bbca-acv-table tr.subtotal td { color: #1A2E2A; }
+            .bbca-mod-item { padding: 12px 16px; border: 1px solid #E2E8F0; border-radius: 6px; margin-bottom: 10px; background: #FAFBFC; }
+            .bbca-mod-item.active { background: #ECFDF5; border-color: #2D5F4E; }
+            .bbca-mod-head { display: flex; justify-content: space-between; align-items: center; }
+            .bbca-mod-title { font-weight: 600; color: #1A2E2A; font-size: 13px; }
+            .bbca-mod-effect { font-size: 12px; color: #059669; font-weight: 600; }
+            .bbca-mod-body { margin-top: 10px; display: none; }
+            .bbca-mod-item.active .bbca-mod-body { display: block; }
+            .bbca-ic-item { padding: 10px 14px; border: 1px solid #E2E8F0; border-radius: 6px; margin-bottom: 8px; background: #FAFBFC; display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+            .bbca-ic-item label { display: flex; align-items: center; gap: 10px; cursor: pointer; flex: 1; font-size: 13px; color: #1E293B; }
+            .bbca-ic-item .bbca-ic-pts { font-weight: 700; color: #2D5F4E; font-size: 13px; min-width: 60px; text-align: right; }
+            .bbca-ic-input { display: inline-block; margin-left: 8px; padding: 4px 8px; border: 1px solid #CBD5E1; border-radius: 4px; font-size: 12px; width: 100px; }
+            .bbca-ic-total { padding: 12px 16px; background: #1A2E2A; color: #FFFFFF; border-radius: 6px; margin-top: 12px; display: flex; justify-content: space-between; font-weight: 700; }
+            .bbca-result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+            .bbca-result-card { padding: 16px 20px; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; }
+            .bbca-result-card-title { font-size: 12px; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 8px; }
+            .bbca-result-card-value { font-size: 24px; font-weight: 700; color: #1A2E2A; }
+            .bbca-result-card-sub { font-size: 12px; color: #64748B; margin-top: 4px; }
+            .bbca-kpi-bar { height: 10px; background: #E2E8F0; border-radius: 5px; overflow: hidden; margin-top: 8px; }
+            .bbca-kpi-bar-fill { height: 100%; transition: width 0.3s; }
+            .bbca-kpi-bar-fill.ok { background: linear-gradient(90deg, #059669, #4FAA8B); }
+            .bbca-kpi-bar-fill.warn { background: linear-gradient(90deg, #D97706, #F59E0B); }
+            .bbca-kpi-bar-fill.ko { background: linear-gradient(90deg, #DC2626, #EF4444); }
+            .bbca-niveau-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 13px; color: #FFFFFF; }
+            .bbca-niveau-badge.standard { background: #94A3B8; }
+            .bbca-niveau-badge.performance { background: #A0823F; }
+            .bbca-niveau-badge.excellence { background: #C9A227; }
+            .bbca-niveau-badge.aucun { background: #CBD5E1; color: #475569; }
+            .bbca-prereq { padding: 10px 14px; background: #FFFBEB; border-left: 3px solid #D97706; border-radius: 4px; margin-bottom: 12px; font-size: 13px; color: #78350F; }
+            .bbca-prereq.ok { background: #ECFDF5; border-left-color: #059669; color: #14532D; }
+            .bbca-detail-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+            .bbca-detail-table td { padding: 5px 8px; border-bottom: 1px solid #F1F5F9; color: #475569; }
+            .bbca-detail-table td.val { text-align: right; font-weight: 600; color: #1A2E2A; }
+        `;
+        document.head.appendChild(style);
+    }
+
+    function buildBbcaNeufGrid() {
+        var contentEl = document.getElementById('bbcaNeufContent');
+        if (!contentEl) return;
+        injectBbcaEvalCss();
+        var st = loadBbcaState();
+        var html = '<div class="bbca-eval-wrap">';
+        html += renderSection1Identite(st);
+        html += renderSection2ACV(st);
+        html += renderSection3Modulations(st);
+        html += renderSection4InnovationClimat(st);
+        html += renderSection5Results(st);
+        html += '</div>';
+        contentEl.innerHTML = html;
+        bindBbcaInputs();
+        recalcBbcaNeuf();
+    }
+
+    // ─── SECTION 1 — Identité & Éligibilité ─────────────────
+    function renderSection1Identite(st) {
+        var id = st.identite;
+        var typoOpt = function(v, lab) { return '<option value="' + v + '"' + (id.typologie === v ? ' selected' : '') + '>' + lab + '</option>'; };
+        var verOpt = function(v, lab) { return '<option value="' + v + '"' + (id.versionRef === v ? ' selected' : '') + '>' + lab + '</option>'; };
+        var zcOpt = function(v) { return '<option value="' + v + '"' + (id.zoneClimatique === v ? ' selected' : '') + '>' + v + '</option>'; };
+        var nivOpt = function(v, lab) { return '<option value="' + v + '"' + (id.niveauVise === v ? ' selected' : '') + '>' + lab + '</option>'; };
+
+        var hotelBlock = '';
+        if (id.typologie === 'hotels') {
+            hotelBlock += '<div class="bbca-form-row"><label class="bbca-form-label">Nombre de chambres</label>';
+            hotelBlock += '<input type="number" min="0" class="bbca-form-input" data-field="identite.hotelChambres" value="' + (id.hotelChambres || 0) + '"></div>';
+            hotelBlock += '<div class="bbca-form-row"><label class="bbca-form-label">Classification (étoiles)</label>';
+            hotelBlock += '<select class="bbca-form-select" data-field="identite.hotelEtoiles">';
+            [1,2,3,4,5].forEach(function(n) { hotelBlock += '<option value="' + n + '"' + (id.hotelEtoiles === n ? ' selected' : '') + '>' + n + ' étoile' + (n>1?'s':'') + '</option>'; });
+            hotelBlock += '<option value="6"' + (id.hotelEtoiles === 6 ? ' selected' : '') + '>Palace</option>';
+            hotelBlock += '</select></div>';
+            hotelBlock += '<div class="bbca-form-row"><label class="bbca-form-label">Surface moyenne chambre (m²)</label>';
+            hotelBlock += '<input type="number" min="0" step="0.1" class="bbca-form-input" data-field="identite.hotelSurfaceMoyenne" value="' + (id.hotelSurfaceMoyenne || 28) + '"></div>';
+        }
+        var dateBlock = '';
+        if (id.phase === 'realisation') {
+            dateBlock = '<div class="bbca-form-row"><label class="bbca-form-label">Date PV de réception</label><input type="date" class="bbca-form-input" data-field="identite.datePV" value="' + (id.datePV || '') + '"></div>';
+        }
+
+        var html = '<details class="bbca-section" open><summary>1. Identité &amp; Éligibilité</summary><div class="bbca-section-body">';
+        html += '<p class="bbca-section-intro">Définissez les caractéristiques principales du projet. Le seuil Eges max et les modulations applicables dépendent de la typologie.</p>';
+        html += '<div class="bbca-form-row"><label class="bbca-form-label">Typologie<span class="req">*</span></label>';
+        html += '<select class="bbca-form-select" data-field="identite.typologie">';
+        html += typoOpt('', '— Sélectionner —');
+        html += typoOpt('bureaux', 'Bureaux');
+        html += typoOpt('residentiel-collectif', 'Résidentiel collectif');
+        html += typoOpt('hotels', 'Hôtels');
+        html += typoOpt('autres-rt', 'Autres bâtiments soumis à la RT');
+        html += '</select></div>';
+        html += '<div class="bbca-form-row"><label class="bbca-form-label">Version du référentiel</label><select class="bbca-form-select" data-field="identite.versionRef">';
+        html += verOpt('3.2', 'V3.2 (mars 2024)');
+        html += verOpt('4.1', 'V4.1 (compatible RE 2020)');
+        html += '</select></div>';
+        html += '<div class="bbca-form-row"><label class="bbca-form-label">Surface De Plancher (m²)<span class="req">*</span></label><input type="number" min="0" step="1" class="bbca-form-input" data-field="identite.sdp" value="' + (id.sdp || 0) + '"></div>';
+        html += '<div class="bbca-form-row"><label class="bbca-form-label">Zone climatique RT</label><select class="bbca-form-select" data-field="identite.zoneClimatique">';
+        html += '<option value="">— Sélectionner —</option>';
+        ['H1a','H1b','H1c','H2a','H2b','H2c','H2d','H3'].forEach(function(z) { html += zcOpt(z); });
+        html += '</select></div>';
+        html += '<div class="bbca-form-row"><label class="bbca-form-label">Niveau visé</label><select class="bbca-form-select" data-field="identite.niveauVise">';
+        html += nivOpt('', '— Aucun ciblé —');
+        html += nivOpt('standard', 'BBCA Standard');
+        html += nivOpt('performance', 'BBCA Performance');
+        html += nivOpt('excellence', 'BBCA Excellence');
+        html += '</select></div>';
+        html += '<div class="bbca-form-row"><label class="bbca-form-label">Phase actuelle</label><div class="bbca-form-radio-group">';
+        html += '<label><input type="radio" name="bbca_phase" data-field="identite.phase" value="conception"' + (id.phase === 'conception' ? ' checked' : '') + '>Conception (DCE)</label>';
+        html += '<label><input type="radio" name="bbca_phase" data-field="identite.phase" value="realisation"' + (id.phase === 'realisation' ? ' checked' : '') + '>Réalisation</label>';
+        html += '</div></div>';
+        html += dateBlock;
+        html += '<div class="bbca-form-row"><label class="bbca-form-label">Hors France métropolitaine</label><label><input type="checkbox" data-field="identite.horsMetropole"' + (id.horsMetropole ? ' checked' : '') + '> Nécessite des principes d\'équivalence validés par l\'Association BBCA</label></div>';
+        html += hotelBlock;
+
+        // Bloc éligibilité (rendu dynamique)
+        html += '<div class="bbca-elig" id="bbcaEligBlock"><div class="bbca-elig-title">Vérification d\'éligibilité</div><div id="bbcaEligItems"></div></div>';
+
+        html += '</div></details>';
+        return html;
+    }
+
+    // ─── SECTION 2 — Saisie ACV ─────────────────────────────
+    function renderSection2ACV(st) {
+        var acv = st.acv;
+        var pce = acv.egesPceParLot || {};
+        var html = '<details class="bbca-section" open><summary>2. Import des résultats ACV</summary><div class="bbca-section-body">';
+        html += '<p class="bbca-section-intro">Saisissez les valeurs Eges (kg CO₂/m² SDP sur 50 ans) issues de votre étude ACV (Elodie / COMETH). L\'import direct depuis xlsx sera disponible en v0.2.</p>';
+        html += '<table class="bbca-acv-table"><thead><tr><th>Contributeur</th><th style="width:160px;text-align:right;">Eges (kg CO₂/m² SDP)</th></tr></thead><tbody>';
+        html += '<tr><td><strong>Eges Déconstruction</strong></td><td style="text-align:right;"><input type="number" step="0.01" data-field="acv.egesDeconstruction" value="' + (acv.egesDeconstruction || 0) + '"></td></tr>';
+        // PCE par lot
+        html += '<tr><td colspan="2" style="background:#F1F5F9;padding:6px 12px;font-weight:600;color:#1A2E2A;">Eges PCE — détail par lot</td></tr>';
+        BBCA_LOTS.forEach(function(lot) {
+            html += '<tr><td style="padding-left:24px;">Lot ' + lot.code + ' — ' + lot.name + '</td>';
+            html += '<td style="text-align:right;"><input type="number" step="0.01" data-field="acv.egesPceParLot.' + lot.code + '" value="' + (pce[lot.code] || 0) + '"></td></tr>';
+        });
+        html += '<tr class="subtotal"><td>Total Eges PCE</td><td style="text-align:right;" id="bbcaEgesPceTotal">0</td></tr>';
+        html += '<tr><td><strong>Eges Chantier</strong></td><td style="text-align:right;"><input type="number" step="0.01" data-field="acv.egesChantier" value="' + (acv.egesChantier || 0) + '"></td></tr>';
+        html += '<tr><td><strong>Eges Eau</strong></td><td style="text-align:right;"><input type="number" step="0.01" data-field="acv.egesEau" value="' + (acv.egesEau || 0) + '"></td></tr>';
+        html += '<tr><td><strong>Eges Énergie</strong> (50 ans)</td><td style="text-align:right;"><input type="number" step="0.01" data-field="acv.egesEnergie" value="' + (acv.egesEnergie || 0) + '"></td></tr>';
+        html += '<tr><td><strong>Stockage Carbone</strong> (valeur négative)</td><td style="text-align:right;"><input type="number" step="0.01" data-field="acv.stockageCarbone" value="' + (acv.stockageCarbone || 0) + '"></td></tr>';
+        html += '<tr><td>Bilan Bepos (kWh/m²SRT.an)</td><td style="text-align:right;"><input type="number" step="0.01" data-field="acv.bilanBepos" value="' + (acv.bilanBepos || 0) + '"></td></tr>';
+        html += '</tbody></table>';
+        html += '</div></details>';
+        return html;
+    }
+
+    // ─── SECTION 3 — Modulations BBCA ───────────────────────
+    function renderSection3Modulations(st) {
+        var m = st.modulations;
+        var html = '<details class="bbca-section" open><summary>3. Modulations BBCA</summary><div class="bbca-section-body">';
+        html += '<p class="bbca-section-intro">Activez et renseignez les modulations applicables à votre projet. Elles sont soustraites de l\'Eges PCE BBCA.</p>';
+
+        // Mstationnement
+        html += '<div class="bbca-mod-item' + (m.mStationnement.actif ? ' active' : '') + '">';
+        html += '<div class="bbca-mod-head"><label class="bbca-mod-title"><input type="checkbox" data-field="modulations.mStationnement.actif"' + (m.mStationnement.actif ? ' checked' : '') + '> M<sub>stationnement</sub> — surfaces de stationnement</label><span class="bbca-mod-effect" id="bbcaMstationEffect"></span></div>';
+        html += '<div class="bbca-mod-body"><div class="bbca-form-row"><label class="bbca-form-label">Surface stationnement (m²)</label><input type="number" min="0" class="bbca-form-input" data-field="modulations.mStationnement.surface" value="' + (m.mStationnement.surface || 0) + '"></div></div>';
+        html += '</div>';
+
+        // Magrément
+        html += '<div class="bbca-mod-item' + (m.mAgrementExt.actif ? ' active' : '') + '">';
+        html += '<div class="bbca-mod-head"><label class="bbca-mod-title"><input type="checkbox" data-field="modulations.mAgrementExt.actif"' + (m.mAgrementExt.actif ? ' checked' : '') + '> M<sub>agrément extérieur</sub> — balcons, loggias, terrasses</label><span class="bbca-mod-effect" id="bbcaMagrementEffect"></span></div>';
+        html += '<div class="bbca-mod-body"><div class="bbca-form-row"><label class="bbca-form-label">Surface agrément ext. (m²)</label><input type="number" min="0" class="bbca-form-input" data-field="modulations.mAgrementExt.surface" value="' + (m.mAgrementExt.surface || 0) + '"></div></div>';
+        html += '</div>';
+
+        // Forfait fondations spéciales
+        html += '<div class="bbca-mod-item' + (m.fondationsSpeciales.actif ? ' active' : '') + '">';
+        html += '<div class="bbca-mod-head"><label class="bbca-mod-title"><input type="checkbox" data-field="modulations.fondationsSpeciales.actif"' + (m.fondationsSpeciales.actif ? ' checked' : '') + '> Forfait fondations spéciales (40 kg CO₂/m² SDP)</label><span class="bbca-mod-effect"></span></div>';
+        html += '<div class="bbca-mod-body" style="font-size:12px;color:#64748B;">Plafonne le sous-lot 2.1 partiel à 40 kg CO₂/m² SDP si le calcul réel le dépasse.</div>';
+        html += '</div>';
+
+        // Livré en blanc
+        html += '<div class="bbca-mod-item' + (m.livreEnBlanc.cas ? ' active' : '') + '">';
+        html += '<div class="bbca-mod-head"><label class="bbca-mod-title">Bâtiment livré en blanc (bureaux)</label><span class="bbca-mod-effect" id="bbcaLEBEffect"></span></div>';
+        html += '<div style="margin-top:10px;"><select class="bbca-form-select" data-field="modulations.livreEnBlanc.cas">';
+        html += '<option value=""' + (m.livreEnBlanc.cas === '' ? ' selected' : '') + '>— Non concerné —</option>';
+        html += '<option value="cas1"' + (m.livreEnBlanc.cas === 'cas1' ? ' selected' : '') + '>Cas 1 — Sans cloisonnement (lot 5 forfait)</option>';
+        html += '<option value="cas2"' + (m.livreEnBlanc.cas === 'cas2' ? ' selected' : '') + '>Cas 2 — Sans second œuvre (lots 5 et 7 forfait)</option>';
+        html += '</select></div>';
+        html += '</div>';
+
+        // Titre V
+        html += '<div class="bbca-mod-item' + (m.titreV.actif ? ' active' : '') + '">';
+        html += '<div class="bbca-mod-head"><label class="bbca-mod-title"><input type="checkbox" data-field="modulations.titreV.actif"' + (m.titreV.actif ? ' checked' : '') + '> Titre V BBCA — Ouvrages particuliers</label><span class="bbca-mod-effect"></span></div>';
+        html += '<div class="bbca-mod-body"><p style="font-size:12px;color:#64748B;margin:0 0 10px 0;">Validation obligatoire par la Commission Technique Association BBCA (délai 2 mois max).</p>';
+        html += '<div class="bbca-form-row"><label class="bbca-form-label">Valeur de neutralisation (kg CO₂/m² SDP)</label><input type="number" min="0" step="0.01" class="bbca-form-input" data-field="modulations.titreV.valeur" value="' + (m.titreV.valeur || 0) + '"></div>';
+        html += '<div class="bbca-form-row"><label class="bbca-form-label">Justification</label><textarea class="bbca-form-input" rows="2" data-field="modulations.titreV.justification" style="max-width:500px;width:100%;">' + (m.titreV.justification || '') + '</textarea></div></div>';
+        html += '</div>';
+
+        html += '</div></details>';
+        return html;
+    }
+
+    // ─── SECTION 4 — Innovation Climat ──────────────────────
+    function renderSection4InnovationClimat(st) {
+        var ic = st.innovationClimat;
+        var typo = st.identite.typologie;
+        var isLogement = (typo === 'residentiel-collectif');
+        var html = '<details class="bbca-section" open><summary>4. Innovation Climat (max 10 points)</summary><div class="bbca-section-body">';
+        html += '<p class="bbca-section-intro">Cochez les démarches mises en œuvre. Le total Innovation Climat est plafonné à 10 points.</p>';
+
+        html += '<div class="bbca-ic-item"><label><input type="checkbox" data-field="innovationClimat.deconstructionSelective"' + (ic.deconstructionSelective ? ' checked' : '') + '> Déconstruction sélective in-situ (diagnostic ressources + DCE adapté)</label><span class="bbca-ic-pts" id="bbcaIcPts_decon">0 pt</span></div>';
+
+        html += '<div class="bbca-ic-item"><label>Réemploi de produits — masse réemployée<input type="number" min="0" class="bbca-ic-input" data-field="innovationClimat.reemploi.masseKg" value="' + (ic.reemploi.masseKg || 0) + '"> kg (1 pt / 5 kg/m² SDP)</label><span class="bbca-ic-pts" id="bbcaIcPts_reemploi">0 pt</span></div>';
+
+        html += '<div class="bbca-ic-item"><label>Mutualisation parkings — surface évitée<input type="number" min="0" class="bbca-ic-input" data-field="innovationClimat.mutualisationParkings.surfaceEvitee" value="' + (ic.mutualisationParkings.surfaceEvitee || 0) + '"> m²</label><span class="bbca-ic-pts" id="bbcaIcPts_parking">0 pt</span></div>';
+
+        html += '<div class="bbca-ic-item"><label>Mutualisation autres espaces — surface complém. équivalente<input type="number" min="0" class="bbca-ic-input" data-field="innovationClimat.mutualisationEspaces.surfaceComplem" value="' + (ic.mutualisationEspaces.surfaceComplem || 0) + '"> m²</label><span class="bbca-ic-pts" id="bbcaIcPts_mutu">0 pt</span></div>';
+
+        html += '<div class="bbca-ic-item"><label>Potentiel de changement d\'usage : <select class="bbca-ic-input" data-field="innovationClimat.changementUsage" style="width:auto;">';
+        [[0,'Aucun'],[1,'1 pt — Principe défini'],[2,'2 pts — Dimensionnement intégré'],[3,'3 pts — Dossier complet']].forEach(function(o) {
+            html += '<option value="' + o[0] + '"' + (ic.changementUsage === o[0] ? ' selected' : '') + '>' + o[1] + '</option>';
+        });
+        html += '</select></label><span class="bbca-ic-pts" id="bbcaIcPts_chgUsage">0 pt</span></div>';
+
+        html += '<div class="bbca-ic-item"><label>Potentiel d\'extension — surface complém. possible<input type="number" min="0" class="bbca-ic-input" data-field="innovationClimat.extensionBatiment.surfaceComplem" value="' + (ic.extensionBatiment.surfaceComplem || 0) + '"> m² (1 pt / 10% SDP, max 3)</label><span class="bbca-ic-pts" id="bbcaIcPts_extension">0 pt</span></div>';
+
+        if (!isLogement) {
+            html += '<div class="bbca-ic-item"><label><input type="checkbox" data-field="innovationClimat.sed"' + (ic.sed ? ' checked' : '') + '> Simulation Énergétique Dynamique (SED) — tertiaire uniquement</label><span class="bbca-ic-pts" id="bbcaIcPts_sed">0 pt</span></div>';
+        }
+        html += '<div class="bbca-ic-item"><label><input type="checkbox" data-field="innovationClimat.commissionnement"' + (ic.commissionnement ? ' checked' : '') + '> Mission de commissionnement par tierce partie</label><span class="bbca-ic-pts" id="bbcaIcPts_comm">0 pt</span></div>';
+        html += '<div class="bbca-ic-item"><label><input type="checkbox" data-field="innovationClimat.sensibilisation"' + (ic.sensibilisation ? ' checked' : '') + '> Sensibilisation des usagers</label><span class="bbca-ic-pts" id="bbcaIcPts_sens">0 pt</span></div>';
+
+        html += '<div class="bbca-ic-total"><span>Total Innovation Climat (plafonné à 10)</span><span id="bbcaIcTotal">0 / 10 pts</span></div>';
+        html += '</div></details>';
+        return html;
+    }
+
+    // ─── SECTION 5 — Résultats & Score ──────────────────────
+    function renderSection5Results(st) {
+        var html = '<details class="bbca-section" open><summary>5. Résultats &amp; Score</summary><div class="bbca-section-body">';
+        html += '<p class="bbca-section-intro">Synthèse de la performance carbone du projet et niveau atteint.</p>';
+
+        html += '<div id="bbcaPrereqBlock" class="bbca-prereq">Prérequis E1/C1 à confirmer…</div>';
+
+        html += '<div class="bbca-result-grid">';
+        html += '<div class="bbca-result-card"><div class="bbca-result-card-title">Eges projet</div><div class="bbca-result-card-value"><span id="bbcaEgesProjet">0</span> <span style="font-size:14px;font-weight:500;color:#64748B;">/ <span id="bbcaEgesMax">—</span> kg CO₂/m²</span></div><div class="bbca-kpi-bar"><div class="bbca-kpi-bar-fill ok" id="bbcaEgesProjetBar" style="width:0%"></div></div><div class="bbca-result-card-sub" id="bbcaEgesProjetSub">Émissions totales sur 50 ans</div></div>';
+        html += '<div class="bbca-result-card"><div class="bbca-result-card-title">Eges PCE BBCA</div><div class="bbca-result-card-value"><span id="bbcaEgesPceBBCA">0</span> <span style="font-size:14px;font-weight:500;color:#64748B;">/ <span id="bbcaEgesPceMax">—</span> kg CO₂/m²</span></div><div class="bbca-kpi-bar"><div class="bbca-kpi-bar-fill ok" id="bbcaEgesPceBBCABar" style="width:0%"></div></div><div class="bbca-result-card-sub">Produits & équipements (avec modulations)</div></div>';
+        html += '</div>';
+
+        html += '<div class="bbca-result-grid">';
+        html += '<div class="bbca-result-card"><div class="bbca-result-card-title">Score BBCA</div><div class="bbca-result-card-value"><span id="bbcaScoreTotal">0</span> <span style="font-size:14px;font-weight:500;color:#64748B;">pts</span></div><div class="bbca-result-card-sub"><span id="bbcaScoreDetail">0 carbone + 0 IC</span></div></div>';
+        html += '<div class="bbca-result-card"><div class="bbca-result-card-title">Niveau atteint</div><div class="bbca-result-card-value" style="font-size:18px;"><span class="bbca-niveau-badge aucun" id="bbcaNiveauBadge">—</span></div><div class="bbca-result-card-sub" id="bbcaNiveauNext">Aucun seuil atteint</div></div>';
+        html += '</div>';
+
+        html += '<div style="margin-top:18px;"><div class="bbca-result-card-title" style="margin-bottom:8px;">Détail des contributions Eges projet</div><table class="bbca-detail-table" id="bbcaDetailTable"></table></div>';
+
+        html += '</div></details>';
+        return html;
+    }
+
+    // ─── EVENT BINDING ──────────────────────────────────────
+    function bindBbcaInputs() {
+        var contentEl = document.getElementById('bbcaNeufContent');
+        if (!contentEl) return;
+        contentEl.querySelectorAll('input[data-field], select[data-field], textarea[data-field]').forEach(function(el) {
+            var ev = (el.tagName === 'SELECT' || el.type === 'checkbox' || el.type === 'radio' || el.type === 'date') ? 'change' : 'input';
+            el.addEventListener(ev, function() {
+                var field = this.getAttribute('data-field');
+                var val;
+                if (this.type === 'checkbox') val = this.checked;
+                else if (this.type === 'number') val = parseFloat(this.value) || 0;
+                else if (this.type === 'radio') val = this.value;
+                else val = this.value;
+                // Cas spécial select pour entiers
+                if (this.tagName === 'SELECT' && /^-?\d+$/.test(this.value)) val = parseInt(this.value, 10);
+                setBbcaField(field, val);
+                // Re-render sections dépendantes (ex : typologie change → IC change → identité hôtel)
+                if (field === 'identite.typologie' || field === 'identite.phase') {
+                    buildBbcaNeufGrid();
+                } else {
+                    recalcBbcaNeuf();
+                }
+            });
+        });
+    }
+
+    function setBbcaField(path, value) {
+        var st = loadBbcaState();
+        var parts = path.split('.');
+        var ref = st;
+        for (var i = 0; i < parts.length - 1; i++) {
+            if (!ref[parts[i]]) ref[parts[i]] = {};
+            ref = ref[parts[i]];
+        }
+        ref[parts[parts.length - 1]] = value;
+        saveBbcaState(st);
+    }
+
+    // ─── RECALC : moteur de calcul ──────────────────────────
+    function recalcBbcaNeuf() {
+        var st = loadBbcaState();
+        var cfg = window.BBCA_NEUF_CONFIG || {};
+        var typoCfg = cfg.typologies && cfg.typologies[st.identite.typologie];
+        var sdp = parseFloat(st.identite.sdp) || 0;
+
+        // ─── Détection : données suffisantes pour un score significatif ? ───
+        var _pceSum = 0;
+        BBCA_LOTS.forEach(function(l) { _pceSum += parseFloat((st.acv.egesPceParLot || {})[l.code]) || 0; });
+        var _hasAcvData = (_pceSum > 0) || (parseFloat(st.acv.egesEnergie) || 0) > 0 || (parseFloat(st.acv.egesChantier) || 0) > 0 || (parseFloat(st.acv.egesEau) || 0) > 0 || (parseFloat(st.acv.egesDeconstruction) || 0) > 0;
+        var _hasSignificantData = !!st.identite.typologie && sdp > 0 && _hasAcvData;
+
+        // 1) Eges PCE total (somme des 14 lots)
+        var pce = st.acv.egesPceParLot || {};
+        var egesPceTotal = 0;
+        BBCA_LOTS.forEach(function(l) { egesPceTotal += parseFloat(pce[l.code]) || 0; });
+
+        // 2) Modulations PCE
+        var modSum = 0;
+        var modDetails = [];
+        if (st.modulations.mStationnement.actif && sdp > 0) {
+            var mst = ((parseFloat(st.modulations.mStationnement.surface) || 0) * 170) / sdp;
+            modSum += mst;
+            modDetails.push({ name: 'M_stationnement', val: -mst });
+        }
+        if (st.modulations.mAgrementExt.actif && sdp > 0) {
+            var mag = ((parseFloat(st.modulations.mAgrementExt.surface) || 0) * 200) / sdp;
+            modSum += mag;
+            modDetails.push({ name: 'M_agrément ext.', val: -mag });
+        }
+        // Forfait fondations spéciales : remplace I_2.1 par 40 si > 40
+        var lot02 = parseFloat(pce['02']) || 0;
+        if (st.modulations.fondationsSpeciales.actif && lot02 > 40) {
+            var diff = lot02 - 40;
+            modSum += diff;
+            modDetails.push({ name: 'Forfait fondations spé.', val: -diff });
+        }
+        // Titre V
+        if (st.modulations.titreV.actif) {
+            var tv = parseFloat(st.modulations.titreV.valeur) || 0;
+            modSum += tv;
+            modDetails.push({ name: 'Titre V', val: -tv });
+        }
+
+        // 3) Forfait livré en blanc (ajout, pas soustraction)
+        var leb = 0;
+        var typoKey = (st.identite.typologie === 'residentiel-collectif') ? 'residentiel' : 'bureaux';
+        if (st.modulations.livreEnBlanc.cas === 'cas1') {
+            leb = (typoKey === 'bureaux') ? 67 : 70;
+        } else if (st.modulations.livreEnBlanc.cas === 'cas2') {
+            leb = (typoKey === 'bureaux') ? (67 + 107) : (70 + 56);
+        }
+
+        // 4) Eges PCE BBCA
+        var egesPceBBCA = egesPceTotal - modSum;
+        if (egesPceBBCA < 0) egesPceBBCA = 0;
+
+        // 5) Eges projet
+        var egesDecon = parseFloat(st.acv.egesDeconstruction) || 0;
+        var egesChantier = parseFloat(st.acv.egesChantier) || 0;
+        var egesEau = parseFloat(st.acv.egesEau) || 0;
+        var egesEnergie = parseFloat(st.acv.egesEnergie) || 0;
+        var stockage = parseFloat(st.acv.stockageCarbone) || 0;
+        var egesProjet = egesDecon + egesPceBBCA + leb + egesEnergie + egesChantier + egesEau + stockage;
+
+        // 6) Eges max selon typologie
+        var egesMax = typoCfg ? typoCfg.egesMax : null;
+        var egesPceMax = typoCfg ? typoCfg.egesPceMax : null;
+        // Cas hôtel : formule à la chambre
+        if (st.identite.typologie === 'hotels') {
+            var sm = parseFloat(st.identite.hotelSurfaceMoyenne) || 28;
+            var et = parseInt(st.identite.hotelEtoiles, 10) || 3;
+            var nbCh = parseInt(st.identite.hotelChambres, 10) || 0;
+            var emt; // tonnes CO2 / chambre
+            if (et <= 3) emt = (sm * 800 + 200 * 28) / 1000;
+            else if (sm <= 70) emt = sm * 1000 * 0.8 / 1000;
+            else emt = 56;
+            // Convertir en kg CO2 / m² SDP : (emt × nbCh × 1000) / SDP
+            if (sdp > 0 && nbCh > 0) {
+                egesMax = (emt * nbCh * 1000) / sdp;
+            } else {
+                egesMax = null;
+            }
+        }
+
+        // 7) Score
+        var pointsCarbone = (egesMax !== null) ? (egesMax - egesProjet) / 10 : 0;
+        var icPoints = computeBbcaIC(st);
+        var score = pointsCarbone + Math.min(icPoints.total, 10);
+
+        // 8) Niveau
+        var niveau = 'aucun';
+        var niveauLabel = '—';
+        if (score >= 30) { niveau = 'excellence'; niveauLabel = 'BBCA Excellence'; }
+        else if (score >= 15) { niveau = 'performance'; niveauLabel = 'BBCA Performance'; }
+        else if (score >= 0) { niveau = 'standard'; niveauLabel = 'BBCA Standard'; }
+
+        // Sauvegarde résultats
+        st.resultats.egesPCEbbca = egesPceBBCA;
+        st.resultats.egesProjet = egesProjet;
+        st.resultats.pointsCarbone = pointsCarbone;
+        st.resultats.pointsIC = Math.min(icPoints.total, 10);
+        st.resultats.score = Math.round(score * 10) / 10;
+        st.resultats.niveauAtteint = niveauLabel;
+        saveBbcaState(st);
+
+        // === Mise à jour UI ===
+        // Hero
+
+        // ─── Branche : si données insuffisantes, afficher "—" et sortir ───
+        if (!_hasSignificantData) {
+            st.resultats.score = '—';
+            st.resultats.niveauAtteint = '—';
+            saveBbcaState(st);
+            var setNA = function(id) { var e = document.getElementById(id); if (e) e.textContent = '—'; };
+            setNA('bbcaNeufHeroScore'); setNA('bbcaNeufHeroLevel');
+            // Section 5
+            setNA('bbcaEgesProjet'); setNA('bbcaEgesMax'); setNA('bbcaEgesPceBBCA'); setNA('bbcaEgesPceMax');
+            setNA('bbcaScoreTotal');
+            var sd = document.getElementById('bbcaScoreDetail'); if (sd) sd.textContent = 'Renseignez SDP et données ACV';
+            var bg = document.getElementById('bbcaNiveauBadge'); if (bg) { bg.className = 'bbca-niveau-badge aucun'; bg.textContent = '—'; }
+            var nx = document.getElementById('bbcaNiveauNext'); if (nx) nx.textContent = 'Score non significatif (saisissez les données ACV pour activer le calcul)';
+            var hl = document.getElementById('bbcaNeufHeroLevel'); if (hl) hl.textContent = 'Niveau : —';
+            // Reset bars
+            var b1 = document.getElementById('bbcaEgesProjetBar'); if (b1) b1.style.width = '0%';
+            var b2 = document.getElementById('bbcaEgesPceBBCABar'); if (b2) b2.style.width = '0%';
+            // Eligibility et autres
+            renderEligibilite(st);
+            var totalEl = document.getElementById('bbcaEgesPceTotal');
+            if (totalEl) totalEl.textContent = _pceSum.toFixed(0);
+            return;
+        }
+        var heroScore = document.getElementById('bbcaNeufHeroScore');
+        var heroLevel = document.getElementById('bbcaNeufHeroLevel');
+        if (heroScore) heroScore.textContent = st.resultats.score;
+        if (heroLevel) heroLevel.textContent = 'Niveau : ' + niveauLabel;
+
+        // Section 1 — Éligibilité
+        renderEligibilite(st);
+
+        // Section 2 — Total PCE
+        var totalEl = document.getElementById('bbcaEgesPceTotal');
+        if (totalEl) totalEl.textContent = egesPceTotal.toFixed(0);
+
+        // Section 3 — Effets modulations
+        var setEl = function(id, txt) { var e = document.getElementById(id); if (e) e.textContent = txt; };
+        var fmtMod = function(v) { return v > 0 ? ('-' + v.toFixed(1) + ' kg CO₂/m²') : ''; };
+        if (sdp > 0 && st.modulations.mStationnement.actif) {
+            setEl('bbcaMstationEffect', fmtMod(((parseFloat(st.modulations.mStationnement.surface)||0) * 170) / sdp));
+        } else { setEl('bbcaMstationEffect', ''); }
+        if (sdp > 0 && st.modulations.mAgrementExt.actif) {
+            setEl('bbcaMagrementEffect', fmtMod(((parseFloat(st.modulations.mAgrementExt.surface)||0) * 200) / sdp));
+        } else { setEl('bbcaMagrementEffect', ''); }
+        setEl('bbcaLEBEffect', leb > 0 ? ('+' + leb.toFixed(0) + ' kg CO₂/m²') : '');
+
+        // Section 4 — Points IC par item
+        var setPts = function(id, n) { var e = document.getElementById(id); if (e) e.textContent = (n > 0 ? '+' : '') + (Math.round(n*10)/10) + ' pt' + (n>1?'s':''); };
+        setPts('bbcaIcPts_decon', icPoints.decon);
+        setPts('bbcaIcPts_reemploi', icPoints.reemploi);
+        setPts('bbcaIcPts_parking', icPoints.parking);
+        setPts('bbcaIcPts_mutu', icPoints.mutu);
+        setPts('bbcaIcPts_chgUsage', icPoints.chgUsage);
+        setPts('bbcaIcPts_extension', icPoints.extension);
+        setPts('bbcaIcPts_sed', icPoints.sed);
+        setPts('bbcaIcPts_comm', icPoints.comm);
+        setPts('bbcaIcPts_sens', icPoints.sens);
+        var totIc = document.getElementById('bbcaIcTotal');
+        if (totIc) totIc.textContent = (Math.round(Math.min(icPoints.total, 10) * 10) / 10) + ' / 10 pts (brut : ' + (Math.round(icPoints.total*10)/10) + ')';
+
+        // Section 5 — KPIs et niveau
+        setEl('bbcaEgesProjet', egesProjet.toFixed(0));
+        setEl('bbcaEgesMax', egesMax !== null ? egesMax.toFixed(0) : '—');
+        setEl('bbcaEgesPceBBCA', egesPceBBCA.toFixed(0));
+        setEl('bbcaEgesPceMax', egesPceMax !== null ? egesPceMax : '—');
+        setEl('bbcaScoreTotal', st.resultats.score);
+        setEl('bbcaScoreDetail', (Math.round(pointsCarbone*10)/10) + ' carbone + ' + (Math.round(Math.min(icPoints.total,10)*10)/10) + ' IC');
+
+        var setBar = function(id, val, max) {
+            var b = document.getElementById(id);
+            if (!b || !max) return;
+            var pct = Math.min(100, Math.max(0, (val / max) * 100));
+            b.style.width = pct + '%';
+            b.className = 'bbca-kpi-bar-fill ' + (pct < 80 ? 'ok' : pct < 100 ? 'warn' : 'ko');
+        };
+        setBar('bbcaEgesProjetBar', egesProjet, egesMax);
+        setBar('bbcaEgesPceBBCABar', egesPceBBCA, egesPceMax);
+
+        var bg = document.getElementById('bbcaNiveauBadge');
+        if (bg) { bg.className = 'bbca-niveau-badge ' + niveau; bg.textContent = niveauLabel; }
+        var nx = document.getElementById('bbcaNiveauNext');
+        if (nx) {
+            if (niveau === 'aucun') nx.textContent = 'Score insuffisant pour BBCA Standard';
+            else if (niveau === 'standard') nx.textContent = 'Encore ' + Math.max(0, 15 - score).toFixed(1) + ' pts pour BBCA Performance';
+            else if (niveau === 'performance') nx.textContent = 'Encore ' + Math.max(0, 30 - score).toFixed(1) + ' pts pour BBCA Excellence';
+            else nx.textContent = 'Niveau maximum atteint';
+        }
+
+        // Detail table
+        var dt = document.getElementById('bbcaDetailTable');
+        if (dt) {
+            var rows = [
+                ['Eges Déconstruction', egesDecon],
+                ['Eges PCE BBCA (avec modulations)', egesPceBBCA],
+                ['Eges Livré en blanc', leb],
+                ['Eges Énergie', egesEnergie],
+                ['Eges Chantier', egesChantier],
+                ['Eges Eau', egesEau],
+                ['Stockage Carbone', stockage],
+                ['<strong>Eges projet total</strong>', egesProjet]
+            ];
+            dt.innerHTML = rows.map(function(r) { return '<tr><td>' + r[0] + '</td><td class="val">' + (r[1].toFixed ? r[1].toFixed(1) : r[1]) + '</td></tr>'; }).join('');
+        }
+    }
+
+    function computeBbcaIC(st) {
+        var ic = st.innovationClimat;
+        var sdp = parseFloat(st.identite.sdp) || 0;
+        var typo = st.identite.typologie;
+        var isLogement = (typo === 'residentiel-collectif');
+        var pce = st.acv.egesPceParLot || {};
+        var egesPceTotal = 0;
+        BBCA_LOTS.forEach(function(l) { egesPceTotal += parseFloat(pce[l.code]) || 0; });
+
+        var p = {};
+        p.decon = ic.deconstructionSelective ? 1 : 0;
+        p.reemploi = sdp > 0 ? ((parseFloat(ic.reemploi.masseKg) || 0) / (sdp * 5)) : 0;
+        p.parking = sdp > 0 ? (((parseFloat(ic.mutualisationParkings.surfaceEvitee) || 0) * 170) / (10 * sdp)) : 0;
+        p.mutu = sdp > 0 ? ((egesPceTotal * (parseFloat(ic.mutualisationEspaces.surfaceComplem) || 0)) / (10 * sdp)) : 0;
+        p.chgUsage = parseInt(ic.changementUsage, 10) || 0;
+        p.extension = sdp > 0 ? Math.min(10 * (parseFloat(ic.extensionBatiment.surfaceComplem) || 0) / sdp, 3) : 0;
+        p.sed = (!isLogement && ic.sed) ? 1 : 0;
+        p.comm = ic.commissionnement ? 1 : 0;
+        p.sens = ic.sensibilisation ? 1 : 0;
+        p.total = p.decon + p.reemploi + p.parking + p.mutu + p.chgUsage + p.extension + p.sed + p.comm + p.sens;
+        return p;
+    }
+
+    function renderEligibilite(st) {
+        var el = document.getElementById('bbcaEligItems');
+        if (!el) return;
+        var checks = [];
+        var id = st.identite;
+        // 1. Typologie sélectionnée
+        checks.push({ ok: !!id.typologie, txt: 'Typologie sélectionnée' });
+        // 2. SDP renseignée
+        checks.push({ ok: id.sdp > 0, txt: 'Surface De Plancher renseignée' });
+        // 3. France métropolitaine OU principes d'équivalence
+        checks.push({ ok: !id.horsMetropole, txt: 'France métropolitaine (sinon principes d\'équivalence à valider)', warn: id.horsMetropole });
+        // 4. Délai 6 mois (si réalisation)
+        if (id.phase === 'realisation' && id.datePV) {
+            var diffMs = new Date() - new Date(id.datePV);
+            var diffMois = diffMs / (1000 * 60 * 60 * 24 * 30.44);
+            checks.push({ ok: diffMois <= 6, txt: 'Délai 6 mois après PV (' + diffMois.toFixed(1) + ' mois)' });
+        }
+        // 5. Hôtel : nb chambres > 0
+        if (id.typologie === 'hotels') {
+            checks.push({ ok: (parseInt(id.hotelChambres,10) || 0) > 0, txt: 'Nombre de chambres renseigné' });
+        }
+        var html = checks.map(function(c) {
+            var cls = c.ok ? 'ok' : (c.warn ? 'todo' : 'ko');
+            return '<div class="bbca-elig-item ' + cls + '">' + c.txt + '</div>';
+        }).join('');
+        el.innerHTML = html;
+
+        // Prereq E1/C1 (basé sur typologie)
+        var pq = document.getElementById('bbcaPrereqBlock');
+        if (pq) {
+            var typo = st.identite.typologie;
+            if (!typo) { pq.textContent = '⚠ Typologie non définie — prérequis E1/C1 à confirmer.'; pq.className = 'bbca-prereq'; }
+            else if (typo === 'residentiel-collectif') { pq.textContent = '✓ Résidentiel collectif : prérequis C1 obligatoire ; E1 recommandé (RT 2012 accepté par dérogation 2017 prolongée).'; pq.className = 'bbca-prereq ok'; }
+            else { pq.textContent = '✓ Tertiaire : niveau Énergie 1 (E1) ET Carbone 1 (C1) selon E+C- requis. À vérifier dans la note thermique du projet.'; pq.className = 'bbca-prereq ok'; }
+        }
+    }
+
+    // ─── Tableau de bord (synthèse rapide) ──────────────────
+    function renderBbcaNeufDashboard() {
+        var contentEl = document.getElementById('bbcaNeufDashboardContent');
+        if (!contentEl) return;
+        injectBbcaEvalCss();
+        var st = loadBbcaState();
+        var typo = st.identite.typologie;
+        if (!typo || !st.identite.sdp) {
+            contentEl.innerHTML = '<div class="bbca-eval-wrap"><h2 style="color:#1A2E2A;">Tableau de bord BBCA Neuf</h2><p style="color:#64748B;">Renseignez d\'abord la typologie et la SDP du projet dans la vue <a href="#" onclick="switchView(\'bbcaNeuf\');return false;" style="color:#2D5F4E;">Évaluation</a> pour activer le tableau de bord.</p></div>';
+            return;
+        }
+        var html = '<div class="bbca-eval-wrap">';
+        html += '<h2 style="color:#1A2E2A;margin-top:0;">Tableau de bord BBCA Neuf</h2>';
+        html += '<div class="bbca-result-grid">';
+        html += '<div class="bbca-result-card"><div class="bbca-result-card-title">Typologie</div><div class="bbca-result-card-value" style="font-size:18px;">' + typo + '</div><div class="bbca-result-card-sub">SDP : ' + st.identite.sdp + ' m²</div></div>';
+        html += '<div class="bbca-result-card"><div class="bbca-result-card-title">Niveau atteint</div><div class="bbca-result-card-value" style="font-size:18px;">' + st.resultats.niveauAtteint + '</div><div class="bbca-result-card-sub">Score : ' + st.resultats.score + ' pts</div></div>';
+        html += '<div class="bbca-result-card"><div class="bbca-result-card-title">Eges projet</div><div class="bbca-result-card-value">' + Math.round(st.resultats.egesProjet) + '</div><div class="bbca-result-card-sub">kg CO₂/m² SDP sur 50 ans</div></div>';
+        html += '<div class="bbca-result-card"><div class="bbca-result-card-title">Phase</div><div class="bbca-result-card-value" style="font-size:18px;">' + (st.identite.phase === 'conception' ? 'Conception (DCE)' : 'Réalisation') + '</div><div class="bbca-result-card-sub">Niveau visé : ' + (st.identite.niveauVise || 'aucun') + '</div></div>';
+        html += '</div>';
+
+        // Répartition par contributeur
+        var pceTot = 0;
+        BBCA_LOTS.forEach(function(l) { pceTot += parseFloat(st.acv.egesPceParLot[l.code]) || 0; });
+        var contribs = [
+            { name: 'PCE (produits & équipements)', val: pceTot },
+            { name: 'Énergie (50 ans)', val: parseFloat(st.acv.egesEnergie) || 0 },
+            { name: 'Déconstruction', val: parseFloat(st.acv.egesDeconstruction) || 0 },
+            { name: 'Chantier', val: parseFloat(st.acv.egesChantier) || 0 },
+            { name: 'Eau', val: parseFloat(st.acv.egesEau) || 0 },
+            { name: 'Stockage carbone', val: parseFloat(st.acv.stockageCarbone) || 0 }
+        ];
+        var totAbs = contribs.reduce(function(s, c) { return s + Math.abs(c.val); }, 0);
+        html += '<div style="margin-top:24px;"><div class="bbca-result-card-title" style="margin-bottom:10px;">Répartition par contributeur</div>';
+        html += '<table class="bbca-detail-table">';
+        contribs.forEach(function(c) {
+            var pct = totAbs > 0 ? Math.abs(c.val) / totAbs * 100 : 0;
+            html += '<tr><td style="width:60%">' + c.name + '</td><td class="val">' + (c.val.toFixed ? c.val.toFixed(0) : c.val) + ' kg/m²</td><td style="width:30%"><div class="bbca-kpi-bar" style="margin-top:0;"><div class="bbca-kpi-bar-fill ok" style="width:' + pct + '%"></div></div></td></tr>';
+        });
+        html += '</table></div>';
+
+        // Top 5 lots PCE
+        var lotsArr = BBCA_LOTS.map(function(l) { return { code: l.code, name: l.name, val: parseFloat(st.acv.egesPceParLot[l.code]) || 0 }; })
+            .filter(function(l) { return l.val > 0; })
+            .sort(function(a, b) { return b.val - a.val; }).slice(0, 5);
+        if (lotsArr.length > 0) {
+            html += '<div style="margin-top:24px;"><div class="bbca-result-card-title" style="margin-bottom:10px;">Top 5 lots E+C- les plus émetteurs</div>';
+            html += '<table class="bbca-detail-table">';
+            lotsArr.forEach(function(l) { html += '<tr><td>Lot ' + l.code + ' — ' + l.name + '</td><td class="val">' + l.val.toFixed(0) + ' kg/m²</td></tr>'; });
+            html += '</table></div>';
+        }
+
+        html += '</div>';
+        contentEl.innerHTML = html;
+    }
+
+    // ─── Dossier Certivea (placeholder enrichi) ─────────────
+    function renderBbcaNeufDossier() {
+        var el = document.getElementById('bbcaNeufDossierContainer');
+        if (!el) return;
+        injectBbcaEvalCss();
+        var st = loadBbcaState();
+        var phase = st.identite.phase || 'conception';
+        var html = '<div class="bbca-eval-wrap">';
+        html += '<h2 style="color:#1A2E2A;margin-top:0;">Dossier de candidature CERTIVEA</h2>';
+        html += '<p style="color:#64748B;">Phase actuelle du projet : <strong>' + (phase === 'conception' ? 'Conception (DCE)' : 'Réalisation') + '</strong></p>';
+
+        // Planning
+        html += '<details class="bbca-section" open><summary>Planning des jalons</summary><div class="bbca-section-body">';
+        html += '<table class="bbca-detail-table">';
+        var jalons = (window.BBCA_NEUF_EVIDENCE && window.BBCA_NEUF_EVIDENCE.jalons) ? window.BBCA_NEUF_EVIDENCE.jalons : [];
+        jalons.forEach(function(j) {
+            var phaseColor = j.phase === 'Conception' ? '#A0823F' : (j.phase === 'Réalisation' ? '#059669' : '#94A3B8');
+            html += '<tr><td style="width:40px;color:#94A3B8;">' + j.ordre + '</td>';
+            html += '<td>' + j.jalon + '<br><span style="color:#94A3B8;font-size:11px;">Phase : <span style="color:' + phaseColor + ';">' + j.phase + '</span> — Responsable : ' + j.responsable + (j.delaiSemaines ? ' — Délai : ' + j.delaiSemaines + ' semaines' : '') + '</span></td></tr>';
+        });
+        html += '</table></div></details>';
+
+        // Livrables
+        html += '<details class="bbca-section" open><summary>Livrables attendus</summary><div class="bbca-section-body">';
+        var ev = window.BBCA_NEUF_EVIDENCE || {};
+        var docs = (phase === 'conception') ? (ev.conception || []) : (ev.realisation || []);
+        var conditionnels = (phase === 'conception') ? (ev.conceptionConditionnelles || []) : (ev.realisationConditionnelles || []);
+        html += '<h4 style="color:#1A2E2A;margin:0 0 8px 0;">Documents obligatoires</h4>';
+        html += '<table class="bbca-detail-table">';
+        docs.forEach(function(d) {
+            html += '<tr><td>' + d.doc + '<br><span style="color:#94A3B8;font-size:11px;">Type : ' + (d.type || '—') + '</span></td><td style="width:60px;text-align:center;"><input type="checkbox" disabled></td></tr>';
+        });
+        html += '</table>';
+        if (conditionnels.length > 0) {
+            html += '<h4 style="color:#1A2E2A;margin:18px 0 8px 0;">Documents conditionnels</h4>';
+            html += '<table class="bbca-detail-table">';
+            conditionnels.forEach(function(d) {
+                html += '<tr><td>' + d.doc + '<br><span style="color:#94A3B8;font-size:11px;">' + (d.condition || '') + '</span></td><td style="width:60px;text-align:center;"><input type="checkbox" disabled></td></tr>';
+            });
+            html += '</table>';
+        }
+        html += '</div></details>';
+
+        // Personnes mobilisées
+        html += '<details class="bbca-section" open><summary>Personnes à mobiliser pour la vérification sur site</summary><div class="bbca-section-body">';
+        if (ev.participantsVerificationSite) {
+            html += '<ul style="margin:0;padding-left:20px;color:#475569;font-size:13px;">';
+            ev.participantsVerificationSite.forEach(function(p) { html += '<li>' + p.role + (p.obligatoire ? ' <strong>(obligatoire)</strong>' : '') + '</li>'; });
+            html += '</ul>';
+        }
+        html += '</div></details>';
+
+        html += '</div>';
+        el.innerHTML = html;
+    }
+
+    // ─── Exposition globale (pour onclick HTML et switchView) ───
+    window.renderBbcaNeufFonctionnement = renderBbcaNeufFonctionnement;
+    window.buildBbcaNeufGrid = buildBbcaNeufGrid;
+    window.renderBbcaNeufDashboard = renderBbcaNeufDashboard;
+    window.renderBbcaNeufDossier = renderBbcaNeufDossier;
+    window.recalcBbcaNeuf = recalcBbcaNeuf;
+    window.loadBbcaState = loadBbcaState;
+    window.saveBbcaState = saveBbcaState;
+
+})();
+</script>
+<!-- ===== END BBCA NEUF MODULE ================================ -->
+
+
+</body>
+</html>

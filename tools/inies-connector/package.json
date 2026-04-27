@@ -1,0 +1,24 @@
+{
+  "name": "inies-connector",
+  "version": "1.0.0",
+  "description": "Connecteur webservice INIES V4 (CSTB) pour le Feasibility Tool BBCA",
+  "main": "inies-connector.js",
+  "scripts": {
+    "start": "node inies-connector.js",
+    "list": "node inies-connector.js list",
+    "fetch": "node inies-connector.js fetch",
+    "update": "node inies-connector.js update",
+    "demo": "node inies-connector.js demo"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "fast-xml-parser": "^4.3.0",
+    "soap": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "private": true,
+  "author": "Romain Richardeau",
+  "license": "UNLICENSED"
+}

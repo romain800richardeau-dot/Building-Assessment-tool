@@ -1,0 +1,12 @@
+{
+  "endpoint": "https://www.inies.fr/api/v4/webservice",
+  "login": "VOTRE_LOGIN_CSTB",
+  "password": "VOTRE_MOT_DE_PASSE_CSTB",
+  "wsdlUrl": "https://www.inies.fr/api/v4/webservice?wsdl",
+  "outputFile": "../../data/INIES_FDES.js",
+  "mergeWithExisting": true,
+  "rateLimit": 500,
+  "timeout": 30000,
+  "retryOnFail": 3,
+  "verbose": true
+}

@@ -74,6 +74,9 @@
     <script src="data/RFO_EVIDENCE_EN.js"></script>
     <script src="data/EVIDENCE_DOCS.js"></script>
     <script src="data/HQE_EVIDENCE_DOCS.js"></script>
+    <script src="data/HQE_PREUVES_LOGIC.js"></script>
+    <script src="data/NOTES_TABS.js"></script>
+    <script src="data/HQE_SMR_QD.js"></script>
     <script src="data/HQE_FONCT_PARTS.js"></script>
     <script src="data/BBCA_NEUF_CONFIG.js"></script>
     <script src="data/BBCA_NEUF_EVIDENCE.js"></script>
@@ -218,7 +221,7 @@ function buildThemeGrid(){
         <td class="tc-pts" id="tcs-${t.code}">0/${mp}</td>
         <td style="text-align:center"><button class="difficulty-badge difficulty-${te.difficulty}" id="htd-${t.code}" onclick="hqeToggleThemeDiff('${t.code}');">${te.difficulty.charAt(0).toUpperCase()+te.difficulty.slice(1)}</button></td>
         <td class="tc-cl" id="tcp-${t.code}">${clB('F')}</td>
-        <td><input type="text" class="notes-input" value="${esc(te.notes)}" onchange="hqeSetThemeExtra('${t.code}','notes',this.value)" placeholder="Notes..."></td>
+        <td><div class="notes-cell"><input type="text" class="notes-input" value="${esc(te.notes)}" onchange="hqeSetThemeExtra('${t.code}','notes',this.value)" placeholder="Notes..."><button class="ext-note-btn ${(window.hasExtNote && window.hasExtNote('breeam-hqe-' + t.code)) ? 'has-note' : ''}" type="button" data-ext-note="breeam-hqe-${t.code}" data-ext-title="${t.code}" data-ext-sub="Thème ${esc(t.name)}" onclick="openExtNote(this.getAttribute('data-ext-note'), this.getAttribute('data-ext-title'), this.getAttribute('data-ext-sub'))" title="Note détaillée"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button></div></td>
       </tr>`;
     });
     h+=`</tbody></table></div></div>`;
@@ -250,11 +253,22 @@ function openTheme(code){
   const mp=t.maxPts||0;
   let scored=0,prCount=0;
   t.items.forEach(i=>{if(i.cat==='SCORED')scored++;if(i.cat==='PR')prCount++});
+  const _dpExtKey = 'breeam-hqe-' + code;
+  const _dpHasNote = (typeof window.hasExtNote === 'function' && window.hasExtNote(_dpExtKey));
   document.getElementById('dpStats').innerHTML=`
     <span class="dp-stat">${mp} pts max</span>
     <span class="dp-stat">${scored} exigences</span>
     ${prCount?`<span class="dp-stat" style="background:#FFF3E0;color:#E65100">${prCount} PR</span>`:''}
     <span class="dp-stat" id="dpScore">0/${mp} pts</span>
+    <button class="ext-note-btn ${_dpHasNote ? 'has-note' : ''}" type="button"
+            data-ext-note="${_dpExtKey}"
+            data-ext-title="${code}"
+            data-ext-sub="Thème ${(t.name||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}"
+            onclick="openExtNote(this.getAttribute('data-ext-note'), this.getAttribute('data-ext-title'), this.getAttribute('data-ext-sub'))"
+            title="Note détaillée"
+            style="margin-left:6px;vertical-align:middle;">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </button>
   `;
   
   // Find level-0 sub-themes for tabs
@@ -748,7 +762,7 @@ function buildPreuvesContent(themeCode){
   let h='';
   t.items.forEach(item=>{
     const qd=QD[item.c];
-    if(!qd||!qd.preuve||item.cat==='HEADING') return;
+    if(!qd||!qd.preuve) return; // accept HEADING items aussi (SMR1.x.y)
     h+=`<div class="pp-item" id="pp-${item.c}">`;
     h+=`<div class="pp-item-code">${esc(item.c)}</div>`;
     h+=`<div class="pp-item-name">${esc(item.n)}</div>`;
@@ -2235,6 +2249,29 @@ function buildGuideHTML(themeCode){
         return;
       }
       h+=`<div class="gp-stitle${item.l<=0?' gp-stitle-h0':''}" id="gq-${ic}">${fmtCode(ic)} \u2014 ${esc(item.n)}</div>`;
+      // If this HEADING item has detailed exigence fields (attendu, definition,
+      // preuve, non_applicabilite, important), render them — not just the title.
+      // Used by SMR1.x.y where everything is HEADING but still has rich content.
+      var _hasDetail = qd && (qd.attendu || qd.definition || qd.preuve || qd.non_applicabilite || qd.important || qd.evaluation || qd.methodes || qd.details);
+      if(!_hasDetail) return;
+      h+=`<div class="gp-entry" id="gq-${ic}-body" style="margin-top:6px;">`;
+      h+=`<div class="gp-entry-desc">`;
+      if(qd.important){h+=`<div class="gf"><div class="gfv imp">${qd.important.replace(/ \| /g,'<br>')}</div></div>`;}
+      var _hFields=[
+        ['attendu','Ce qui est attendu'],['definition','D\u00e9finition'],['evaluation','\u00c9valuation'],
+        ['methodes','M\u00e9thodes accept\u00e9es'],['details','D\u00e9tails'],
+        ['non_applicabilite','Non-applicabilit\u00e9']
+      ];
+      _hFields.forEach(function(f){
+        var k=f[0], label=f[1];
+        if(qd[k]){
+          h+=`<div class="gf"><div class="gfl">${label}</div><div class="gfv">${qd[k].replace(/ \| /g,'<br>')}</div></div>`;
+        }
+      });
+      if(qd.preuve){
+        h+=`<div class="gf"><span class="prv-link" onclick="openPreuvesPanel('${ic}');event.stopPropagation();"><svg viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Preuves attendues</span></div>`;
+      }
+      h+=`</div></div>`;
       return;
     }
     // Carte "manuel scolaire" pour QAIR1.2.x
@@ -8737,12 +8774,15 @@ function hqeSwitchView(view){
   var sumBtn=document.getElementById('hqeViewSummary');
   var tThemes=document.getElementById('t-themes');
   var sumSec=document.getElementById('hqeSummarySection');
+  var evBtn=document.getElementById('hqeViewEvidence');
+  var evSec=document.getElementById('hqeEvidenceSection');
   var toggleAllBtn=document.getElementById('hqeToggleAllBtn');
   var navLockEl=document.getElementById('hqeNavLock');
   var lockBannerEl=document.getElementById('hqeLockBanner');
-  [critBtn,sumBtn].forEach(function(b){if(b){b.style.background='transparent';b.style.color='#64748B';b.style.boxShadow='none';}});
+  [critBtn,sumBtn,evBtn].forEach(function(b){if(b){b.style.background='transparent';b.style.color='#64748B';b.style.boxShadow='none';}});
   if(tThemes) tThemes.style.display='none';
   if(sumSec) sumSec.style.display='none';
+  if(evSec) evSec.style.display='none';
   if(view==='summary'){
     if(sumSec) sumSec.style.display='block';
     if(sumBtn){sumBtn.style.background='#fff';sumBtn.style.color='#0D9488';sumBtn.style.boxShadow='0 1px 2px rgba(0,0,0,0.08)';}
@@ -8750,6 +8790,13 @@ function hqeSwitchView(view){
     if(navLockEl) navLockEl.style.display='none';
     if(lockBannerEl) lockBannerEl.style.visibility='hidden';
     hqeUpdateSummaryTable();
+  }else if(view==='evidence'){
+    if(evSec) evSec.style.display='block';
+    if(evBtn){evBtn.style.background='#fff';evBtn.style.color='#0D9488';evBtn.style.boxShadow='0 1px 2px rgba(0,0,0,0.08)';}
+    if(toggleAllBtn) toggleAllBtn.style.display='none';
+    if(navLockEl) navLockEl.style.display='none';
+    if(lockBannerEl) lockBannerEl.style.visibility='hidden';
+    if(typeof hqeOpenEvidenceView==='function') hqeOpenEvidenceView();
   }else{
     if(tThemes) tThemes.style.display='block';
     if(critBtn){critBtn.style.background='#fff';critBtn.style.color='#0D9488';critBtn.style.boxShadow='0 1px 2px rgba(0,0,0,0.08)';}
@@ -22971,6 +23018,12 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
                 R&eacute;capitulatif
             </button>
         </div>
+            <div style="display:flex;align-items:center;gap:4px;background:#E2E8F0;border-radius:6px;padding:2px;">
+                <button id="hqeViewEvidence" onclick="hqeSwitchView('evidence')" style="display:flex;align-items:center;gap:4px;padding:4px 12px;border-radius:4px;border:none;background:transparent;color:#64748B;cursor:pointer;font-size:11px;font-weight:600;transition:all 0.15s;">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>
+                    Preuves
+                </button>
+            </div>
     </div>
     <!-- Right: Controls -->
     <div style="display:flex;align-items:center;gap:8px;">
@@ -23023,6 +23076,11 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
         <tbody id="hqeSummaryBody">
         </tbody>
     </table>
+</div>
+
+<!-- HQE Evidence section (toggled via hqeSwitchView) — le mindmap-container y est déplacé dynamiquement par hqeOpenEvidenceView() -->
+<div class="summary-section" id="hqeEvidenceSection" style="display:none;padding:0;">
+    <!-- Le contenu (mindmap-container) est déplacé ici depuis ncEvidenceSection -->
 </div>
 
 <div id="t-seuils" class="tab-content" style="display:none">
@@ -32457,7 +32515,7 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
             var catSel = document.getElementById('ncBuildingCategorySelect');
             var catLabel = catSel ? catSel.options[catSel.selectedIndex].text : val;
             var ncTitle = document.getElementById('ncSummaryTitle');
-            if (ncTitle) ncTitle.innerHTML = 'Récapitulatif par thème : <span style="color:#94A3B8;font-weight:400;">' + catLabel + '</span>';
+            if (ncTitle) ncTitle.innerHTML = 'Récapitulatif par thème : <span style="color:#94A3B8;font-weight:400;">' + catLabel + '</span> <button type="button" class="hqe-pond-btn" onclick="ncv7OpenFonctSection(3,1)" title="Voir les pondérations par catégorie BREEAM NC v7"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> pondérations par catégorie</button>';
             rfoUpdateSummaryTitle();
 
             updateUI();
@@ -32478,7 +32536,7 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
                 if (catSel) {
                     var catLabel = catSel.options[catSel.selectedIndex].text;
                     var ncTitle = document.getElementById('ncSummaryTitle');
-                    if (ncTitle) ncTitle.innerHTML = 'Récapitulatif par thème : <span style="color:#94A3B8;font-weight:400;">' + catLabel + '</span>';
+                    if (ncTitle) ncTitle.innerHTML = 'Récapitulatif par thème : <span style="color:#94A3B8;font-weight:400;">' + catLabel + '</span> <button type="button" class="hqe-pond-btn" onclick="ncv7OpenFonctSection(3,1)" title="Voir les pondérations par catégorie BREEAM NC v7"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> pondérations par catégorie</button>';
                     rfoUpdateSummaryTitle();
                 }
             }, 0);
@@ -33824,6 +33882,23 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
         /* ═══════════════════════════════════════════════════════════════
            NC V7 FONCTIONNEMENT — Render, tab switching, lang toggle
            ═══════════════════════════════════════════════════════════════ */
+        // Navigation vers le Fonctionnement BREEAM NC v7 (équivalent de hqeOpenFonctSection)
+        window.ncv7OpenFonctSection = function(tabIdx, groupIdx) {
+            window._fromMinStdLegend = true; // active la flèche "Retour à l'évaluation" dans le hero
+            if (typeof switchView === 'function') switchView('ncv7Fonctionnement');
+            setTimeout(function() {
+                if (typeof switchNcv7FonctTab === 'function') switchNcv7FonctTab(tabIdx);
+                setTimeout(function() {
+                    var target = document.getElementById('ncv7FonctSec_' + tabIdx + '_' + groupIdx);
+                    var contentEl = document.getElementById('ncv7FonctContent');
+                    if (target && contentEl) {
+                        var top = target.offsetTop - contentEl.offsetTop;
+                        contentEl.scrollTo({ top: top, behavior: 'smooth' });
+                    }
+                }, 120);
+            }, 80);
+        };
+
         // Navigation depuis la légende astérisques vers Minimum standards
         window.openMinStdFromLegend = function() {
             window._fromMinStdLegend = true;

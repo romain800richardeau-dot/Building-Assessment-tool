@@ -22197,7 +22197,7 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
                             <span id="rfoHeroPct">0</span>%
                             <span class="hero-pct" id="rfoHeroSecuredPct">↗ 0% acquis</span>
                         </div>
-                        <span class="hero-banner-level">Niveau cible : <strong id="rfoHeroLevel">N/A</strong></span>
+                        <span class="hero-banner-level">Niveau cible : <select id="rfoHeroTargetLevelSelect" class="hero-tl-select" onchange="rfoChangeHeroTargetLevel(this.value)"><option value="" style="color:#333;">N/A</option><option value="Pass" style="color:#333;">Pass (≥30%)</option><option value="Good" style="color:#333;">Good (≥45%)</option><option value="Very Good" style="color:#333;">Very Good (≥55%)</option><option value="Excellent" style="color:#333;">Excellent (≥70%)</option><option value="Outstanding" style="color:#333;">Outstanding (≥85%)</option></select></span>
                     </div>
                     <div class="hero-banner-actions" style="flex-wrap:wrap;justify-content:flex-end;">
                         <button onclick="rfoExportToExcel()" title="Exporter vers Excel">
@@ -27260,12 +27260,32 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
         // ═══ BREEAM RFO 2015 — Standalone data & rendering ═════════
         // ══════════════════════════════════════════════════════════════
 
+        // ═══ Tooltips détaillés pour les minimum standards RFO (Table 5 SD216) ═══
+        window.MANDATORY_TOOLTIP_RFO = {
+            'Man03': "Excellent : 1 crédit Considerate construction\nOutstanding : 2 crédits Considerate construction",
+            'Man04': "Excellent / Outstanding : Criterion 9 (Building User Guide)",
+            'Man05': "Excellent / Outstanding : 1 crédit Seasonal commissioning (Parts 2 & 3 only)",
+            'Ene01': "Excellent : 6 crédits Reduction of energy use (Parts 1-4 full assessments)\nOutstanding : 10 crédits",
+            'Ene02': "Very Good / Excellent / Outstanding : 1 crédit First sub-metering (Parts 2, 3 & 4)",
+            'Wat01': "Good / Very Good / Excellent : 1 crédit Water consumption (where applicable)\nOutstanding : 2 crédits",
+            'Wat02': "Good et au-dessus : Part 2 — Criterion 1 only (water meter)",
+            'Mat03': "Pass et au-dessus : Criterion 1 only (Legally harvested timber)",
+            'Wst01': "Outstanding : 1 crédit Project waste management",
+            'Wst03': "Excellent / Outstanding : 1 crédit Operational waste"
+        };
+        // Critères numérotés explicites mandatory RFO (Table 5)
+        window.MANDATORY_CRITERIA_RFO = {
+            'Man03': { '7': 'Excellent', '8': 'Excellent', '7.a': 'Excellent', '8.a': 'Excellent', '7.b': 'Outstanding', '8.b': 'Outstanding', '1': 'Pass' },  // Considerate construction (8.a=1cr Excellent, 8.b=2cr Outstanding) + Criterion 1 (Legally harvested timber, prerequisite)
+            'Man04': { '9': 'Excellent' },              // Building User Guide
+            'Wat02': { '1': 'Good' },                    // Water meter installed
+            'Mat03': { '1': 'Pass' }                     // Legally harvested timber
+        };
         const BREEAM_RFO_CATEGORIES = [
             { code:'Man', name:'Management', color:'#3498db', weight:0.12,
               credits:[
                 {code:'Man01',name:'Project brief and design',maxPoints:4,mandatory:[],app:{p1:4,p2:4,p3:4,p4:4}},
                 {code:'Man02',name:'Life cycle cost and service life planning',maxPoints:4,mandatory:[],app:{p1:4,p2:4,p3:4,p4:4}},
-                {code:'Man03',name:'Responsible construction practices',maxPoints:6,mandatory:['Very Good','Excellent','Outstanding'],app:{p1:6,p2:6,p3:6,p4:6}},
+                {code:'Man03',name:'Responsible construction practices',maxPoints:6,mandatory:['Excellent','Outstanding'],app:{p1:6,p2:6,p3:6,p4:6}},
                 {code:'Man04',name:'Commissioning and handover',maxPoints:4,mandatory:['Excellent','Outstanding'],app:{p1:4,p2:4,p3:4,p4:4}},
                 {code:'Man05',name:'Aftercare',maxPoints:3,mandatory:['Excellent','Outstanding'],app:{p1:3,p2:3,p3:3,p4:3}},
               ]},
@@ -27451,7 +27471,10 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
                     var _isMandHere = rfoProjectData.targetLevel && _mList.indexOf(rfoProjectData.targetLevel) !== -1;
                     var _mFromLvl = _mList.length > 0 ? _mList[0] : '';
                     var _mStars = _isMandHere ? new Array(7 - _mList.length).join('*') : '';
-                    var _starsHtml = _mStars ? '<span class="mand-stars" title="Obligatoire à partir de '+_mFromLvl+'">'+_mStars+'</span>' : '';
+                    // Tooltip enrichi : utiliser MANDATORY_TOOLTIP_RFO d'abord, sinon fallback générique
+                    var _rfoTooltipMap = (typeof window.MANDATORY_TOOLTIP_RFO !== 'undefined') ? window.MANDATORY_TOOLTIP_RFO : {};
+                    var _detailedTip = _rfoTooltipMap[credit.code] || ('Obligatoire à partir de ' + _mFromLvl);
+                    var _starsHtml = _mStars ? '<span class="mand-stars" title="'+_detailedTip.replace(/"/g, '&quot;')+'">'+_mStars+'</span>' : '';
                     var naStyle = na ? ' style="opacity:0.45;background:#f8f8f8;"' : '';
                     var exclClass = isExcl ? ' class="credit-excluded"' : '';
                     var exclBtn = (!rfoLocked && !isMand && !na) ? '<button class="exclude-btn'+(isExcl?' excluded':'')+'" onclick="event.stopPropagation();rfoToggleExclude(\''+credit.code+'\')" title="'+(isExcl?'Réintégrer':'Exclure')+'">✕</button>' : '';
@@ -27500,13 +27523,25 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
             // Update RFO hero banner (RFO-specific IDs)
             var heroPct = document.getElementById('rfoHeroPct');
             var heroSecPct = document.getElementById('rfoHeroSecuredPct');
-            var heroLevel = document.getElementById('rfoHeroLevel');
             if (heroPct) heroPct.textContent = scores.percentage;
             if (heroSecPct) heroSecPct.textContent = '↗ ' + scores.securedPercentage + '% acquis';
-            if (heroLevel) heroLevel.textContent = scores.rating;
+            // Niveau cible = objectif saisi par l'utilisateur (rfoProjectData.targetLevel)
+            var heroTL = document.getElementById('rfoHeroTargetLevelSelect');
+            if (heroTL) heroTL.value = rfoProjectData.targetLevel || '';
             renderRfoCategories();
             rfoRenderSummary(scores);
         }
+
+        // Handler pour le select Niveau cible dans la bannière RFO
+        function rfoChangeHeroTargetLevel(val) {
+            if (typeof rfoProjectData === 'undefined') return;
+            rfoProjectData.targetLevel = val;
+            if (typeof rfoSaveProjectData === 'function') try { rfoSaveProjectData(); } catch(e) {}
+            if (typeof rfoUpdateUI === 'function') rfoUpdateUI();
+            else if (typeof recalcRfo === 'function') recalcRfo();
+            else if (typeof renderRfoCategories === 'function') renderRfoCategories();
+        }
+        window.rfoChangeHeroTargetLevel = rfoChangeHeroTargetLevel;
 
         function rfoRenderSummary(scores) {
             var body = document.getElementById('rfoSummaryBody');
@@ -31521,7 +31556,8 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
                             return;
                         }
                         var k1 = code + '-' + item.num;
-                        html += '<li class="criterion-item' + (window.isAimChecked && window.isAimChecked(k1) ? ' aim-checked' : '') + '" data-num="' + item.num + '"><span class="criterion-text">' + linkifyDefinitionTerms(linkifyCNRefs(linkifyMethodologyRefs(item.text, code), code)) + '</span><input type="checkbox" class="aim-cb" data-aim-key="' + k1 + '" ' + (window.isAimChecked && window.isAimChecked(k1) ? 'checked' : '') + ' onclick="window.toggleAimCheck(this)" title="Marquer ce critère comme validé">';
+                        var _critStarsF1 = getCriterionStarsRFO(code, item.num);
+                        html += '<li class="criterion-item' + (window.isAimChecked && window.isAimChecked(k1) ? ' aim-checked' : '') + '" data-num="' + item.num + '"><span class="criterion-text">' + linkifyDefinitionTerms(linkifyCNRefs(linkifyMethodologyRefs(item.text, code), code)) + _critStarsF1 + '</span><input type="checkbox" class="aim-cb" data-aim-key="' + k1 + '" ' + (window.isAimChecked && window.isAimChecked(k1) ? 'checked' : '') + ' onclick="window.toggleAimCheck(this)" title="Marquer ce critère comme validé">';
                         if (item.subitems && item.subitems.length > 0) {
                             html += '<ul class="criterion-subitems">';
                             item.subitems.forEach(function(sub) {
@@ -32566,7 +32602,9 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
             const _isMandHere = projectData.targetLevel && _mandList.indexOf(projectData.targetLevel) !== -1;
             const _mandFromLevel = _mandList.length > 0 ? _mandList[0] : '';
             const _mandStars = _isMandHere ? '*'.repeat(6 - _mandList.length) : '';
-            const _starsHtml = _mandStars ? `<span class="mand-stars" title="Obligatoire à partir de ${_mandFromLevel}">${_mandStars}</span>` : '';
+            const _detailedTooltip = MANDATORY_TOOLTIP[credit.code];
+            const _tooltipText = _detailedTooltip ? _detailedTooltip : ('Obligatoire à partir de ' + _mandFromLevel);
+            const _starsHtml = _mandStars ? `<span class="mand-stars" title="${_tooltipText.replace(/"/g, '&quot;')}">${_mandStars}</span>` : '';
             return `
                 <tr${naStyle}${naTitle}${excludedClass}>
                     <td class="credit-code" style="white-space:nowrap;">${excludeBtn}${credit.code}${_starsHtml}</td>
@@ -32656,6 +32694,72 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
         // Current open credit code (used for re-rendering tabs)
         let currentDetailCode = null;
         let isRFODetailOpen = false;
+
+
+        // ═══ Critères numérotés explicitement mandatory selon Table 4 SD6073 (Étape 1) ═══
+        const MANDATORY_CRITERIA = {
+            // Man — Management
+            'Man03': { '2': 'Pass', '9': 'Excellent' },       // Criterion 2 dès Pass + critère 9 (Up to 2cr - Resp. construction mgmt) dès Excellent
+            'Man04': { '11': 'Excellent' },                   // Criterion 11 dès Excellent (Handover)
+            // Hea — Health & wellbeing
+            'Hea01': { '1': 'Outstanding' },
+            'Hea04': { '1': 'Pass', '2': 'Excellent', '7': 'Excellent' },
+            'Hea11': { '1': 'Pass' },
+            // Wat — Water
+            'Wat02': { '1': 'Good' },
+            // Mat — Materials
+            'Mat01': { '1': 'Excellent', '2': 'Excellent', '3': 'Excellent', '4': 'Excellent', '5': 'Excellent', '6': 'Excellent' }, // Criteria 1 to 6 dès Excellent (Table 4)
+            'Mat03': { '1': 'Pass' }
+        };
+        const MAND_LEVELS_ORDER = ['Pass', 'Good', 'Very Good', 'Excellent', 'Outstanding'];
+
+        // Tooltips détaillés pour chaque crédit ayant un minimum standard (Table 4 SD6073)
+        const MANDATORY_TOOLTIP = {
+            'Man03': "Pass : Criterion 2 (National health and safety legislation)\nExcellent : 1 crédit Basic responsible construction practices (critère 9)\nOutstanding : 2 crédits Advanced responsible construction practices",
+            'Man04': "Excellent : 1 crédit Schedule and responsibilities + Criterion 11 (Handover)",
+            'Man05': "Outstanding : 1 crédit 12-month in-use commissioning (Aftercare support)",
+            'Hea01': "Outstanding : Criterion 1 (Relevant areas have access to natural light)",
+            'Hea04': "Pass : Criterion 1 (No asbestos used)\nExcellent : Criteria 1, 2 et 7 (No asbestos + Indoor air quality plan + Smoking ban)",
+            'Hea07': "Outstanding : 2 crédits Inclusive and accessible design (résidentiel uniquement)",
+            'Hea09': "Outstanding : 1 crédit Private space - homes have outdoor space (résidentiel uniquement)",
+            'Hea11': "Pass : Criterion 1 (Prevention of legionella)",
+            'Ene01': "Excellent : 4 crédits Significant improvement over energy regulations\nOutstanding : 6 crédits Best practice improvement",
+            'Ene02': "Excellent : 3 cr Predictive energy modelling OU 3 cr Operational energy performance score\nOutstanding : (3 cr Predictive + No fossil fuels combusted on-site) OU 5 cr Operational",
+            'Ene03': "Excellent : 1 crédit Energy monitoring by end-use (90% energy consumption monitored)",
+            'Wat01': "Good : 1 cr 15% improvement over baseline\nOutstanding : 2 cr 30% improvement over baseline",
+            'Wat02': "Good : Criterion 1 (A water meter is installed)",
+            'Mat01': "Excellent : Criteria 1 à 6 (Any project stage LCA + embodied carbon reporting)\nOutstanding : 5 crédits All project stages LCA",
+            'Mat03': "Pass : Criterion 1 (Legally harvested and traded timber)",
+            'Wst01': "Outstanding : 1 crédit — Pre-demolition audit OU Resource management plan",
+            'Wst03a': "Excellent : 1 crédit Recycling facilities provided",
+            'Pol01': "Outstanding : 1 crédit — No refrigerant use OU Refrigerants emissions rate < 1000 kgCO2e/kW"
+        };
+        function getCriterionStars(creditCode, num) {
+            if (!projectData.targetLevel) return '';
+            const map = MANDATORY_CRITERIA[creditCode];
+            if (!map) return '';
+            const mandFrom = map[num];
+            if (!mandFrom) return '';
+            const targetIdx = MAND_LEVELS_ORDER.indexOf(projectData.targetLevel);
+            const fromIdx = MAND_LEVELS_ORDER.indexOf(mandFrom);
+            if (targetIdx < fromIdx) return '';
+            const nb = fromIdx + 1;
+            return '<span class="mand-stars" title="Critère obligatoire à partir de ' + mandFrom + '">' + '*'.repeat(nb) + '</span>';
+        }
+
+        // Variante RFO : utilise rfoProjectData et MANDATORY_CRITERIA_RFO
+        function getCriterionStarsRFO(creditCode, num) {
+            if (typeof rfoProjectData === 'undefined' || !rfoProjectData.targetLevel) return '';
+            var map = (typeof window.MANDATORY_CRITERIA_RFO !== 'undefined') ? window.MANDATORY_CRITERIA_RFO[creditCode] : null;
+            if (!map) return '';
+            var mandFrom = map[num];
+            if (!mandFrom) return '';
+            var targetIdx = MAND_LEVELS_ORDER.indexOf(rfoProjectData.targetLevel);
+            var fromIdx = MAND_LEVELS_ORDER.indexOf(mandFrom);
+            if (targetIdx < fromIdx) return '';
+            var nb = fromIdx + 1;
+            return '<span class="mand-stars" title="Critère obligatoire à partir de ' + mandFrom + '">' + '*'.repeat(nb) + '</span>';
+        }
 
         function renderAimContent(creditCode) {
             const detail = CREDIT_DETAILS[creditCode];
@@ -32784,7 +32888,8 @@ td.cl-f{background:#D32F2F!important;color:#fff!important;font-weight:700}
                         crit.numbered.forEach(nc => {
                             const ek1 = creditCode + '-' + nc.num;
                             const ec1 = window.isAimChecked && window.isAimChecked(ek1);
-                            html += `<li class="criterion-item${ec1 ? ' aim-checked' : ''}" data-num="${nc.num}"><span class="criterion-text">${linkifyDefinitionTerms(linkifyCNRefs(linkifyMethodologyRefs(nc.text, creditCode), creditCode))}</span><input type="checkbox" class="aim-cb" data-aim-key="${ek1}" ${ec1 ? 'checked' : ''} onclick="window.toggleAimCheck(this)" title="Mark as validated">`;
+                            const _critStars1 = getCriterionStars(creditCode, nc.num);
+                            html += `<li class="criterion-item${ec1 ? ' aim-checked' : ''}" data-num="${nc.num}"><span class="criterion-text">${linkifyDefinitionTerms(linkifyCNRefs(linkifyMethodologyRefs(nc.text, creditCode), creditCode))}${_critStars1}</span><input type="checkbox" class="aim-cb" data-aim-key="${ek1}" ${ec1 ? 'checked' : ''} onclick="window.toggleAimCheck(this)" title="Mark as validated">`;
                             if (nc.subitems && nc.subitems.length > 0) {
                                 html += `<ul class="criterion-subitems">`;
                                 nc.subitems.forEach(si => {

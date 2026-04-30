@@ -12717,6 +12717,69 @@ function saSlugify(str) {
 // Detail panel map instance
 var saDetailMap = null;
 
+// ─────────────────────────────────────────────────────────────────────────
+// Masquage BREEAM dans l'Analyse de site
+// L'Analyse de site est désormais accessible sans choisir de certification.
+// Pour les utilisateurs sans BREEAM (mode standalone, projet HQE/BBCA seul),
+// on enveloppe les blocs spécifiques BREEAM dans des wrappers `.sa-breeam-only`
+// (sections entières) et `.sa-breeam-only-inline` (références credit
+// inline : Tra X, Hea X, Pol X, etc.). Une règle CSS dans index.html cache
+// ces wrappers tant que body.has-breeam-cert n'est pas posé.
+// ─────────────────────────────────────────────────────────────────────────
+function _saApplyBreeamHiding(root) {
+    if (!root) return;
+
+    // 1) Sections entières dont le titre mentionne BREEAM
+    //    (Impact BREEAM, Valorisation et BREEAM, Crédits BREEAM, Méthode de
+    //    valorisation BREEAM, etc.). On enveloppe le h3/h4 et tous ses frères
+    //    suivants jusqu'au prochain h3/h4 de niveau égal ou supérieur.
+    var BREEAM_HEADING_RE = /breeam/i;
+    var headings = root.querySelectorAll('h3, h4');
+    Array.prototype.forEach.call(headings, function(h) {
+        if (h.dataset && h.dataset.breeamWrapped === '1') return;
+        var txt = (h.textContent || '');
+        if (!BREEAM_HEADING_RE.test(txt)) return;
+        var curLvl = parseInt(h.tagName.substr(1), 10);
+        var wrap = document.createElement('div');
+        wrap.className = 'sa-breeam-only';
+        var parent = h.parentNode;
+        if (!parent) return;
+        parent.insertBefore(wrap, h);
+        var node = h;
+        while (node) {
+            var advance = node.nextSibling;
+            // Stop avant un heading de niveau égal ou supérieur
+            if (advance && advance.nodeType === 1 && /^H[1-6]$/.test(advance.tagName)) {
+                var nextLvl = parseInt(advance.tagName.substr(1), 10);
+                if (nextLvl <= curLvl) {
+                    wrap.appendChild(node);
+                    break;
+                }
+            }
+            wrap.appendChild(node);
+            if (!advance) break;
+            node = advance;
+        }
+        if (h.dataset) h.dataset.breeamWrapped = '1';
+    });
+
+    // 2) Références credit BREEAM inline dans les paragraphes (Tra 02, Hea 04,
+    //    Pol 03, Mat 03, Wat 01, LE 04, Ene 01, Wst, Man, Inn). On wrappe
+    //    uniquement les <strong> dont le contenu correspond exactement à un
+    //    code de crédit, pour ne pas casser des sentences entières.
+    //    L'espace insécable ( ) et l'espace fine ( ) sont fréquents
+    //    dans le code (Tra 02, Hea 04, etc.).
+    var BREEAM_CODE_RE = /^\s*(?:Tra|Hea|Ene|Pol|Mat|Wat|LE|Wst|Man|Inn)\s*[  ]?\s*\d+(?:\s*\/\s*(?:Tra|Hea|Ene|Pol|Mat|Wat|LE|Wst|Man|Inn)\s*[  ]?\s*\d+)*\s*$/i;
+    var strongs = root.querySelectorAll('strong');
+    Array.prototype.forEach.call(strongs, function(s) {
+        if (s.classList.contains('sa-breeam-only-inline')) return;
+        var t = (s.textContent || '').replace(/[  ]/g, ' ').trim();
+        if (BREEAM_CODE_RE.test(t)) {
+            s.classList.add('sa-breeam-only-inline');
+        }
+    });
+}
+
 function openSaDetailPanel(category, key) {
     var panel = document.getElementById('saDetailPanel');
     var overlay = document.getElementById('saDetailOverlay');
@@ -12726,6 +12789,16 @@ function openSaDetailPanel(category, key) {
     var info = saGetDetailContent(category, key);
     title.textContent = info.title;
     content.innerHTML = info.html;
+
+    // Masque les blocs BREEAM si aucune certification BREEAM n'est active
+    // (mode standalone ou projet sans BREEAM). Le wrapping est inconditionnel ;
+    // la visibilité est pilotée par la classe body.has-breeam-cert via CSS.
+    // Retries pour rattraper les contenus injectés en async (matériaux,
+    // sondages BSS, BREEAM credits enrichis, etc.).
+    _saApplyBreeamHiding(content);
+    setTimeout(function() { _saApplyBreeamHiding(content); }, 400);
+    setTimeout(function() { _saApplyBreeamHiding(content); }, 1500);
+    setTimeout(function() { _saApplyBreeamHiding(content); }, 4000);
 
     // Badge à côté du titre (ex : renvoi vers fiches pédagogiques pour les thèmes ENR)
     var hb = document.getElementById('saDetailHeaderBadge');
@@ -12889,7 +12962,9 @@ function openSaDetailPanel(category, key) {
             + 'box-shadow:2px 2px 8px rgba(0,0,0,0.08);white-space:nowrap;';
         var tocHtml = '<div style="font-weight:700;color:#1E293B;margin-bottom:4px;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.04em;">Sommaire</div>';
         tocItems.forEach(function(item) {
-            tocHtml += '<a href="#" style="display:block;color:#2563EB;text-decoration:none;" onclick="var e=document.getElementById(\'' + item[0] + '\');if(e)e.scrollIntoView({behavior:\'smooth\'});return false;">' + item[1] + '</a>';
+            // Marque les entrées BREEAM pour masquage si aucune certif BREEAM active
+            var cls = /breeam/i.test(item[1]) ? ' class="sa-breeam-only"' : '';
+            tocHtml += '<a' + cls + ' href="#" style="display:block;color:#2563EB;text-decoration:none;" onclick="var e=document.getElementById(\'' + item[0] + '\');if(e)e.scrollIntoView({behavior:\'smooth\'});return false;">' + item[1] + '</a>';
         });
         toc.innerHTML = tocHtml;
         document.body.appendChild(toc);

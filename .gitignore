@@ -42,3 +42,16 @@ yarn-error.log*
 *.bak
 *.backup
 *~
+
+# Claude Code internal state
+.claude/
+
+# Local backups before risky rewrites
+*.before-*
+cat >> .gitignore << 'EOF'
+
+# Claude Code internal state
+.claude/
+
+# Local backups before risky rewrites
+*.before-*

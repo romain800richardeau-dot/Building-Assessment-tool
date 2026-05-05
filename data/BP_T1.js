@@ -18,7 +18,7 @@ window.BP_T1_HTML = `<div class="bp-fiche" data-theme="moa-publique" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre ce qu'est la <strong>ma&icirc;trise d'ouvrage</strong> ind&eacute;pendamment du statut public ou priv&eacute; du commanditaire</li>
                                     <li>identifier les <strong>responsabilit&eacute;s incessibles</strong> qui incombent &agrave; tout ma&icirc;tre d'ouvrage</li>
@@ -395,7 +395,7 @@ window.BP_T1_HTML = `<div class="bp-fiche" data-theme="moa-publique" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>identifier les <strong>acteurs cl&eacute;s</strong> d'une op&eacute;ration de construction ou de r&eacute;habilitation et leurs missions respectives</li>
                                     <li>comprendre la <strong>mission de ma&icirc;trise d'&oelig;uvre</strong> et ses &eacute;l&eacute;ments constitutifs (ESQ, AVP, PRO, ACT, DET, AOR)</li>
@@ -788,7 +788,7 @@ window.BP_T1_HTML = `<div class="bp-fiche" data-theme="moa-publique" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre pourquoi tout ma&icirc;tre d'ouvrage &mdash; public ou priv&eacute; &mdash; a int&eacute;r&ecirc;t &agrave; se faire accompagner</li>
                                     <li>distinguer les missions et pouvoirs respectifs du <strong>mandataire</strong>, du <strong>conducteur d'op&eacute;ration</strong> et des <strong>AMO sp&eacute;cialis&eacute;s</strong> en contexte public</li>
@@ -1053,7 +1053,7 @@ window.BP_T1_HTML = `<div class="bp-fiche" data-theme="moa-publique" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre pourquoi confondre <strong>besoin et solution</strong> conduit &agrave; des projets mal cadr&eacute;s et co&ucirc;teux</li>
                                     <li>ma&icirc;triser les &eacute;tudes pr&eacute;alables qui structurent la programmation (opportunit&eacute;, faisabilit&eacute;, pr&eacute;-programme)</li>
@@ -1270,7 +1270,7 @@ window.BP_T1_HTML = `<div class="bp-fiche" data-theme="moa-publique" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre la notion de <strong>co&ucirc;t global</strong> et son importance pour tout ma&icirc;tre d'ouvrage</li>
                                     <li>identifier les composantes d'une <strong>enveloppe financi&egrave;re</strong> et les postes fr&eacute;quemment oubli&eacute;s</li>
@@ -1715,7 +1715,7 @@ window.BP_T1_HTML = `<div class="bp-fiche" data-theme="moa-publique" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre que le r&ocirc;le du MOA en conception n'est pas de concevoir mais de <strong>piloter et valider</strong></li>
                                     <li>identifier les points critiques du suivi : conformit&eacute; au programme, analyse des co&ucirc;ts, respect du calendrier</li>
@@ -1928,7 +1928,7 @@ window.BP_T1_HTML = `<div class="bp-fiche" data-theme="moa-publique" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre les <strong>principes de la commande publique</strong> et les diff&eacute;rencier de la passation en MOA priv&eacute;e</li>
                                     <li>&eacute;valuer les strat&eacute;gies d'<strong>allotissement</strong> et choisir entre lots s&eacute;par&eacute;s et march&eacute; global</li>
@@ -2165,7 +2165,7 @@ window.BP_T1_HTML = `<div class="bp-fiche" data-theme="moa-publique" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre la <strong>r&eacute;ception</strong> comme acte juridique de transfert de responsabilit&eacute;s et ses effets majeurs</li>
                                     <li>ma&icirc;triser le processus de r&eacute;ception en <strong>MOA publique</strong> (CCAG travaux) et en <strong>MOA priv&eacute;e</strong> (code civil, CCMI, VEFA)</li>
@@ -2354,7 +2354,7 @@ window.BP_T1_HTML = `<div class="bp-fiche" data-theme="moa-publique" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>conna&icirc;tre les <strong>trois garanties l&eacute;gales</strong> qui prot&egrave;gent tout ma&icirc;tre d'ouvrage apr&egrave;s la r&eacute;ception (GPA, biennale, d&eacute;cennale)</li>
                                     <li>comprendre le r&eacute;gime d'<strong>assurance construction</strong> et ses diff&eacute;rences entre MOA publique et priv&eacute;e</li>

@@ -19,7 +19,7 @@ window.BP_T3_HTML = `<div class="bp-fiche" data-theme="ventilation" id="bpFicheT
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre <strong>pourquoi la QAI est devenue un enjeu sanitaire majeur</strong> dans les b&acirc;timents r&eacute;nov&eacute;s ;</li>
                                     <li>conna&icirc;tre les <strong>chiffres-cl&eacute;s</strong> de l&rsquo;exposition et de l&rsquo;impact sanitaire ;</li>
@@ -292,7 +292,7 @@ window.BP_T3_HTML = `<div class="bp-fiche" data-theme="ventilation" id="bpFicheT
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>À la fin de cette fiche, l'apprenant doit savoir :</h4>
+                                <h4>À la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>nommer les <strong>quatre familles de polluants</strong> de l'air intérieur et citer leurs sources principales ;</li>
                                     <li>donner les <strong>ordres de grandeur d'exposition</strong> en logement et en tertiaire ;</li>
@@ -547,7 +547,7 @@ window.BP_T3_HTML = `<div class="bp-fiche" data-theme="ventilation" id="bpFicheT
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>À la fin de cette fiche, l'apprenant doit savoir :</h4>
+                                <h4>À la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>expliquer les principes de <strong>balayage</strong> et de <strong>différence de pression</strong> ;</li>
                                     <li>distinguer les trois grandes familles : <strong>naturelle</strong>, <strong>mécanique</strong>, <strong>hybride</strong> ;</li>
@@ -812,7 +812,7 @@ window.BP_T3_HTML = `<div class="bp-fiche" data-theme="ventilation" id="bpFicheT
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>À la fin de cette fiche, l'apprenant doit savoir :</h4>
+                                <h4>À la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>décrire le <strong>fonctionnement</strong> d'une VMC simple flux ;</li>
                                     <li>distinguer les modèles <strong>autoréglable</strong>, <strong>hygro A</strong> et <strong>hygro B</strong> ;</li>
@@ -1085,7 +1085,7 @@ window.BP_T3_HTML = `<div class="bp-fiche" data-theme="ventilation" id="bpFicheT
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>À la fin de cette fiche, l'apprenant doit savoir :</h4>
+                                <h4>À la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>expliquer le <strong>principe de la récupération de chaleur</strong> sur l'air extrait ;</li>
                                     <li>comparer les trois familles d'échangeurs et leurs <strong>rendements</strong> ;</li>
@@ -1423,7 +1423,7 @@ window.BP_T3_HTML = `<div class="bp-fiche" data-theme="ventilation" id="bpFicheT
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li><strong>calculer les d&eacute;bits r&eacute;glementaires</strong> d&rsquo;un logement selon l&rsquo;arr&ecirc;t&eacute; du 24 mars 1982 ;</li>
                                     <li>ma&icirc;triser le <strong>dimensionnement du r&eacute;seau</strong> : diam&egrave;tres, vitesses, pertes de charge ;</li>
@@ -1794,7 +1794,7 @@ window.BP_T3_HTML = `<div class="bp-fiche" data-theme="ventilation" id="bpFicheT
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre pourquoi la <strong>maintenance</strong> est un facteur critique de dur&eacute;e de vie ;</li>
                                     <li>conna&icirc;tre les <strong>op&eacute;rations d&rsquo;entretien</strong> courantes et leur fr&eacute;quence ;</li>

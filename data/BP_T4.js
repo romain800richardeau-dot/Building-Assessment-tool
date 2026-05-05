@@ -19,7 +19,7 @@ window.BP_T4_HTML = `<div class="bp-fiche" data-theme="chauffage" id="bpFicheT4C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>expliquer la notion de <strong>co&ucirc;t global</strong> d&rsquo;un syst&egrave;me de chauffage ;</li>
                                     <li>comparer les <strong>&eacute;nergies disponibles</strong> (gaz, fioul, &eacute;lectricit&eacute;, bois, PAC, r&eacute;seau) sur les plans &eacute;conomique et environnemental ;</li>
@@ -299,7 +299,7 @@ window.BP_T4_HTML = `<div class="bp-fiche" data-theme="chauffage" id="bpFicheT4C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>expliquer la <strong>place r&eacute;elle</strong> du chauffage &eacute;lectrique dans le parc fran&ccedil;ais et ses limites ;</li>
                                     <li>distinguer les <strong>technologies de radiateurs</strong> (convecteur, rayonnant, inertie, accumulation, double syst&egrave;me) ;</li>
@@ -616,7 +616,7 @@ window.BP_T4_HTML = `<div class="bp-fiche" data-theme="chauffage" id="bpFicheT4C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>expliquer le <strong>principe physique</strong> de la condensation et la distinction PCI / PCS ;</li>
                                     <li>d&eacute;terminer <strong>dans quelles conditions</strong> la chaudi&egrave;re fonctionne effectivement en mode condensation ;</li>
@@ -854,7 +854,7 @@ window.BP_T4_HTML = `<div class="bp-fiche" data-theme="chauffage" id="bpFicheT4C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>d&eacute;finir ce qu&rsquo;est un <strong>chauffage d&rsquo;appoint</strong> et dans quels cas il est pertinent ;</li>
                                     <li>comparer les principales <strong>familles</strong> (&eacute;lectrique, gaz, p&eacute;trole, bois) ;</li>
@@ -1102,7 +1102,7 @@ window.BP_T4_HTML = `<div class="bp-fiche" data-theme="chauffage" id="bpFicheT4C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>situer le poids de l&rsquo;<strong>ECS</strong> dans le bilan &eacute;nerg&eacute;tique d&rsquo;un logement contemporain ;</li>
                                     <li>distinguer les <strong>trois postes de consommation</strong> : production, distribution, stockage ;</li>
@@ -1380,7 +1380,7 @@ window.BP_T4_HTML = `<div class="bp-fiche" data-theme="chauffage" id="bpFicheT4C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>expliquer le <strong>principe</strong> d&rsquo;un CET et son <strong>COP</strong> ;</li>
                                     <li>distinguer les <strong>quatre configurations</strong> (air ambiant, air ext&eacute;rieur monobloc, air ext&eacute;rieur split, air extrait VMC) ;</li>

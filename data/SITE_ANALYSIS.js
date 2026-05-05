@@ -165,6 +165,11 @@ function saSiteSearch() {
         (saState.codeInsee ? ' (INSEE: ' + saState.codeInsee + ')' : '');
     document.getElementById('saAddressInput').value = fullInfo;
 
+    // Hide the floating Export PDF button during a fresh search — il sera
+    // ré-affiché quand l'analyse termine (Promise.all().then plus bas).
+    var _saExpBtnReset = document.getElementById('saExportPdfBtn');
+    if (_saExpBtnReset) _saExpBtnReset.style.display = 'none';
+
     // Show results container so the map div has real dimensions,
     // but hide the data panels (synthesis + sections stack) during loading
     var resultsDiv = document.getElementById('saResults');
@@ -189,6 +194,8 @@ function saSiteSearch() {
         { id: 'georisques', label: 'G\u00e9orisques' },
         { id: 'biodiv', label: 'Biodiversit\u00e9' },
         { id: 'urbanisme', label: 'Urbanisme' },
+        { id: 'sup', label: 'Servitudes' },
+        { id: 'patrimoine', label: 'Patrimoine' },
         { id: 'icpe', label: 'ICPE' },
         { id: 'pollution', label: 'Sites pollu\u00e9s' },
         { id: 'airquality', label: 'Qualit\u00e9 air' },
@@ -205,6 +212,8 @@ function saSiteSearch() {
         saFetchGeorisques().then(function () { saMarkStep('georisques', 'done'); }).catch(function () { saMarkStep('georisques', 'error'); }),
         saFetchBiodiversite().then(function () { saMarkStep('biodiv', 'done'); }).catch(function () { saMarkStep('biodiv', 'error'); }),
         saFetchUrbanisme().then(function () { saMarkStep('urbanisme', 'done'); }).catch(function () { saMarkStep('urbanisme', 'error'); }),
+        saFetchSup().then(function () { saMarkStep('sup', 'done'); }).catch(function () { saMarkStep('sup', 'error'); }),
+        saFetchPatrimoineMH().then(function () { saMarkStep('patrimoine', 'done'); }).catch(function () { saMarkStep('patrimoine', 'error'); }),
         saFetchICPE().then(function () { saMarkStep('icpe', 'done'); }).catch(function () { saMarkStep('icpe', 'error'); }),
         saFetchPollution().then(function () { saMarkStep('pollution', 'done'); }).catch(function () { saMarkStep('pollution', 'error'); }),
         saFetchAirQuality().then(function () { saMarkStep('airquality', 'done'); }).catch(function () { saMarkStep('airquality', 'error'); }),
@@ -220,10 +229,19 @@ function saSiteSearch() {
         // Reveal data panels (were hidden during loading)
         if (saSynthEl) saSynthEl.style.display = '';
         if (saStackEl) saStackEl.style.display = '';
+        // Export PDF/Word desactive temporairement (en cours de developpement —
+        // utiliser Ctrl+P du navigateur en attendant pour imprimer la page).
+        // var _saExpBtn = document.getElementById('saExportPdfBtn');
+        // if (_saExpBtn) _saExpBtn.style.display = 'inline-flex';
         // Safety invalidateSize after content reflow
         if (saState.map) saState.map.invalidateSize();
-        // Default to Milieu physique page
-        saGoToPage('MilieuPhysique');
+        // Default to Urbanisme (1ère section du sommaire dans la nouvelle organisation)
+        saGoToPage('Urbanisme');
+        // Onboarding "découverte du sommaire" à la 1ère analyse (no-op si déjà fait)
+        console.log('[SA] Tentative onboarding sommaire — typeof window.saTocOnboardingStart:', typeof window.saTocOnboardingStart);
+        if (typeof window.saTocOnboardingStart === 'function') {
+            try { window.saTocOnboardingStart(); } catch (e) { console.warn('[SA] Onboarding error:', e); }
+        }
     });
 }
 
@@ -329,6 +347,93 @@ function saFetchUrbanisme() {
         .then(function (r) { return r.json(); })
         .then(function (data) { saState.results.urbanisme = data; })
         .catch(function (err) { saState.results.urbanisme = { error: err.message }; });
+}
+
+// ── API Carto GPU — Servitudes d'Utilité Publique (SUP) ──
+// Couvre : MH/ABF (AC1), sites classés (AC2), AVAP/SPR (AC4), périmètres
+// captage AEP (AS1), PPRN/PPRT (PM1/PM2/PM3), canalisations dangereuses
+// (I1/I7/I8/I9), aérodromes (T5/T7), lignes HT (I4), voies ferrées (T1)…
+// Endpoint : sup-s (surfaciques) + sup-l (linéaires) + sup-p (ponctuelles)
+function saFetchSup() {
+    var lat = saState.lat, lon = saState.lon;
+    var geojson = { type: 'Point', coordinates: [lon, lat] };
+    var geomStr = JSON.stringify(geojson);
+
+    var urlS = 'https://apicarto.ign.fr/api/gpu/sup-s?geom=' + encodeURIComponent(geomStr);
+    var urlL = 'https://apicarto.ign.fr/api/gpu/sup-l?geom=' + encodeURIComponent(geomStr);
+    var urlP = 'https://apicarto.ign.fr/api/gpu/sup-p?geom=' + encodeURIComponent(geomStr);
+
+    var fetchOne = function (u) {
+        return fetch(u).then(function (r) { return r.json(); }).catch(function () { return { features: [] }; });
+    };
+
+    return Promise.all([fetchOne(urlS), fetchOne(urlL), fetchOne(urlP)]).then(function (results) {
+        var allFeatures = [];
+        ['s', 'l', 'p'].forEach(function (geomType, i) {
+            var d = results[i];
+            if (d && d.features && d.features.length) {
+                d.features.forEach(function (f) { f._geomType = geomType; allFeatures.push(f); });
+            }
+        });
+        saState.results.sup = { features: allFeatures };
+    }).catch(function (err) { saState.results.sup = { error: err.message }; });
+}
+
+// ── Fallback patrimoine via data.culture.gouv.fr (Opendatasoft) ──
+// Beaucoup de communes (Lyon, Marseille, Bordeaux…) n'ont pas digitalisé
+// leurs SUP au format CNIG, donc l'API GPU renvoie vide pour des sites
+// pourtant classés. On complète avec les datasets officiels du Ministère
+// de la Culture qui couvrent toute la France de façon fiable.
+function saFetchPatrimoineMH() {
+    var lat = saState.lat, lon = saState.lon;
+    if (!lat || !lon) {
+        saState.results.patrimoineComplement = { mh: [], sites: [], spr: [] };
+        return Promise.resolve();
+    }
+
+    // API v1 d'Opendatasoft — plus stable, geofilter.distance fait exactement ce qu'on veut
+    var v1base = 'https://data.culture.gouv.fr/api/records/1.0/search/';
+    var radius = 500; // 500 m = périmètre ABF standard
+    var geo = '&geofilter.distance=' + lat + ',' + lon + ',' + radius;
+
+    // 1. Monuments historiques (rayon 500 m → périmètre ABF)
+    var urlMh = v1base + '?dataset=liste-des-immeubles-proteges-au-titre-des-monuments-historiques' + geo + '&rows=50';
+
+    // 2. Sites classés / inscrits (loi 1930) — nom de dataset best effort
+    var urlSites = v1base + '?dataset=liste-des-sites-classes-et-inscrits' + geo + '&rows=20';
+
+    // 3. Sites Patrimoniaux Remarquables (SPR / AVAP / ZPPAUP) — nom best effort
+    var urlSpr = v1base + '?dataset=sites-patrimoniaux-remarquables-spr' + geo + '&rows=20';
+
+    var fetchOne = function (u) {
+        return fetch(u)
+            .then(function (r) { return r.ok ? r.json() : { records: [] }; })
+            .then(function (d) {
+                if (!d || !d.records) return [];
+                // API v1 : { records: [{ fields: {...}, geometry: {...} }] }
+                // On récupère les fields ET on injecte les coords GeoJSON [lon, lat]
+                return d.records.map(function (rec) {
+                    var item = Object.assign({}, rec.fields || {});
+                    if (rec.geometry && rec.geometry.coordinates && rec.geometry.coordinates.length === 2) {
+                        // GeoJSON : [lon, lat]
+                        item._lon = rec.geometry.coordinates[0];
+                        item._lat = rec.geometry.coordinates[1];
+                    }
+                    return item;
+                });
+            })
+            .catch(function () { return []; });
+    };
+
+    return Promise.all([fetchOne(urlMh), fetchOne(urlSites), fetchOne(urlSpr)])
+        .then(function (results) {
+            saState.results.patrimoineComplement = {
+                mh: results[0] || [],
+                sites: results[1] || [],
+                spr: results[2] || []
+            };
+            console.log('[SA] patrimoine fallback:', results[0].length, 'MH /', results[1].length, 'sites /', results[2].length, 'SPR');
+        });
 }
 
 // ── API Géorisques — ICPE ──
@@ -744,9 +849,13 @@ function saRenderResults() {
     saRenderRisques();
     saRenderBiodiversite();
     saRenderUrbanisme();
+    saRenderPatrimoine();
+    saRenderSup();
     saRenderICPE();
     saRenderPollution();
     saRenderPdfLink();
+    // Marquer les colonnes Crédits BREEAM (cachées en mode standalone via CSS)
+    if (typeof saMarkBreeamCreditCols === 'function') saMarkBreeamCreditCols();
     // Synthesis reads actual counts from rendered sections
     saRenderSynthesis();
 }
@@ -2715,7 +2824,9 @@ function saInjectCommerceIconCss() {
       + '.sa-route-label-pill{font-family:Inter,system-ui,sans-serif;font-weight:700;font-size:0.68rem;padding:1px 6px;border-radius:10px;white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,0.25);border:1.5px solid currentColor;background:#fff;line-height:1.3;}'
       // Affichage selon priorite + zoom (class sur container)
       + '.sa-map-sparse .sa-route-label{display:block;}'   // densite faible : tout afficher
-      + '.sa-map-dense.sa-zoom-14 .sa-route-label-metro,.sa-map-dense.sa-zoom-14 .sa-route-label-train{display:block;}'
+      // Modes structurants (metro/tram/train) : visibles des le zoom 13 (cas Mise en page A4)
+      + '.sa-map-dense.sa-zoom-13 .sa-route-label-metro,.sa-map-dense.sa-zoom-13 .sa-route-label-train,.sa-map-dense.sa-zoom-13 .sa-route-label-tram{display:block;}'
+      + '.sa-map-dense.sa-zoom-14 .sa-route-label-metro,.sa-map-dense.sa-zoom-14 .sa-route-label-train,.sa-map-dense.sa-zoom-14 .sa-route-label-tram{display:block;}'
       + '.sa-map-dense.sa-zoom-15 .sa-route-label-metro,.sa-map-dense.sa-zoom-15 .sa-route-label-train,.sa-map-dense.sa-zoom-15 .sa-route-label-tram{display:block;}'
       + '.sa-map-dense.sa-zoom-16 .sa-route-label-metro,.sa-map-dense.sa-zoom-16 .sa-route-label-train,.sa-map-dense.sa-zoom-16 .sa-route-label-tram,.sa-map-dense.sa-zoom-16 .sa-route-label-funic,.sa-map-dense.sa-zoom-16 .sa-route-label-ferry{display:block;}'
       + '.sa-map-dense.sa-zoom-17 .sa-route-label{display:block;}';
@@ -2782,6 +2893,16 @@ function _saRenderTransportRoutesOnMap(cfg) {
     var siteLat = cfg.siteLat, siteLon = cfg.siteLon;
     var modeFilter = cfg.modeFilter || null;
     var ROUTE_RADIUS_M = cfg.radiusM || 3000;
+    // Rayon adaptatif par mode : les modes structurants (metro/tram/train) sont
+    // pertinents bien au-dela de 3km dans une analyse de site batiment.
+    // Override possible via cfg.radiusM (force toutes les couches au meme rayon).
+    function _routeRadius(rtype) {
+        if (cfg.radiusM) return cfg.radiusM;
+        if (rtype === 2 || (rtype >= 100 && rtype < 200)) return 10000;  // train / RER
+        if (rtype === 1 || (rtype >= 400 && rtype < 500)) return 5000;   // metro
+        if (rtype === 0 || (rtype >= 900 && rtype < 1000)) return 5000;  // tram
+        return 3000;  // bus, ferry, funi
+    }
     var TYPE_COLOR = { 0: '#7C3AED', 1: '#DB2777', 2: '#DC2626', 3: '#2563EB', 4: '#0EA5E9', 5: '#78716C', 7: '#78716C' };
 
     function _routeWeight(rtype) {
@@ -2824,7 +2945,8 @@ function _saRenderTransportRoutesOnMap(cfg) {
         var cx = ax + t * dx, cy = ay + t * dy;
         return Math.sqrt(cx*cx + cy*cy);
     }
-    var marginDeg = ROUTE_RADIUS_M / METERS_PER_DEG_LAT * 1.1;
+    // marge bbox = max possible (10km pour train) pour ne pas exclure prematurement
+    var marginDeg = (cfg.radiusM ? cfg.radiusM : 10000) / METERS_PER_DEG_LAT * 1.1;
     function _hasUnrealisticStraightSegment(shape, maxSegM) {
         for (var i = 0; i < shape.length - 1; i++) {
             var dlat = (shape[i+1][0] - shape[i][0]) * 111320;
@@ -2848,9 +2970,11 @@ function _saRenderTransportRoutesOnMap(cfg) {
         }
         if (latMax < siteLat - marginDeg || latMin > siteLat + marginDeg) return;
         if (lonMax < siteLon - marginDeg || lonMin > siteLon + marginDeg) return;
+        // Rayon adaptatif par mode (3km bus, 5km tram/metro, 10km train)
+        var routeRadius = _routeRadius(rtype);
         var keep = false;
         for (var pi = 0; pi < shape.length - 1; pi++) {
-            if (_pointToSegMeters(shape[pi][0], shape[pi][1], shape[pi+1][0], shape[pi+1][1]) <= ROUTE_RADIUS_M) {
+            if (_pointToSegMeters(shape[pi][0], shape[pi][1], shape[pi+1][0], shape[pi+1][1]) <= routeRadius) {
                 keep = true; break;
             }
         }
@@ -2873,16 +2997,37 @@ function _saRenderTransportRoutesOnMap(cfg) {
         var w = _routeWeight(r.rtype);
         var hw = _routeHalo(r.rtype);
         var priority = _saRoutePriority(r.rtype);
-        var halo = L.polyline(r.shape, { color: '#fff', weight: hw, opacity: 0.55, lineJoin: 'round', lineCap: 'round' });
-        halo.addTo(targetLayer);
-        addedPolylines.push(halo);
-        var poly = L.polyline(r.shape, {
-            color: strokeColor, weight: w, opacity: 0.92,
-            lineJoin: 'round', lineCap: 'round'
-        });
-        poly.bindTooltip(tipLabel, { sticky: true });
-        poly.addTo(targetLayer);
-        addedPolylines.push(poly);
+        var isTrain = (r.rtype === 2 || (r.rtype >= 100 && r.rtype < 200));
+        // Train : symbole cartographique classique = trait blanc base + tirets noirs au-dessus
+        // Autres modes : halo blanc + polyline coloree (existant)
+        if (isTrain) {
+            // Base blanche solide (legerement plus epaisse pour servir de fond)
+            var base = L.polyline(r.shape, {
+                color: '#FFFFFF', weight: w + 1, opacity: 1,
+                lineJoin: 'round', lineCap: 'butt'
+            });
+            base.addTo(targetLayer);
+            addedPolylines.push(base);
+            // Trait noir pointille par-dessus (style railway)
+            var dash = L.polyline(r.shape, {
+                color: '#1A1A1A', weight: w, opacity: 1,
+                dashArray: '8 8', lineJoin: 'miter', lineCap: 'butt'
+            });
+            dash.bindTooltip(tipLabel || 'Voie ferrée', { sticky: true });
+            dash.addTo(targetLayer);
+            addedPolylines.push(dash);
+        } else {
+            var halo = L.polyline(r.shape, { color: '#fff', weight: hw, opacity: 0.55, lineJoin: 'round', lineCap: 'round' });
+            halo.addTo(targetLayer);
+            addedPolylines.push(halo);
+            var poly = L.polyline(r.shape, {
+                color: strokeColor, weight: w, opacity: 0.92,
+                lineJoin: 'round', lineCap: 'round'
+            });
+            poly.bindTooltip(tipLabel, { sticky: true });
+            poly.addTo(targetLayer);
+            addedPolylines.push(poly);
+        }
         routeLabels.push({
             shape: r.shape,
             short: _saRouteDisplayShort(r.short, r.rtype),
@@ -2899,12 +3044,28 @@ function _saRenderTransportRoutesOnMap(cfg) {
         labelLayer.clearLayers();
         var bounds = map.getBounds();
         var padded = bounds.pad(-0.03);
-        var labels = routeLabels.slice();
+        // Dedoublonner : les donnees GTFS contiennent souvent plusieurs routes pour
+        // une meme ligne (aller/retour, segments). Sans dedup, "T1" ou "M1" apparait
+        // 2-3 fois sur la carte. On garde la route avec la shape la plus longue par
+        // couple (short, priority) — la plus representative de la ligne complete.
+        var byShort = {};
+        routeLabels.forEach(function(lbl) {
+            if (!lbl.short || !String(lbl.short).trim()) return;
+            var key = lbl.priority + '|' + String(lbl.short).trim();
+            var len = lbl.shape ? lbl.shape.length : 0;
+            if (!byShort[key] || len > byShort[key]._len) {
+                byShort[key] = lbl;
+                byShort[key]._len = len;
+            }
+        });
+        var labels = Object.keys(byShort).map(function(k) { return byShort[k]; });
         var prOrder = { 'metro':0, 'train':1, 'tram':2, 'funic':3, 'ferry':4, 'bus':5 };
         labels.sort(function(a,b) { return (prOrder[a.priority]||9) - (prOrder[b.priority]||9); });
         var placedPx = [];
         var MIN_PX = 42;
         labels.forEach(function(lbl) {
+            // Skip si pas de short (cas des rails SNCF sans label) - evite les "bulles vides"
+            if (!lbl.short || !String(lbl.short).trim()) return;
             var shape = lbl.shape;
             if (!shape || shape.length < 2) return;
             var visible = [];
@@ -2955,11 +3116,12 @@ function _saRenderTransportRoutesOnMap(cfg) {
     mapEl.classList.add(newSparseDense);
     function _applyZoomClass() {
         var z = map.getZoom();
-        ['sa-zoom-14','sa-zoom-15','sa-zoom-16','sa-zoom-17'].forEach(function(c){ mapEl.classList.remove(c); });
+        ['sa-zoom-13','sa-zoom-14','sa-zoom-15','sa-zoom-16','sa-zoom-17'].forEach(function(c){ mapEl.classList.remove(c); });
         if (z >= 17) mapEl.classList.add('sa-zoom-17');
         else if (z >= 16) mapEl.classList.add('sa-zoom-16');
         else if (z >= 15) mapEl.classList.add('sa-zoom-15');
         else if (z >= 14) mapEl.classList.add('sa-zoom-14');
+        else if (z >= 13) mapEl.classList.add('sa-zoom-13');
     }
     _applyZoomClass();
     map.on('zoomend', _applyZoomClass);
@@ -4653,11 +4815,14 @@ function saRenderClimatTable() {
 function saGoToPage(page) {
     // Update active state in TOC
     var items = document.querySelectorAll('.sa-toc-item');
+    // Marquer les colonnes Crédits BREEAM pour le mode standalone (différé après render)
+    setTimeout(function () { if (typeof saMarkBreeamCreditCols === 'function') saMarkBreeamCreditCols(); }, 50);
     items.forEach(function(item) { item.classList.remove('active'); });
     var clicked = document.querySelector('.sa-toc-item[data-page="' + page + '"]');
     if (clicked) clicked.classList.add('active');
 
     // Toggle page containers
+    var urbaPage = document.getElementById('saUrbanismePage');
     var risquesPage = document.getElementById('saResults');
     var milieuPage = document.getElementById('saMilieuPhysiquePage');
     var climatPage = document.getElementById('saClimatPage');
@@ -4669,6 +4834,7 @@ function saGoToPage(page) {
     var acteursPage = document.getElementById('saActeursPage');
 
     // Hide all pages first
+    if (urbaPage) urbaPage.style.display = 'none';
     if (risquesPage) risquesPage.style.display = 'none';
     if (milieuPage) milieuPage.style.display = 'none';
     if (climatPage) climatPage.style.display = 'none';
@@ -4682,7 +4848,25 @@ function saGoToPage(page) {
     // Gestion mode immersif atelier : actif uniquement sur la page Carto
     if (page !== 'Carto') document.body.classList.remove('carto-immersive');
 
-    if (page === 'MilieuPhysique') {
+    if (page === 'Urbanisme') {
+        // Page Urbanisme : contexte du site (Wikipedia + Géo) + bloc Urbanisme (PLU/PLUi)
+        if (urbaPage) urbaPage.style.display = '';
+        // Render contexte du site (réutilise saMpIntro déplacé dans saUrbanismePage)
+        saRenderMilieuPhysiqueIntro();
+        // Render bloc Urbanisme (saBodyUrbanisme rempli depuis saState.results.urbanisme)
+        if (typeof saRenderUrbanisme === 'function') saRenderUrbanisme();
+        // Render bloc Patrimoine (filtre AC1/AC2/AC4 des SUP, mise en avant car impact projet majeur)
+        if (typeof saRenderPatrimoine === 'function') saRenderPatrimoine();
+        // Render bloc SUP (servitudes d'utilité publique)
+        if (typeof saRenderSup === 'function') saRenderSup();
+        // Init map on first visit, invalidateSize on subsequent
+        if (!saUrbaMap) {
+            setTimeout(saUrbaInitMap, 100);
+        } else {
+            setTimeout(function() { saUrbaMap.invalidateSize(); }, 100);
+            setTimeout(function() { if (saUrbaMap) saUrbaMap.invalidateSize(); }, 500);
+        }
+    } else if (page === 'MilieuPhysique') {
         if (milieuPage) milieuPage.style.display = '';
         // Render intro paragraph + data table
         saRenderMilieuPhysiqueIntro();
@@ -5570,6 +5754,282 @@ function saRenderUrbanisme() {
     body.innerHTML = h;
 }
 
+// ── SUP : Servitudes d'Utilité Publique ──
+// Catégories du standard CNIG : https://cnig.gouv.fr/
+var SA_SUP_CATEGORIES = {
+    'AC1':  { label: 'Monuments historiques (périmètre 500 m / ABF)', credits: ['LE 03'], level: 'medium' },
+    'AC2':  { label: 'Sites classés ou inscrits',                     credits: ['LE 03'], level: 'medium' },
+    'AC3':  { label: 'Réserves naturelles',                           credits: ['LE 04'], level: 'low' },
+    'AC4':  { label: 'ZPPAUP / AVAP / SPR (patrimoine)',              credits: ['LE 03'], level: 'medium' },
+    'AS1':  { label: 'Périmètre de protection de captage AEP',        credits: ['POL 04'], level: 'medium' },
+    'AS2':  { label: 'Eaux minérales',                                credits: ['POL 04'], level: 'low' },
+    'EL3':  { label: 'Voies navigables (halage)',                     credits: [],         level: 'low' },
+    'EL5':  { label: 'Visibilité voies publiques',                    credits: [],         level: 'low' },
+    'EL7':  { label: 'Alignement (voirie)',                           credits: [],         level: 'low' },
+    'EL11': { label: 'Voies express, déviations',                     credits: ['POL 02'], level: 'low' },
+    'I1':   { label: 'Hydrocarbures liquides',                        credits: ['POL 03'], level: 'high' },
+    'I3':   { label: 'Gaz (canalisations)',                           credits: ['POL 03'], level: 'medium' },
+    'I4':   { label: 'Électricité (lignes HT/THT)',                   credits: [],         level: 'medium' },
+    'I5':   { label: 'Communications téléphoniques',                  credits: [],         level: 'low' },
+    'I6':   { label: 'Mines et carrières',                            credits: ['POL 03'], level: 'medium' },
+    'I7':   { label: 'Hydrocarbures gazeux',                          credits: ['POL 03'], level: 'high' },
+    'I8':   { label: 'Stockage hydrocarbures liquides',               credits: ['POL 03'], level: 'high' },
+    'I9':   { label: 'Canalisations matières dangereuses',            credits: ['POL 03'], level: 'high' },
+    'INT1': { label: 'Cimetières',                                    credits: [],         level: 'low' },
+    'PM1':  { label: 'PPRN — risques naturels',                       credits: ['HEA 02'], level: 'medium' },
+    'PM2':  { label: 'PPRT — risques technologiques',                 credits: ['HEA 02', 'POL 03'], level: 'high' },
+    'PM3':  { label: 'PPR mines / cavités',                           credits: ['HEA 02'], level: 'medium' },
+    'PT1':  { label: 'Communications radioélectriques (perturbation)',credits: [],         level: 'low' },
+    'PT2':  { label: 'Centres radioélectriques (obstacles)',          credits: [],         level: 'low' },
+    'PT3':  { label: 'Câbles téléphoniques',                          credits: [],         level: 'low' },
+    'T1':   { label: 'Voies ferrées',                                 credits: ['HEA 05'], level: 'low' },
+    'T4':   { label: 'Servitudes aéronautiques (balisage)',           credits: [],         level: 'low' },
+    'T5':   { label: 'Servitudes aéronautiques (dégagement)',         credits: [],         level: 'medium' },
+    'T7':   { label: 'Aérodromes (PEB)',                              credits: ['HEA 05'], level: 'medium' }
+};
+
+// ── Patrimoine : ABF (AC1) / Sites classés (AC2) / SPR-AVAP (AC4) ──
+// Filtre les SUP patrimoniales (déjà fetchées via saFetchSup) pour les
+// mettre en avant — impact projet majeur (ABF, autorisation Préfet, SPR).
+function saRenderPatrimoine() {
+    var body = document.getElementById('saBodyPatrimoine');
+    if (!body) return;
+    var r = saState.results.sup;
+
+    var patrimCats = {
+        'AC1': {
+            label: 'Monument historique — périmètre 500 m',
+            badge: 'ABF requis',
+            badgeColor: '#FBBF24',
+            icon: '<path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M9 9h2v2H9zM13 9h2v2h-2zM9 13h2v2H9zM13 13h2v2h-2z"/><path d="M10 17h4v4h-4z"/>',
+            consequence: 'Avis conforme de l\'Architecte des Bâtiments de France (ABF) obligatoire pour tout permis de construire ou déclaration préalable. Délais d\'instruction allongés (~2 mois). Contraintes esthétiques fortes : matériaux, couleurs, volumes, ouvertures, toitures.',
+            credit: 'LE 03'
+        },
+        'AC2': {
+            label: 'Site classé ou inscrit',
+            badge: 'Autorisation spéciale',
+            badgeColor: '#F87171',
+            icon: '<path d="M12 2L4 6v8c0 5 4 8 8 10 4-2 8-5 8-10V6l-8-4z"/><path d="M9 12l2 2 4-4"/>',
+            consequence: 'Site classé : autorisation préfectorale (ou ministérielle pour modification importante) obligatoire. Site inscrit : déclaration 4 mois avant travaux. Aucune publicité autorisée, esthétique rigoureusement préservée.',
+            credit: 'LE 03'
+        },
+        'AC4': {
+            label: 'Site Patrimonial Remarquable (SPR / AVAP / ZPPAUP)',
+            badge: 'Règlement SPR',
+            badgeColor: '#FBBF24',
+            icon: '<rect x="3" y="6" width="18" height="14" rx="1"/><path d="M3 10h18M9 6v14M15 6v14"/>',
+            consequence: 'Règlement de SPR (ex-AVAP / ZPPAUP) applicable : prescriptions architecturales, urbanistiques et paysagères spécifiques. Avis ABF requis pour tous travaux extérieurs visibles depuis l\'espace public.',
+            credit: 'LE 03'
+        }
+    };
+
+    // Source 1 : SUP du Géoportail Urbanisme (par catégorie CNIG)
+    var patrimFound = {};
+    if (r && r.features && r.features.length > 0) {
+        r.features.forEach(function (f) {
+            var p = f.properties || {};
+            var cat = p.categorie || p.libcategorie || '';
+            if (patrimCats[cat]) {
+                if (!patrimFound[cat]) patrimFound[cat] = { noms: {} };
+                var nom = p.nomsuplitt || p.libelle || p.nomgen || '';
+                if (nom) patrimFound[cat].noms[nom] = true;
+            }
+        });
+    }
+
+    // Helper : récupère le 1er champ non-vide parmi une liste de noms possibles
+    var getF = function (obj, names) {
+        if (!obj) return '';
+        for (var i = 0; i < names.length; i++) {
+            var v = obj[names[i]];
+            if (v != null && v !== '') return v;
+        }
+        return '';
+    };
+
+    // Source 2 : fallback data.culture.gouv.fr (couvre toute la France de façon fiable)
+    var rComp = saState.results.patrimoineComplement || { mh: [], sites: [], spr: [] };
+    if (rComp.mh && rComp.mh.length > 0) {
+        if (!patrimFound['AC1']) patrimFound['AC1'] = { noms: {}, items: [] };
+        if (!patrimFound['AC1'].items) patrimFound['AC1'].items = [];
+        rComp.mh.forEach(function (m) {
+            var nom = getF(m, ['titre_editorial_de_la_notice', 'titre_courant', 'appellation_courante', 'titre_editorial', 'titre', 'libelle']);
+            var statut = getF(m, ['statut_juridique_de_protection', 'statut_juridique', 'protection']);
+            var deno = getF(m, ['denomination', 'denomination_courante', 'designation', 'categorie_du_bien_protege']);
+            var ref = getF(m, ['reference_merimee', 'reference_de_la_notice', 'reference', 'numero_de_la_notice', 'merimee', 'ref']);
+            // Coordonnées : essayer plusieurs formats (array, object, ou _lat/_lon depuis geometry)
+            var coord = m.coordonnees || m.geo_point_2d || m.coords || m.coordinates;
+            var clat = null, clon = null, dist = null;
+            if (coord && Array.isArray(coord) && coord.length === 2) {
+                clat = coord[0]; clon = coord[1];
+                if (Math.abs(clat) > 90) { var tmp = clat; clat = clon; clon = tmp; }
+            } else if (coord && typeof coord === 'object') {
+                clat = coord.lat != null ? coord.lat : coord.latitude;
+                clon = coord.lon != null ? coord.lon : (coord.lng != null ? coord.lng : coord.longitude);
+            }
+            // Fallback : coords extraites depuis rec.geometry.coordinates par fetchOne
+            if ((clat == null || clon == null) && m._lat != null && m._lon != null) {
+                clat = m._lat;
+                clon = m._lon;
+            }
+            if (clat != null && clon != null && typeof saHaversine === 'function') {
+                dist = saHaversine(saState.lat, saState.lon, clat, clon);
+            }
+            if (nom) {
+                patrimFound['AC1'].noms[nom] = true;
+                patrimFound['AC1'].items.push({ nom: nom, statut: statut, deno: deno, ref: ref, dist: dist, clat: clat, clon: clon });
+            }
+        });
+        // Trier par distance croissante (sans dist en fin)
+        patrimFound['AC1'].items.sort(function (a, b) {
+            return (a.dist != null ? a.dist : 9e9) - (b.dist != null ? b.dist : 9e9);
+        });
+    }
+    if (rComp.sites && rComp.sites.length > 0) {
+        if (!patrimFound['AC2']) patrimFound['AC2'] = { noms: {} };
+        rComp.sites.forEach(function (s) {
+            var nom = getF(s, ['nom', 'libelle', 'appellation', 'intitule', 'titre']);
+            if (nom) patrimFound['AC2'].noms[nom] = true;
+        });
+    }
+    if (rComp.spr && rComp.spr.length > 0) {
+        if (!patrimFound['AC4']) patrimFound['AC4'] = { noms: {} };
+        rComp.spr.forEach(function (s) {
+            var nom = getF(s, ['nom', 'libelle', 'appellation', 'intitule', 'commune']);
+            if (nom) patrimFound['AC4'].noms[nom] = true;
+        });
+    }
+
+    var foundCats = Object.keys(patrimFound);
+    saSetCount('Patrimoine', foundCats.length);
+
+    if (r && r.error && foundCats.length === 0) {
+        body.innerHTML = '<div class="sa-empty">Erreur lors du chargement des servitudes patrimoniales.</div>';
+        return;
+    }
+
+    if (foundCats.length === 0) {
+        body.innerHTML = '<div class="sa-patrimoine-ok"><div class="sa-patrimoine-ok-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div><strong>Aucune contrainte patrimoniale identifiée.</strong> Le site n\'est ni en périmètre ABF (500 m d\'un Monument historique), ni en site classé ou inscrit, ni en SPR / AVAP.</div></div>';
+        return;
+    }
+
+    // Render alert cards (ordre : AC1 → AC2 → AC4)
+    var ordre = ['AC1', 'AC2', 'AC4'];
+    var h = '<div class="sa-patrimoine-grid">';
+    ordre.forEach(function (cat) {
+        if (!patrimFound[cat]) return;
+        var meta = patrimCats[cat];
+        var noms = Object.keys(patrimFound[cat].noms);
+        h += '<div class="sa-patrimoine-card">';
+        h += '<div class="sa-patrimoine-header">';
+        h += '<div class="sa-patrimoine-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + meta.icon + '</svg></div>';
+        h += '<div class="sa-patrimoine-title">';
+        h += '<span class="sa-patrimoine-badge" style="background:' + meta.badgeColor + ';">' + saEscH(meta.badge) + '</span>';
+        h += '<h4>' + saEscH(meta.label) + '</h4>';
+        h += '</div>';
+        h += '<span class="sa-credit">' + meta.credit + '</span>';
+        h += '</div>';
+        // AC1 enrichi : conséquence + mini-table si items disponibles
+        if (cat === 'AC1' && patrimFound[cat].items && patrimFound[cat].items.length > 0) {
+            var items = patrimFound[cat].items;
+            // Conséquence en premier (déplacée au-dessus de la liste MH, plus visible)
+            h += '<div class="sa-patrimoine-consequence">' + saEscH(meta.consequence) + '</div>';
+            h += '<div class="sa-patrimoine-mh-block">';
+            h += '<div class="sa-patrimoine-mh-header">' + items.length + ' monument' + (items.length > 1 ? 's' : '') + ' historique' + (items.length > 1 ? 's' : '') + ' dans le perimetre 500 m</div>';
+            h += '<table class="sa-patrimoine-mh-table">';
+            var maxRows = 12;
+            items.slice(0, maxRows).forEach(function (it) {
+                var statutLow = (it.statut || '').toLowerCase();
+                var statutBadge;
+                if (/class/.test(statutLow)) statutBadge = '<span class="sa-mh-badge sa-mh-badge-cl" title="Classe MH">CL</span>';
+                else if (/inscr/.test(statutLow)) statutBadge = '<span class="sa-mh-badge sa-mh-badge-in" title="Inscrit MH">INSCR</span>';
+                else statutBadge = '<span class="sa-mh-badge sa-mh-badge-other" title="MH">MH</span>';
+                var distLabel = it.dist != null ? Math.round(it.dist) + ' m' : '';
+                var popLink = it.ref ? '<a href="https://www.pop.culture.gouv.fr/notice/merimee/' + saEscH(it.ref) + '" target="_blank" rel="noopener" class="sa-mh-pop" title="Fiche POP / Merimee">&#8599;</a>' : '';
+                h += '<tr><td>' + statutBadge + '</td><td>' + saEscH(it.nom) + (it.deno ? '<span class="sa-mh-deno">' + saEscH(it.deno) + '</span>' : '') + '</td><td class="sa-mh-dist-cell">' + distLabel + '</td><td class="sa-mh-pop-cell">' + popLink + '</td></tr>';
+            });
+            h += '</table>';
+            if (items.length > maxRows) {
+                h += '<div class="sa-patrimoine-mh-more">+ ' + (items.length - maxRows) + ' autre' + (items.length - maxRows > 1 ? 's' : '') + ' monument' + (items.length - maxRows > 1 ? 's' : '') + ' dans le perimetre</div>';
+            }
+            h += '</div>'; // close mh-block (mini-carte retirée — bouton Patrimoine sur la carte principale à la place)
+        } else if (noms.length > 0) {
+            h += '<div class="sa-patrimoine-noms"><strong>Servitude' + (noms.length > 1 ? 's' : '') + ' identifié' + (noms.length > 1 ? 'es' : 'e') + ' :</strong> ' + noms.slice(0, 5).map(saEscH).join(' &middot; ') + (noms.length > 5 ? ' &middot; +' + (noms.length - 5) : '') + '</div>';
+        }
+        // Conséquence en bas (sauf si déjà affichée au-dessus pour AC1 enrichi)
+        if (!(cat === 'AC1' && patrimFound[cat].items && patrimFound[cat].items.length > 0)) {
+            h += '<div class="sa-patrimoine-consequence">' + saEscH(meta.consequence) + '</div>';
+        }
+        h += '</div>';
+    });
+    h += '</div>';
+    body.innerHTML = h;
+}
+
+function saRenderSup() {
+    var body = document.getElementById('saBodySup');
+    if (!body) return;
+    var r = saState.results.sup;
+    var rows = [];
+
+    if (r && r.features && r.features.length > 0) {
+        // Regrouper par catégorie pour éviter doublons (une même servitude peut avoir plusieurs entités)
+        var byCat = {};
+        r.features.forEach(function (f) {
+            var p = f.properties || {};
+            var cat = p.categorie || p.libcategorie || '?';
+            var nom = p.nomsuplitt || p.libelle || p.nomgen || '';
+            if (!byCat[cat]) byCat[cat] = { categorie: cat, noms: {}, geomTypes: {} };
+            if (nom) byCat[cat].noms[nom] = true;
+            if (f._geomType) byCat[cat].geomTypes[f._geomType] = true;
+        });
+        Object.keys(byCat).forEach(function (cat) {
+            var meta = SA_SUP_CATEGORIES[cat] || { label: 'Servitude ' + cat, credits: [], level: 'low' };
+            var noms = Object.keys(byCat[cat].noms);
+            rows.push({
+                categorie: cat,
+                level: meta.level,
+                label: meta.label,
+                noms: noms,
+                credits: meta.credits
+            });
+        });
+        // Tri : niveau décroissant (high → medium → low)
+        var levelOrder = { 'high': 0, 'medium': 1, 'low': 2 };
+        rows.sort(function (a, b) { return (levelOrder[a.level] || 9) - (levelOrder[b.level] || 9); });
+    }
+
+    saSetCount('Sup', rows.length);
+
+    if (r && r.error) {
+        body.innerHTML = '<div class="sa-empty">Erreur lors de l\'interrogation de l\'API SUP : ' + saEscH(r.error) + '</div>';
+        return;
+    }
+
+    if (rows.length === 0) {
+        body.innerHTML = '<div class="sa-empty">Aucune servitude d\'utilité publique recensée à l\'emplacement du site.</div>';
+        return;
+    }
+
+    var h = '<table class="sa-table"><thead><tr><th></th><th style="width:90px;">Cat&eacute;gorie</th><th style="width:90px;">Niveau</th><th>Servitude / D&eacute;tail</th><th style="width:140px;">Cr&eacute;dits BREEAM</th></tr></thead><tbody>';
+    rows.forEach(function (row) {
+        var levLabel = row.level === 'high' ? 'Forte' : row.level === 'medium' ? 'Mod&eacute;r&eacute;e' : 'Faible';
+        h += '<tr>';
+        h += '<td style="width:32px;text-align:center;"><button class="sa-loupe" onclick="openSaDetailPanel(\'sup\',\'' + saEscH(row.categorie) + '\')" title="Détail"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M8.5 3a5.5 5.5 0 014.383 8.823l3.896 3.9a.75.75 0 01-1.06 1.06l-3.9-3.896A5.5 5.5 0 118.5 3zm0 1.5a4 4 0 100 8 4 4 0 000-8z"/></svg></button></td>';
+        h += '<td><strong>' + saEscH(row.categorie) + '</strong></td>';
+        h += '<td><span class="sa-sev sa-sev-' + row.level + '">' + levLabel + '</span></td>';
+        var detail = saEscH(row.label);
+        if (row.noms.length > 0) {
+            detail += '<br><span style="color:#64748B;font-size:0.82rem;">' + row.noms.slice(0, 3).map(saEscH).join(' &middot; ') + (row.noms.length > 3 ? ' &middot; +' + (row.noms.length - 3) : '') + '</span>';
+        }
+        h += '<td>' + detail + '</td>';
+        h += '<td>' + (row.credits.length ? row.credits.map(function (c) { return '<span class="sa-credit">' + c + '</span>'; }).join(' ') : '<span style="color:#94A3B8;font-size:0.78rem;">—</span>') + '</td>';
+        h += '</tr>';
+    });
+    h += '</tbody></table>';
+    body.innerHTML = h;
+}
+
 function saRenderICPE() {
     var body = document.getElementById('saBodyICPE');
     var r = saState.results.icpe;
@@ -6168,6 +6628,16 @@ function saMpToggleCollapse() {
     }
 }
 
+function saGeolToggleCollapse() {
+    var el = document.getElementById('saGeolIntro');
+    if (!el) return;
+    el.classList.toggle('sa-expanded');
+    var btn = el.querySelector('.sa-collapse-toggle');
+    if (btn) {
+        btn.firstChild.textContent = el.classList.contains('sa-expanded') ? 'Voir moins ' : 'Voir plus ';
+    }
+}
+
 // ── MILIEU PHYSIQUE TABLE ───────────────────────────────────
 function saRenderMilieuPhysiqueTable() {
     var body = document.getElementById('saBodyMilieuPhysique');
@@ -6390,6 +6860,29 @@ function saRenderMilieuPhysiqueTable() {
             eauPotable: eauPotable,
             vigiEauZones: vigiEauZones
         };
+
+        // Synthèse — remplir le bloc d'intro saGeolIntro à gauche de la carte
+        var introEl = document.getElementById('saGeolIntro');
+        if (introEl) {
+            var intro = '<div class="sa-synthesis-title">Analyse du milieu physique</div>';
+            intro += '<div class="sa-synthesis-body">';
+            if (topoDetail) {
+                intro += '<h4 style="margin:0 0 6px;color:#1E293B;font-size:0.84rem;letter-spacing:0.04em;text-transform:uppercase;">Topographie</h4>';
+                intro += '<p style="margin:0 0 14px;font-size:0.86rem;line-height:1.6;color:#475569;">' + topoDetail + '</p>';
+            }
+            if (solDetail) {
+                intro += '<h4 style="margin:0 0 6px;color:#1E293B;font-size:0.84rem;letter-spacing:0.04em;text-transform:uppercase;">Géologie et nature du sol</h4>';
+                intro += '<p style="margin:0 0 14px;font-size:0.86rem;line-height:1.6;color:#475569;">' + solDetail + '</p>';
+            }
+            if (hydroDetail) {
+                intro += '<h4 style="margin:0 0 6px;color:#1E293B;font-size:0.84rem;letter-spacing:0.04em;text-transform:uppercase;">Hydrographie</h4>';
+                intro += '<p style="margin:0;font-size:0.86rem;line-height:1.6;color:#475569;">' + hydroDetail + '</p>';
+            }
+            intro += '</div>';
+            intro += '<div class="sa-collapse-fade"></div>';
+            intro += '<button class="sa-collapse-toggle" onclick="saGeolToggleCollapse()">Voir plus <svg width="12" height="12" viewBox="0 0 12 12"><polyline points="2,4 6,8 10,4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>';
+            introEl.innerHTML = intro;
+        }
 
         // Build table HTML
         var h = '<table class="sa-table">';
@@ -9258,6 +9751,369 @@ function saMpSetMapLayer(layerName) {
         var b = document.getElementById('saMpLayer' + n);
         if (b) b.classList.toggle('active', n.toLowerCase() === layerName);
     });
+}
+
+// ══════════════════════════════════════════════════════════════
+// ║  PAGE URBANISME : carte (réutilise pattern saMpMap)         ║
+// ══════════════════════════════════════════════════════════════
+var saUrbaMap = null;
+var saUrbaLayers = {};
+var saUrbaCurrentLayer = 'aerial';
+
+function saUrbaInitMap() {
+    if (!saState.lat || !saState.lon || typeof L === 'undefined') return;
+    var mapDiv = document.getElementById('saUrbaMap');
+    if (!mapDiv) return;
+
+    if (saUrbaMap) { saUrbaMap.remove(); saUrbaMap = null; }
+
+    saUrbaMap = L.map('saUrbaMap', { center: [saState.lat, saState.lon], zoom: 17, zoomControl: true });
+
+    saUrbaLayers.aerial = L.tileLayer(
+        'https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/jpeg',
+        { attribution: '&copy; <a href="https://geoservices.ign.fr/">IGN</a>', maxZoom: 20 }
+    );
+    saUrbaLayers.plan = L.tileLayer(
+        'https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png',
+        { attribution: '&copy; <a href="https://geoservices.ign.fr/">IGN</a>', maxZoom: 19 }
+    );
+    saUrbaLayers.cadastre = L.layerGroup([
+        L.tileLayer(
+            'https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/jpeg',
+            { attribution: '&copy; <a href="https://geoservices.ign.fr/">IGN</a>', maxZoom: 20 }
+        ),
+        L.tileLayer.wms('https://data.geopf.fr/wms-v/ows', {
+            layers: 'CADASTRALPARCELS.PARCELLAIRE_EXPRESS', format: 'image/png',
+            transparent: true, attribution: '&copy; IGN Cadastre', maxZoom: 20
+        })
+    ]);
+
+    saUrbaCurrentLayer = 'aerial';
+    saUrbaLayers.aerial.addTo(saUrbaMap);
+
+    var markerIcon = L.divIcon({
+        className: 'sa-map-marker',
+        html: '<div style="background:#10B981;width:16px;height:16px;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);"></div>',
+        iconSize: [22, 22], iconAnchor: [11, 11]
+    });
+    L.marker([saState.lat, saState.lon], { icon: markerIcon }).addTo(saUrbaMap)
+        .bindPopup('<strong>' + (saState.address || 'Projet') + '</strong>').openPopup();
+    L.control.scale({ imperial: false, position: 'bottomleft' }).addTo(saUrbaMap);
+
+    setTimeout(function () { if (saUrbaMap) saUrbaMap.invalidateSize(); }, 200);
+    setTimeout(function () { if (saUrbaMap) saUrbaMap.invalidateSize(); }, 600);
+    setTimeout(function () { if (saUrbaMap) saUrbaMap.invalidateSize(); }, 1500);
+}
+
+function saUrbaSetMapLayer(layerName) {
+    if (!saUrbaMap || !saUrbaLayers[layerName]) return;
+    if (saUrbaLayers[saUrbaCurrentLayer]) saUrbaMap.removeLayer(saUrbaLayers[saUrbaCurrentLayer]);
+    saUrbaLayers[layerName].addTo(saUrbaMap);
+    saUrbaCurrentLayer = layerName;
+    ['Aerial','Plan','Cadastre'].forEach(function(n) {
+        var b = document.getElementById('saUrbaLayer' + n);
+        if (b) b.classList.toggle('active', n.toLowerCase() === layerName);
+    });
+}
+
+// ── Marquage des colonnes "Crédits BREEAM" pour les cacher en mode standalone ──
+// (CSS : body.tool-standalone-mode .col-credits-header { display: none; })
+// Le <td> est masqué via :has(.sa-credit). Pour le <th>, on ajoute la classe via JS
+// après chaque render, car les fonctions de rendu sont nombreuses et le label varie.
+function saMarkBreeamCreditCols() {
+    document.querySelectorAll('.sa-table thead th').forEach(function (th) {
+        if (/cr[ée]dits/i.test(th.textContent || '')) {
+            th.classList.add('col-credits-header');
+        }
+    });
+}
+
+// ── Resize handles pour les panneaux latéraux des pages d'analyse ──
+// Ajoute une poignée de redimensionnement entre la colonne intro/synthèse
+// et la colonne carte de chaque .sa-dash-top.
+function saInitDashHandles() {
+    var dashTops = document.querySelectorAll('.sa-dash-top');
+    var invalidateMaps = function () {
+        ['saMpMap', 'saClimatMap', 'saUrbaMap', 'saEcoMap', 'saAccessMap', 'saReseauxMap', 'saEnrMap', 'saActeursMap'].forEach(function (id) {
+            var m = window[id];
+            if (m && typeof m.invalidateSize === 'function') {
+                try { m.invalidateSize(); } catch (e) {}
+            }
+        });
+    };
+    dashTops.forEach(function (dt) {
+        if (dt.classList.contains('sa-dash-init')) return;
+        dt.classList.add('sa-dash-init');
+        var children = dt.children;
+        if (children.length < 2) return;
+        var leftCol = children[0];
+        var rightCol = children[1];
+        var handle = document.createElement('div');
+        handle.className = 'sa-dash-handle';
+        handle.title = 'Glisser pour redimensionner';
+        dt.insertBefore(handle, rightCol);
+        var dragging = false, startX = 0, startWidth = 0;
+        handle.addEventListener('mousedown', function (e) {
+            dragging = true;
+            startX = e.clientX;
+            startWidth = leftCol.getBoundingClientRect().width;
+            handle.classList.add('is-dragging');
+            document.body.style.cursor = 'col-resize';
+            document.body.style.userSelect = 'none';
+            e.preventDefault();
+        });
+        document.addEventListener('mousemove', function (e) {
+            if (!dragging) return;
+            var dx = e.clientX - startX;
+            var newWidth = Math.max(320, Math.min(900, startWidth + dx));
+            leftCol.style.flex = '0 0 ' + newWidth + 'px';
+            invalidateMaps();
+        });
+        document.addEventListener('mouseup', function () {
+            if (!dragging) return;
+            dragging = false;
+            handle.classList.remove('is-dragging');
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+            setTimeout(invalidateMaps, 80);
+        });
+    });
+}
+// Init au chargement du script (SITE_ANALYSIS.js est chargé après le DOM)
+try { saInitDashHandles(); } catch (e) { console.warn('[SA] saInitDashHandles error:', e); }
+
+// ── Légende dynamique des overlays sous la carte (Patrimoine + Zonage PLU) ──
+function saUrbaUpdateLegends() {
+    var legendDiv = document.getElementById('saUrbaMapLegends');
+    if (!legendDiv) return;
+    var html = '';
+
+    if (saUrbaZonagePluLayer) {
+        html += '<div class="sa-urba-legend-block">';
+        html += '<span class="sa-urba-legend-title">Zonage PLU</span>';
+        html += '<span class="sa-urba-legend-item"><span class="sa-urba-legend-swatch" style="background:#E84C50;"></span>U &mdash; Urbanis&eacute;e</span>';
+        html += '<span class="sa-urba-legend-item"><span class="sa-urba-legend-swatch" style="background:#F7A64B;"></span>AU &mdash; &Agrave; urbaniser</span>';
+        html += '<span class="sa-urba-legend-item"><span class="sa-urba-legend-swatch" style="background:#FBFB76;"></span>A &mdash; Agricole</span>';
+        html += '<span class="sa-urba-legend-item"><span class="sa-urba-legend-swatch" style="background:#5AC45A;"></span>N &mdash; Naturelle</span>';
+        html += '</div>';
+    }
+
+    if (saUrbaPatrimoineLayer) {
+        if (html) html += '<span class="sa-urba-legend-sep"></span>';
+        html += '<div class="sa-urba-legend-block">';
+        html += '<span class="sa-urba-legend-title">Patrimoine</span>';
+        html += '<span class="sa-urba-legend-item"><span class="sa-urba-legend-swatch circle" style="background:#DC2626;"></span>MH class&eacute;</span>';
+        html += '<span class="sa-urba-legend-item"><span class="sa-urba-legend-swatch circle" style="background:#FB923C;"></span>MH inscrit</span>';
+        html += '<span class="sa-urba-legend-item"><span class="sa-urba-legend-swatch dashed"></span>P&eacute;rim&egrave;tre 500 m</span>';
+        html += '</div>';
+    }
+
+    if (html) {
+        legendDiv.innerHTML = html;
+        legendDiv.style.display = '';
+    } else {
+        legendDiv.innerHTML = '';
+        legendDiv.style.display = 'none';
+    }
+}
+
+// ── Overlay Patrimoine sur la carte principale (cercle 500m + marqueurs MH) ──
+var saUrbaPatrimoineLayer = null;
+
+function saUrbaTogglePatrimoine() {
+    if (!saUrbaMap || typeof L === 'undefined') return;
+    var btn = document.getElementById('saUrbaLayerPatrimoine');
+
+    // Si overlay déjà actif → l'enlever
+    if (saUrbaPatrimoineLayer) {
+        saUrbaMap.removeLayer(saUrbaPatrimoineLayer);
+        saUrbaPatrimoineLayer = null;
+        if (btn) btn.classList.remove('active');
+        if (typeof saUrbaUpdateLegends === 'function') saUrbaUpdateLegends();
+        return;
+    }
+
+    // Récupérer les MH (depuis le fallback data.culture)
+    var rComp = saState.results.patrimoineComplement || { mh: [] };
+    var mhItems = rComp.mh || [];
+
+    var group = L.layerGroup();
+
+    // Cercle 500m autour du site (périmètre ABF de référence)
+    var circle = L.circle([saState.lat, saState.lon], {
+        radius: 500,
+        color: '#F59E0B',
+        weight: 1.5,
+        fillColor: '#FEF3C7',
+        fillOpacity: 0.12,
+        dashArray: '5, 4'
+    });
+    group.addLayer(circle);
+
+    // Marqueurs colorés pour chaque MH (rouge classé / orange inscrit / gris autre)
+    var added = 0;
+    mhItems.forEach(function (m) {
+        var lat = null, lon = null;
+        // Coordonnées : essayer plusieurs formats
+        if (m._lat != null && m._lon != null) {
+            lat = m._lat; lon = m._lon;
+        } else if (m.coordonnees && Array.isArray(m.coordonnees) && m.coordonnees.length === 2) {
+            lat = m.coordonnees[0]; lon = m.coordonnees[1];
+            if (Math.abs(lat) > 90) { var tmp = lat; lat = lon; lon = tmp; }
+        } else if (m.geo_point_2d && Array.isArray(m.geo_point_2d) && m.geo_point_2d.length === 2) {
+            lat = m.geo_point_2d[0]; lon = m.geo_point_2d[1];
+        }
+        if (lat == null || lon == null) return;
+
+        var nom = m.titre_editorial_de_la_notice || m.titre_courant || m.appellation_courante || m.titre_editorial || m.titre || m.libelle || 'Monument historique';
+        var statut = (m.statut_juridique_de_protection || m.statut_juridique || m.protection || '').toLowerCase();
+        var deno = m.denomination || m.denomination_courante || m.designation || '';
+        var ref = m.reference_merimee || m.reference_de_la_notice || m.reference || m.numero_de_la_notice || '';
+        var color = /class/.test(statut) ? '#DC2626' : /inscr/.test(statut) ? '#FB923C' : '#94A3B8';
+        var statutLabel = /class/.test(statut) ? 'Classé MH' : /inscr/.test(statut) ? 'Inscrit MH' : 'Monument historique';
+
+        // Icône SVG bâtiment patrimoine (silhouette colorée selon statut)
+        var iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,0.45));">'
+            + '<path d="M5 21 V8 L12 3 L19 8 V21 Z" fill="' + color + '" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>'
+            + '<rect x="9" y="9" width="1.6" height="1.6" fill="#fff"/>'
+            + '<rect x="13.4" y="9" width="1.6" height="1.6" fill="#fff"/>'
+            + '<rect x="9" y="13" width="1.6" height="1.6" fill="#fff"/>'
+            + '<rect x="13.4" y="13" width="1.6" height="1.6" fill="#fff"/>'
+            + '<rect x="10.5" y="17" width="3" height="4" fill="#fff"/>'
+            + '</svg>';
+        var icon = L.divIcon({
+            className: 'sa-mh-marker-icon',
+            html: iconSvg,
+            iconSize: [22, 22],
+            iconAnchor: [11, 22]
+        });
+
+        // Popup au survol qui reste affiché si la souris passe dessus
+        // (permet de cliquer le lien Fiche POP sans que ça se ferme)
+        var popupHtml = '<div style="font-size:0.84rem;line-height:1.45;"><strong>' + nom + '</strong>';
+        popupHtml += '<br><span style="color:' + color + ';font-weight:600;font-size:0.78rem;">' + statutLabel + '</span>';
+        if (deno) popupHtml += '<br><span style="font-size:0.74rem;color:#64748B;">' + deno + '</span>';
+        if (ref) popupHtml += '<br><a href="https://www.pop.culture.gouv.fr/notice/merimee/' + ref + '" target="_blank" rel="noopener" style="font-size:0.74rem;color:' + color + ';">Fiche POP &#8599;</a>';
+        popupHtml += '</div>';
+
+        var marker = L.marker([lat, lon], { icon: icon });
+        marker.bindPopup(popupHtml, {
+            closeButton: false,
+            autoClose: false,
+            closeOnClick: false,
+            offset: [0, -8]
+        });
+
+        // Pattern hover-sticky : popup ouvert au mouseover, fermeture différée
+        // de 300ms au mouseout — annulée si la souris entre dans le popup
+        (function (m) {
+            var hideTimer = null;
+            var clearHide = function () { if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; } };
+            var scheduleHide = function (delay) {
+                clearHide();
+                hideTimer = setTimeout(function () { m.closePopup(); }, delay || 300);
+            };
+            m.on('mouseover', function () { clearHide(); m.openPopup(); });
+            m.on('mouseout', function () { scheduleHide(300); });
+            m.on('popupopen', function (e) {
+                var el = e.popup._container;
+                if (!el) return;
+                el.addEventListener('mouseenter', clearHide);
+                el.addEventListener('mouseleave', function () { scheduleHide(200); });
+            });
+        })(marker);
+
+        group.addLayer(marker);
+        added++;
+    });
+
+    if (added === 0 && mhItems.length === 0) {
+        alert('Aucun Monument historique détecté dans le périmètre 500 m de ce site.');
+        return;
+    }
+
+    saUrbaPatrimoineLayer = group;
+    saUrbaPatrimoineLayer.addTo(saUrbaMap);
+    if (btn) btn.classList.add('active');
+    if (typeof saUrbaUpdateLegends === 'function') saUrbaUpdateLegends();
+}
+
+// ── Overlay Zonage PLU sur la carte principale (zones U/AU/A/N colorées) ──
+var saUrbaZonagePluLayer = null;
+var saUrbaPluClickHandler = null;
+
+function saUrbaToggleZonagePlu() {
+    if (!saUrbaMap || typeof L === 'undefined') return;
+    var btn = document.getElementById('saUrbaLayerZonagePlu');
+
+    if (saUrbaZonagePluLayer) {
+        saUrbaMap.removeLayer(saUrbaZonagePluLayer);
+        saUrbaZonagePluLayer = null;
+        if (btn) btn.classList.remove('active');
+        // Détacher le click handler quand l'overlay est désactivé
+        if (saUrbaPluClickHandler) {
+            saUrbaMap.off('click', saUrbaPluClickHandler);
+            saUrbaPluClickHandler = null;
+        }
+        if (typeof saUrbaUpdateLegends === 'function') saUrbaUpdateLegends();
+        return;
+    }
+
+    // WMS officiel du Géoportail Urbanisme — même config que la carte du PLU
+    // existante (SA_RISK_DEFINITIONS['urbanisme_plu'] : layer 'du', wms-v/ows)
+    saUrbaZonagePluLayer = L.tileLayer.wms('https://data.geopf.fr/wms-v/ows', {
+        layers: 'du',
+        format: 'image/png',
+        transparent: true,
+        version: '1.3.0',
+        opacity: 0.65,
+        attribution: '© Géoportail Urbanisme',
+        maxZoom: 20
+    });
+
+    saUrbaZonagePluLayer.addTo(saUrbaMap);
+    if (btn) btn.classList.add('active');
+
+    // Click handler : interroger l'API GPU pour afficher les infos de la zone au point cliqué
+    saUrbaPluClickHandler = function (e) {
+        var lat = e.latlng.lat, lon = e.latlng.lng;
+        var url = 'https://apicarto.ign.fr/api/gpu/zone-urba?geom='
+            + encodeURIComponent(JSON.stringify({ type: 'Point', coordinates: [lon, lat] }));
+        var popup = L.popup({ closeButton: true, maxWidth: 300, autoClose: true })
+            .setLatLng(e.latlng)
+            .setContent('<em style="color:#64748B;">Chargement de la zone PLU…</em>')
+            .openOn(saUrbaMap);
+        fetch(url)
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                var html;
+                if (data && data.features && data.features.length > 0) {
+                    var f = data.features[0];
+                    var p = f.properties || {};
+                    var typezone = p.typezone || '?';
+                    var libelle = p.libelle || '';
+                    var libelong = p.libelong || '';
+                    var destdom = p.destdomi || '';
+                    var typeLabels = { 'U': 'Urbanisée', 'AU': 'À urbaniser', 'A': 'Agricole', 'N': 'Naturelle' };
+                    var typeKey = typezone.charAt(0);
+                    var typeLabel = typeLabels[typezone] || typeLabels[typeKey] || '';
+                    html = '<div style="font-size:0.84rem;line-height:1.5;"><strong>Zone ' + typezone + (typeLabel ? ' — ' + typeLabel : '') + '</strong>';
+                    if (libelle) html += '<br><span style="font-size:0.80rem;">' + libelle + '</span>';
+                    if (libelong && libelong !== libelle) html += '<br><span style="font-size:0.76rem;color:#64748B;">' + libelong + '</span>';
+                    if (destdom) html += '<br><span style="font-size:0.76rem;color:#64748B;">Destination : ' + destdom + '</span>';
+                    html += '</div>';
+                } else {
+                    html = '<em style="color:#64748B;font-size:0.82rem;">Aucune zone PLU à cet endroit.</em>';
+                }
+                popup.setContent(html);
+            })
+            .catch(function () {
+                popup.setContent('<em style="color:#DC2626;font-size:0.82rem;">Erreur lors du chargement.</em>');
+            });
+    };
+    saUrbaMap.on('click', saUrbaPluClickHandler);
+
+    if (typeof saUrbaUpdateLegends === 'function') saUrbaUpdateLegends();
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -18041,6 +18897,8 @@ var saCartoCurrentBase = 'aerial';
 var saCartoOverlays = {};            // id -> Leaflet layer
 var saCartoLayersState = {};         // id -> bool (cocher)
 var saCartoLayersOpacity = {};       // id -> 0..1
+var saCartoLayerSubFilter = {};      // id -> { mode: bool } (filtre sous-modes par couche)
+var saCartoLayerSubmodesOpen = {};   // id -> bool (UI : chevron déplié ?)
 var saCartoDrawLayer = null;         // L.FeatureGroup des dessins utilisateur
 var saCartoDrawControl = null;
 var saCartoMeasureControl = null;
@@ -18053,6 +18911,9 @@ var saCartoHeaderText = '';
 var saCartoFooterText = '';
 var saCartoMapLegendPos = null;
 var saCartoTextPlaceActive = false;  // en mode placement texte
+var saCartoCalloutPlaceActive = false;  // en mode placement légende (l'utilisateur clique pour poser le dot)
+var _saCartoCalloutPlaceClickHandler = null;
+var _saCartoCalloutPlaceEscHandler = null;
 
 // Mod\u00e8le unifi\u00e9 de calques (ordre = z-index d\u00e9croissant : [0]=dessus)
 var saCartoLayers = [];            // [{id, type, label, visible, locked, opacity, _lyr, _defId}]
@@ -18692,8 +19553,16 @@ var SA_CARTO_CATALOG = [
                     { id: 'access_tc_lines', label: 'Lignes TC (m\u00e9tro, tram, train, bus)', source: 'GTFS data.gouv.fr',
                       customLoader: 'accessTcLines',
                       maxZoom: 22, opacity: 0.85, attribution: 'GTFS data.gouv.fr',
+                      // Filtres par mode (chevron deroulant dans l'UI catalogue)
+                      // Train en noir = coherent avec le rendu carto (tirets noir/blanc)
+                      subModes: [
+                          { mode: 'tram',  label: 'Tram',         color: '#7C3AED' },
+                          { mode: 'metro', label: 'M\u00e9tro',        color: '#DB2777' },
+                          { mode: 'train', label: 'Train / RER',  color: '#1A1A1A' },
+                          { mode: 'bus',   label: 'Bus',          color: '#2563EB' }
+                      ],
                       richLegend: [
-                          { color: '#DC2626', shape: 'line', label: 'Train / RER' },
+                          { color: '#1A1A1A', shape: 'line', label: 'Train / RER (rails SNCF)' },
                           { color: '#DB2777', shape: 'line', label: 'M\u00e9tro' },
                           { color: '#7C3AED', shape: 'line', label: 'Tram' },
                           { color: '#2563EB', shape: 'line', label: 'Bus' }
@@ -18706,6 +19575,13 @@ var SA_CARTO_CATALOG = [
                     { id: 'access_bike', label: 'Am\u00e9nagements cyclables', source: 'data.gouv.fr / OSM',
                       customLoader: 'accessBike',
                       maxZoom: 22, opacity: 0.85, attribution: '&copy; am\u00e9nagements-cyclables-france / OSM',
+                      // Filtres par type (chevron d\u00e9roulant dans l'UI catalogue)
+                      // Codes 'P','V','B' = ceux utilis\u00e9s dans _saCartoLoadAccessBike (COLORS/LABELS).
+                      subModes: [
+                          { mode: 'P', label: 'Piste cyclable (s\u00e9par\u00e9e du trafic)', color: '#16A34A' },
+                          { mode: 'V', label: 'Voie verte',                          color: '#0EA5E9' },
+                          { mode: 'B', label: 'Bande / voirie cyclable',             color: '#F59E0B' }
+                      ],
                       richLegend: [
                           { color: '#16A34A', shape: 'line', label: 'Piste cyclable (s\u00e9par\u00e9e du trafic)' },
                           { color: '#0EA5E9', shape: 'line', label: 'Voie verte' },
@@ -18813,7 +19689,26 @@ function saCartoInitMap() {
     );
     saCartoBasemaps.light = L.tileLayer(
         'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-        { attribution: '&copy; OpenStreetMap, &copy; CARTO', maxZoom: 22, maxNativeZoom: 20, subdomains: 'abcd' }
+        {
+            attribution: '&copy; OpenStreetMap, &copy; CARTO',
+            maxZoom: 22, maxNativeZoom: 20, subdomains: 'abcd',
+            // Filtre CSS (cf. .sa-carto-light-tiles dans index.html) qui sature la
+            // legere teinte bleue de l'eau pour la rendre clairement visible.
+            // N'affecte pas le gris des batis/rues (saturation = 0 -> inchange).
+            className: 'sa-carto-light-tiles'
+        }
+    );
+    // Voyager : CARTO Voyager sans labels — bati beige, parcs vert, eau bleu, sans
+    // texte de rue/quartier/batiment. Un filtre CSS (cf. .sa-carto-pastel-tiles dans
+    // index.html) attenue les details fins (petites rues, contours de batiments) pour
+    // se rapprocher du style "atlas pedagogique" type JB Bouron.
+    saCartoBasemaps.pastel = L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png',
+        {
+            attribution: '&copy; OpenStreetMap, &copy; CARTO',
+            maxZoom: 22, maxNativeZoom: 20, subdomains: 'abcd',
+            className: 'sa-carto-pastel-tiles'
+        }
     );
     // Fond Topo = OpenTopoMap (relief ombre + courbes colorees)
     //           + overlay IGN ELEVATION.CONTOUR.LINE (courbes officielles avec cotes d'altitude en metres)
@@ -18892,10 +19787,17 @@ function saCartoInitMap() {
     // Clic sur la carte (hors d'un dot/forme/marker qui aurait stopPropagation) :
     // ferme le volet lateral droit des images. Le dot a un handler click qui appelle
     // L.DomEvent.stopPropagation, donc cliquer dessus ne declenche PAS ce handler-ci.
-    saCartoMap.on('click', function() {
+    saCartoMap.on('click', function(e) {
         var sidePanel = document.getElementById('saCartoImagesPanel');
         if (sidePanel && sidePanel.classList.contains('is-open')) {
             if (typeof _saCartoCloseImagesPanel === 'function') _saCartoCloseImagesPanel();
+        }
+        // Cliquer hors d'un calque texte / legende : deselectionner et fermer le panneau "Mise en forme du texte"
+        // Filtre : ignorer si le clic vient d'un marker texte (sinon le panneau s'ouvre puis se ferme aussitot).
+        var tgt = e && e.originalEvent && e.originalEvent.target;
+        if (tgt && tgt.closest && tgt.closest('.sa-carto-text-layer')) return;
+        if (saCartoTextSelected && typeof saCartoCloseTextPanel === 'function') {
+            saCartoCloseTextPanel();
         }
     });
 
@@ -19084,6 +19986,78 @@ function saCartoToggleMapTitle() {
 }
 
 // ── L\u00e9gende sur la carte ────────────────────────────────────────────
+// Click handler global de la boite legende : route vers edition titre
+// ou selection-pour-suppression selon la zone cliquee.
+function saCartoLegendOnClick(ev) {
+    var el = document.getElementById('saCartoMapLegend');
+    if (!el) return;
+    var t = ev.target;
+    if (t.closest && (t.closest('.sa-carto-map-legend-drag')
+                   || t.closest('.sa-carto-map-legend-close'))) return;
+    if (t.closest && t.closest('#saCartoMapLegendTitle')) {
+        saCartoLegendTitleEdit(ev);
+        return;
+    }
+    el.classList.add('is-selected');
+    try { el.focus({ preventScroll: true }); } catch (e) { try { el.focus(); } catch(_){} }
+    ev.stopPropagation();
+}
+
+// Active l'edition contenteditable du titre. Echap ou clic dehors = commit.
+function saCartoLegendTitleEdit(ev) {
+    var el = document.getElementById('saCartoMapLegendTitle');
+    if (!el) return;
+    if (ev) ev.stopPropagation();
+    if (el.getAttribute('contenteditable') === 'true') return;
+    el.setAttribute('contenteditable', 'true');
+    el.focus();
+    try {
+        var sel = window.getSelection();
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    } catch (e) {}
+    function commit() {
+        el.removeAttribute('contenteditable');
+        el.removeEventListener('blur', commit);
+        el.removeEventListener('keydown', onKey);
+        if (!el.textContent.trim()) el.textContent = 'Legende';
+    }
+    function onKey(e) {
+        e.stopPropagation();
+        if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+        else if (e.key === 'Escape') { e.preventDefault(); el.blur(); }
+    }
+    el.addEventListener('blur', commit);
+    el.addEventListener('keydown', onKey);
+}
+
+// Listeners globaux : clic dehors -> deselectionne, Suppr/Backspace -> ferme
+(function() {
+    if (window._saCartoLegendListenersInit) return;
+    window._saCartoLegendListenersInit = true;
+    document.addEventListener('click', function(ev) {
+        var el = document.getElementById('saCartoMapLegend');
+        if (!el || !el.classList.contains('is-selected')) return;
+        if (!el.contains(ev.target)) el.classList.remove('is-selected');
+    }, true);
+    document.addEventListener('keydown', function(ev) {
+        var el = document.getElementById('saCartoMapLegend');
+        if (!el || !el.classList.contains('is-selected')) return;
+        var ae = document.activeElement;
+        if (ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.isContentEditable)) return;
+        if (ev.key === 'Delete' || ev.key === 'Backspace') {
+            ev.preventDefault();
+            el.classList.remove('is-selected');
+            if (typeof saCartoToggleMapLegend === 'function') saCartoToggleMapLegend();
+        }
+        else if (ev.key === 'Escape') {
+            el.classList.remove('is-selected');
+        }
+    });
+})();
+
 function saCartoToggleMapLegend() {
     var el = document.getElementById('saCartoMapLegend');
     var btn = document.getElementById('saCartoToolMapLegend');
@@ -24225,15 +25199,44 @@ function saCartoInsertTextBox() {
     });
 }
 
-// L\u00e9gende : texte reli\u00e9 \u00e0 un point cible par une ligne avec fl\u00e8che orientable
+// L\u00e9gende : l'utilisateur clique sur la carte pour placer le dot ; le texte
+// appara\u00eet d\u00e9cal\u00e9 en haut-droite du point cliqu\u00e9.
 function saCartoInsertCallout() {
     if (!saCartoMap) return;
-    var center = saCartoMap.getCenter();
-    // Le point cible est d\u00e9cal\u00e9 en haut-gauche du texte
-    var pxCenter = saCartoMap.latLngToContainerPoint(center);
-    var pxTarget = L.point(pxCenter.x - 100, pxCenter.y - 60);
-    var target = saCartoMap.containerPointToLatLng(pxTarget);
-    _saCartoCreateCallout(center, target, 'L\u00e9gende');
+    // Re-clic sur le bouton = annuler le mode
+    if (saCartoCalloutPlaceActive) { _saCartoCancelCalloutPlace(); return; }
+    saCartoCalloutPlaceActive = true;
+    var container = saCartoMap.getContainer();
+    container.style.cursor = 'crosshair';
+    _saCartoCalloutPlaceClickHandler = function(e) {
+        var target = e.latlng;  // point cliqu\u00e9 = position du dot
+        // Le texte est d\u00e9cal\u00e9 en haut-droite du dot (offset px en coords \u00e9cran)
+        var pxTarget = saCartoMap.latLngToContainerPoint(target);
+        var pxText = L.point(pxTarget.x + 100, pxTarget.y - 60);
+        var textLatlng = saCartoMap.containerPointToLatLng(pxText);
+        _saCartoCancelCalloutPlace();
+        _saCartoCreateCallout(textLatlng, target, 'L\u00e9gende');
+    };
+    saCartoMap.once('click', _saCartoCalloutPlaceClickHandler);
+    // ESC = annuler
+    _saCartoCalloutPlaceEscHandler = function(ev) {
+        if (ev.key === 'Escape') _saCartoCancelCalloutPlace();
+    };
+    document.addEventListener('keydown', _saCartoCalloutPlaceEscHandler);
+}
+function _saCartoCancelCalloutPlace() {
+    saCartoCalloutPlaceActive = false;
+    if (saCartoMap) {
+        saCartoMap.getContainer().style.cursor = '';
+        if (_saCartoCalloutPlaceClickHandler) {
+            try { saCartoMap.off('click', _saCartoCalloutPlaceClickHandler); } catch (e) {}
+        }
+    }
+    if (_saCartoCalloutPlaceEscHandler) {
+        document.removeEventListener('keydown', _saCartoCalloutPlaceEscHandler);
+    }
+    _saCartoCalloutPlaceClickHandler = null;
+    _saCartoCalloutPlaceEscHandler = null;
 }
 
 // Stockage des styles texte par calque
@@ -24257,7 +25260,8 @@ function _saCartoCreateTextLayer(latlng, text, subtype, style) {
         var el = marker.getElement();
         if (!el) return;
         var inner = el.querySelector('.sa-carto-text-layer-inner');
-        if (!inner) return;
+        if (!inner || inner._saHandlersBound) return;
+        inner._saHandlersBound = true;
         // D\u00e9faut : non \u00e9ditable \u2192 drag OK
         inner.contentEditable = 'false';
         // Simple clic = s\u00e9lectionner (ouvrir panneau format)
@@ -24283,11 +25287,27 @@ function _saCartoCreateTextLayer(latlng, text, subtype, style) {
     };
     setTimeout(attachDomHandlers, 0);
     setTimeout(attachDomHandlers, 100);
+    // Enregistrer les deplacements pour Ctrl+Z / Ctrl+Y
+    var _moveBefore = null;
+    marker.on('dragstart', function() { _moveBefore = marker.getLatLng(); });
+    marker.on('dragend', function() {
+        var b = _moveBefore; _moveBefore = null;
+        var a = marker.getLatLng();
+        if (!b || (a.lat === b.lat && a.lng === b.lng)) return;
+        if (typeof _saCartoRecord === 'function') {
+            _saCartoRecord({
+                type: 'move',
+                undo: function() { marker.setLatLng(b); },
+                redo: function() { marker.setLatLng(a); }
+            });
+        }
+    });
     var textModel = {
         id: layerId, type: 'text',
         label: text, sublabel: subtype === 'textbox' ? 'Bo\u00eete de texte' : 'Texte',
         visible: true, locked: false, opacity: 1,
-        _lyr: marker
+        _lyr: marker,
+        _attachHandlers: attachDomHandlers
     };
     _saCartoLayerModelAdd(textModel);
     _saCartoRecordCreate(textModel);
@@ -24358,6 +25378,36 @@ function _saCartoCreateCallout(textLatlng, targetLatlng, text) {
     textMarker.on('drag', updateLine);
     targetMarker.on('drag', updateLine);
 
+    // Enregistrer les deplacements (texte ET cible) pour Ctrl+Z / Ctrl+Y
+    var _moveTextBefore = null;
+    textMarker.on('dragstart', function() { _moveTextBefore = textMarker.getLatLng(); });
+    textMarker.on('dragend', function() {
+        var b = _moveTextBefore; _moveTextBefore = null;
+        var a = textMarker.getLatLng();
+        if (!b || (a.lat === b.lat && a.lng === b.lng)) return;
+        if (typeof _saCartoRecord === 'function') {
+            _saCartoRecord({
+                type: 'move',
+                undo: function() { textMarker.setLatLng(b); updateLine(); },
+                redo: function() { textMarker.setLatLng(a); updateLine(); }
+            });
+        }
+    });
+    var _moveTargetBefore = null;
+    targetMarker.on('dragstart', function() { _moveTargetBefore = targetMarker.getLatLng(); });
+    targetMarker.on('dragend', function() {
+        var b = _moveTargetBefore; _moveTargetBefore = null;
+        var a = targetMarker.getLatLng();
+        if (!b || (a.lat === b.lat && a.lng === b.lng)) return;
+        if (typeof _saCartoRecord === 'function') {
+            _saCartoRecord({
+                type: 'move',
+                undo: function() { targetMarker.setLatLng(b); updateLine(); },
+                redo: function() { targetMarker.setLatLng(a); updateLine(); }
+            });
+        }
+    });
+
     var group = L.featureGroup([line, textMarker, targetMarker]);
     group.addTo(saCartoDrawLayer);
     textMarker._saLayerId = layerId;
@@ -24365,15 +25415,31 @@ function _saCartoCreateCallout(textLatlng, targetLatlng, text) {
     var attachHandlers = function() {
         var el = textMarker.getElement();
         if (!el) return;
-        el.addEventListener('mousedown', function() { saCartoSelectTextLayer(layerId); });
         var inner = el.querySelector('.sa-carto-text-layer-inner');
-        if (inner) {
-            inner.addEventListener('focus', function() { saCartoSelectTextLayer(layerId); });
-            inner.addEventListener('input', function() {
-                var f = _saCartoLayerFind(layerId);
-                if (f) { f.layer.label = inner.textContent || ''; saCartoRenderLayerPanel(); }
-            });
-        }
+        if (!inner || inner._saHandlersBound) return;
+        inner._saHandlersBound = true;
+        // Defaut : non editable -> drag OK
+        inner.contentEditable = 'false';
+        // Simple clic = selectionner (ouvrir panneau format)
+        el.addEventListener('mousedown', function() {
+            if (inner.isContentEditable) return;
+            saCartoSelectTextLayer(layerId);
+        });
+        // Double-clic = entrer en edition
+        el.addEventListener('dblclick', function(e) {
+            e.stopPropagation();
+            inner.contentEditable = 'true';
+            inner.focus();
+            try { document.execCommand('selectAll', false, null); } catch (err) {}
+            saCartoSelectTextLayer(layerId);
+        });
+        inner.addEventListener('blur', function() {
+            inner.contentEditable = 'false';
+        });
+        inner.addEventListener('input', function() {
+            var f = _saCartoLayerFind(layerId);
+            if (f) { f.layer.label = inner.textContent || ''; saCartoRenderLayerPanel(); }
+        });
     };
     setTimeout(attachHandlers, 0);
     setTimeout(attachHandlers, 100);
@@ -24383,7 +25449,8 @@ function _saCartoCreateCallout(textLatlng, targetLatlng, text) {
         label: text, sublabel: 'L\u00e9gende',
         visible: true, locked: false, opacity: 1,
         _lyr: group,
-        _textMarker: textMarker
+        _textMarker: textMarker,
+        _attachHandlers: attachHandlers
     };
     _saCartoLayerModelAdd(calloutModel);
     _saCartoRecordCreate(calloutModel);
@@ -24391,7 +25458,11 @@ function _saCartoCreateCallout(textLatlng, targetLatlng, text) {
         saCartoSelectTextLayer(layerId);
         var el = textMarker.getElement();
         var inner = el && el.querySelector('.sa-carto-text-layer-inner');
-        if (inner) { inner.focus(); try { document.execCommand('selectAll', false, null); } catch (e) {} }
+        if (inner) {
+            inner.contentEditable = 'true';
+            inner.focus();
+            try { document.execCommand('selectAll', false, null); } catch (e) {}
+        }
     }, 60);
 }
 
@@ -24408,10 +25479,26 @@ function saCartoSelectTextLayer(layerId) {
     // Synchroniser la selection dans le panneau Calques (pour la touche Suppr)
     if (typeof saCartoLayerSelect === 'function') saCartoLayerSelect(layerId);
     _saCartoUpdateTextPanel();
+    _saCartoSyncTextLayerSelectionVisual();
 }
 function saCartoCloseTextPanel() {
     saCartoTextSelected = null;
     _saCartoShowTextPanel(false);
+    _saCartoSyncTextLayerSelectionVisual();
+}
+// Applique le contour bleu sur le calque texte / legende selectionne et le retire des autres
+function _saCartoSyncTextLayerSelectionVisual() {
+    document.querySelectorAll('.sa-carto-text-layer.is-selected').forEach(function(el) {
+        el.classList.remove('is-selected');
+    });
+    if (!saCartoTextSelected) return;
+    var f = (typeof _saCartoLayerFind === 'function') ? _saCartoLayerFind(saCartoTextSelected) : null;
+    if (!f || !f.layer) return;
+    var marker = f.layer._textMarker || f.layer._lyr;
+    if (marker && typeof marker.getElement === 'function') {
+        var el = marker.getElement();
+        if (el) el.classList.add('is-selected');
+    }
 }
 function _saCartoShowTextPanel(show) {
     var panel = document.getElementById('saCartoTextPanel');
@@ -24663,6 +25750,7 @@ function saCartoSelectShapeLayer(layerId) {
     // Si un autre panneau est ouvert, le fermer
     _saCartoShowTextPanel(false);
     saCartoTextSelected = null;
+    if (typeof _saCartoSyncTextLayerSelectionVisual === 'function') _saCartoSyncTextLayerSelectionVisual();
     _saCartoShowShapePanel(true);
     _saCartoUpdateShapePanel();
     // Synchroniser la selection dans le panneau Calques (pour la touche Suppr)
@@ -25473,8 +26561,9 @@ function _saCartoAddBasemapControl() {
     var basemaps = [
         { key: 'aerial', label: 'A\u00e9rienne', icon: 'sat' },
         { key: 'plan',   label: 'Plan',         icon: 'map' },
-        { key: 'light',  label: 'Clair',        icon: 'sun' },
-        { key: 'scan',   label: 'Topo',         icon: 'scan' }
+        { key: 'scan',   label: 'Topo',         icon: 'scan' },
+        { key: 'pastel', label: 'Voyager',      icon: 'palette' },
+        { key: 'light',  label: 'Clair',        icon: 'sun' }
     ];
     var BasemapCtrl = L.Control.extend({
         options: { position: 'topleft' },
@@ -26042,15 +27131,30 @@ function _saCartoLoadAccessTcLines(def, opacity, id) {
                 // Helper PARTAGE avec la carte d'accessibilite : meme rendu (halos blancs +
                 // polylines colorees + labels dynamiques avec anti-collision).
                 // labelLayerHost = fg => labels disparaissent quand l'utilisateur decoche la couche.
+                // Lecture du filtre sous-modes (chevron UI dans le catalogue) :
+                // permet de n'afficher que tram / metro / train / bus selon les choix utilisateur.
+                var subFilter = saCartoLayerSubFilter[id];
+                var modeFilter = null;
+                if (subFilter) {
+                    // _saRenderTransportRoutesOnMap utilise les noms : 'tram','metro','train','bus','funic','ferry'
+                    // On mappe nos sous-modes vers ces clés.
+                    modeFilter = {
+                        tram:  !!subFilter.tram,
+                        metro: !!subFilter.metro,
+                        train: !!subFilter.train,
+                        bus:   !!subFilter.bus,
+                        funic: true,  // toujours visible (pas dans subModes)
+                        ferry: true
+                    };
+                }
                 var result = _saRenderTransportRoutesOnMap({
                     map: saCartoMap,
                     targetLayer: fg,
                     labelLayerHost: fg,
                     routes: combined,
                     siteLat: lat,
-                    siteLon: lon
-                    // pas de modeFilter : tous les modes rendus (le filtre par mode est specifique
-                    // a la carte d'accessibilite via les toggles saActiveTransportModes)
+                    siteLon: lon,
+                    modeFilter: modeFilter
                 });
                 fg._saRouteRendererCleanup = result.cleanup;
                 // Annoter chaque polyline coloree (non-halo) avec son indice de legende
@@ -26063,9 +27167,16 @@ function _saCartoLoadAccessTcLines(def, opacity, id) {
                     if (idx != null && colorToIdx[rl.color] == null) colorToIdx[rl.color] = idx;
                 });
                 fg.eachLayer(function(child) {
-                    // Polylines colorees ont opacity 0.92 (les halos blancs ont 0.55)
-                    if (child.options && child.options.opacity === 0.92 && colorToIdx[child.options.color] != null) {
+                    if (!child.options) return;
+                    // Polylines colorees standards (metro/tram/bus) : opacity 0.92 + couleur connue
+                    if (child.options.opacity === 0.92 && colorToIdx[child.options.color] != null) {
                         child._saLegendIdx = colorToIdx[child.options.color];
+                    }
+                    // Train : trait noir pointille (rendu different, cf. _saRenderTransportRoutesOnMap)
+                    // -> opacity 1 + dashArray defini + color #1A1A1A. Sans ce tag, la legende
+                    //    n'inclut pas "Train / RER (rails SNCF)" alors que le train est visible.
+                    else if (child.options.opacity === 1 && child.options.dashArray && child.options.color === '#1A1A1A') {
+                        child._saLegendIdx = 0;  // 0 = Train / RER dans richLegend
                     }
                 });
             } else {
@@ -26098,8 +27209,11 @@ function _saCartoLoadAccessBike(def, opacity, id) {
     // Mapping type -> indice legende (richLegend : 0=Piste, 1=Voie verte, 2=Bande)
     var LEGEND_IDX = { 'P': 0, 'V': 1, 'B': 2 };
     var BIKE_RADIUS_M = 1500;  // 1.5 km
+    // Filtre par sous-mode (chevron UI). Si non defini, tout est affiche.
+    var bikeSubFilter = saCartoLayerSubFilter[id];
     function addBikeLine(coords, type) {
         if (!coords || coords.length < 2) return;
+        if (bikeSubFilter && bikeSubFilter[type] === false) return;  // type decoche dans le chevron
         var color = COLORS[type] || '#16A34A';
         var line = L.polyline(coords, { color: color, weight: 3, opacity: fg._saOpacity });
         line.bindPopup('<strong>' + saEscH(LABELS[type] || 'Am\u00e9nagement cyclable') + '</strong>');
@@ -27466,12 +28580,42 @@ function _saCartoRenderLayerRow(l) {
     var active = !!saCartoLayersState[l.id];
     var op = saCartoLayersOpacity[l.id] != null ? saCartoLayersOpacity[l.id] : (l.opacity != null ? l.opacity : 0.8);
     var opPct = Math.round(op * 100);
-    return '<div class="sa-carto-layer' + (active ? ' active' : '') + '">'
+    var hasSubModes = Array.isArray(l.subModes) && l.subModes.length > 0;
+    var subOpen = hasSubModes && !!saCartoLayerSubmodesOpen[l.id];
+
+    // Bloc chevron + sous-modes (uniquement si subModes defini)
+    var subModesUI = '';
+    if (hasSubModes) {
+        var filter = _saCartoGetLayerSubFilter(l.id, l.subModes);
+        var activeSubCount = l.subModes.filter(function(sm){ return filter[sm.mode]; }).length;
+        var totalSubCount = l.subModes.length;
+        var subModesRows = l.subModes.map(function(sm) {
+            var checked = !!filter[sm.mode];
+            return '<label class="sa-carto-submode-row" onclick="event.stopPropagation()">'
+                 + '<input type="checkbox"' + (checked ? ' checked' : '')
+                 + ' onchange="saCartoToggleSubMode(\'' + _jsEscQ(l.id) + '\',\'' + sm.mode + '\')">'
+                 + '<span class="sa-carto-submode-swatch" style="background:' + sm.color + '"></span>'
+                 + '<span class="sa-carto-submode-label">' + saEscH(sm.label) + '</span>'
+                 + '</label>';
+        }).join('');
+        subModesUI = '<button type="button" class="sa-carto-layer-submode-toggle" '
+                   + 'title="Filtrer par mode" '
+                   + 'onclick="event.preventDefault();event.stopPropagation();saCartoToggleSubModesPanel(\'' + _jsEscQ(l.id) + '\')">'
+                   + activeSubCount + '/' + totalSubCount
+                   + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>'
+                   + '</button>'
+                   + '<div class="sa-carto-layer-submodes">' + subModesRows + '</div>';
+    }
+
+    return '<div class="sa-carto-layer' + (active ? ' active' : '') + (subOpen ? ' is-submodes-open' : '') + '">'
          + '<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;flex:1;">'
          + '<input type="checkbox"' + (active ? ' checked' : '') + ' onchange="saCartoToggleLayer(\'' + l.id + '\')" style="margin-top:2px;accent-color:#4F46E5;">'
          + '<div class="sa-carto-layer-body">'
-         + '<div class="sa-carto-layer-label">' + saEscH(l.label) + '</div>'
+         + '<div class="sa-carto-layer-label">' + saEscH(l.label)
+         + (hasSubModes ? subModesUI.split('<div class="sa-carto-layer-submodes">')[0] : '')
+         + '</div>'
          + '<div class="sa-carto-layer-source">' + saEscH(l.source) + '</div>'
+         + (hasSubModes ? '<div class="sa-carto-layer-submodes">' + subModesUI.split('<div class="sa-carto-layer-submodes">')[1] : '')
          + '<div class="sa-carto-layer-opacity">'
          + '<input type="range" min="10" max="100" step="5" value="' + opPct + '" oninput="saCartoSetOpacity(\'' + l.id + '\', this.value)" onclick="event.stopPropagation()">'
          + '<span class="sa-carto-layer-opacity-val" id="saCartoOp_' + l.id + '">' + opPct + '\u202f%</span>'
@@ -27479,6 +28623,48 @@ function _saCartoRenderLayerRow(l) {
          + '</div>'
          + '</label>'
          + '</div>';
+}
+
+// Helper : obtient le filtre par sous-mode pour une couche, en initialisant
+// avec tous les modes activ\u00e9s par d\u00e9faut.
+function _saCartoGetLayerSubFilter(layerId, subModes) {
+    if (!saCartoLayerSubFilter[layerId]) {
+        saCartoLayerSubFilter[layerId] = {};
+        (subModes || []).forEach(function(sm) {
+            saCartoLayerSubFilter[layerId][sm.mode] = true;
+        });
+    }
+    return saCartoLayerSubFilter[layerId];
+}
+
+// Toggle l'ouverture du panneau "sous-modes" pour une couche (UI uniquement)
+function saCartoToggleSubModesPanel(layerId) {
+    saCartoLayerSubmodesOpen[layerId] = !saCartoLayerSubmodesOpen[layerId];
+    saCartoRenderCatalog();
+}
+
+// Toggle un sous-mode pour une couche : recharge la couche si elle est active
+function saCartoToggleSubMode(layerId, mode) {
+    var def = _saCartoIdx[layerId];
+    if (!def || !Array.isArray(def.subModes)) return;
+    var filter = _saCartoGetLayerSubFilter(layerId, def.subModes);
+    filter[mode] = !filter[mode];
+    // Si la couche est active, on la recharge avec le nouveau filtre
+    if (saCartoLayersState[layerId]) {
+        _saCartoRemoveOverlay(layerId);
+        _saCartoAddOverlay(layerId);
+        _saCartoLayerModelRemoveByTheme(layerId);
+        var op = saCartoLayersOpacity[layerId] || def.opacity || 0.8;
+        _saCartoLayerModelAdd({
+            id: 'theme_' + layerId, type: 'theme',
+            label: def.label, sublabel: def.source,
+            visible: true, locked: false,
+            opacity: op,
+            _themeId: layerId, _lyr: saCartoOverlays[layerId]
+        });
+    }
+    saCartoRenderCatalog();
+    if (typeof saCartoRenderLayerPanel === 'function') saCartoRenderLayerPanel();
 }
 
 // Render du panneau de couches (groupes + sous-groupes collapsibles)
@@ -27760,42 +28946,1773 @@ function _saCartoPageDims(fmt) {
     }
 }
 
+// Charge dynamiquement dom-to-image-more (meilleur que html2canvas pour les SVG Leaflet)
+function _saLoadDomToImage() {
+    if (typeof domtoimage !== 'undefined') return Promise.resolve(true);
+    return new Promise(function(resolve) {
+        var s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/dom-to-image-more@3.5.0/dist/dom-to-image-more.min.js';
+        s.onload = function() { resolve(typeof domtoimage !== 'undefined'); };
+        s.onerror = function() { resolve(false); };
+        document.head.appendChild(s);
+    });
+}
+
+// =============================================================================
+// EXPORT PDF de l'Analyse de site (page #saResults)
+// -----------------------------------------------------------------------------
+// Workflow :
+//   1. saExportPDF() \u2014 verifie les prerequis et ouvre la modale de selection
+//   2. setSaPdfExportScope() / toggleSaPdfSelectAll() \u2014 manipulent la modale
+//   3. launchSaPdfExport() \u2014 lit la selection et lance la generation
+//   4. _saBuildAnalysisPDF(opts) \u2014 construit le PDF avec les options choisies
+//
+// Structure du PDF genere (selon options) :
+//   - Page 1 : Couverture (titre, adresse, GPS, date, sources)        [opt]
+//   - Page 2 : Synthese + carte                                        [opt]
+//   - Pages 3+ : sections selectionnees, capturees et paginees
+// =============================================================================
+
+// Etat courant de la modale (scope = 'open' = page courante, 'all' = toutes)
+var _saPdfExportScope = 'open';
+
+// Pages exportables de l'Analyse de site, dans l'ordre logique du rapport.
+// id correspond a l'element DOM, gotoKey au parametre de saGoToPage(...).
+var SA_EXPORT_PAGES = [
+    { id: 'saResults',            gotoKey: 'Risques',        label: 'Risques',                     sub: 'Géorisques, ICPE, Sites pollués, Urbanisme' },
+    { id: 'saMilieuPhysiquePage', gotoKey: 'MilieuPhysique', label: 'Milieu physique',             sub: 'Topographie, sol, hydro, eau potable' },
+    { id: 'saClimatPage',         gotoKey: 'Climat',         label: 'Climat',                      sub: 'Températures, précipitations, canicules' },
+    { id: 'saEcosystemesPage',    gotoKey: 'Ecosystemes',    label: 'Écosystèmes',                 sub: 'Natura 2000, ZNIEFF, trames vertes' },
+    { id: 'saAccessibilitePage',  gotoKey: 'Accessibilite',  label: 'Accessibilité',               sub: 'Transports, commerces, services' },
+    { id: 'saReseauxPage',        gotoKey: 'Reseaux',        label: 'Réseaux urbains',             sub: 'Chaleur, gaz, électricité, eau' },
+    { id: 'saEnrPage',            gotoKey: 'Enr',            label: 'Énergies renouvelables',      sub: 'Solaire, géothermie, éolien, biomasse' },
+    { id: 'saActeursPage',        gotoKey: 'Acteurs',        label: 'Acteurs du bâtiment durable', sub: 'Réemploi : plateformes, AMO, recycleurs' }
+];
+
+// Detecte la page actuellement visible (la seule saXxxPage avec display !== 'none')
+function _saGetCurrentSaPageId() {
+    for (var i = 0; i < SA_EXPORT_PAGES.length; i++) {
+        var el = document.getElementById(SA_EXPORT_PAGES[i].id);
+        if (!el) continue;
+        // saResults est la "page Risques" par defaut quand aucune autre n'est active
+        var d = el.style.display;
+        if (d !== 'none' && d !== undefined) return SA_EXPORT_PAGES[i].id;
+    }
+    return null;
+}
+
+function saExportPDF() {
+    // Conserve par compat \u2014 delegue desormais a l'export Word.
+    return saExportWord();
+}
+
+function saExportWord() {
+    if (!saState.lat || !saState.lon) {
+        alert('Aucune analyse \u00e0 exporter \u2014 saisissez une adresse d\'abord.');
+        return;
+    }
+    if (typeof docx === 'undefined') {
+        alert('Librairie docx non charg\u00e9e. V\u00e9rifiez votre connexion internet.');
+        return;
+    }
+    _saOpenSaPdfExportModal();
+}
+
+// \u2500\u2500\u2500 Modale : ouverture / fermeture \u2500\u2500\u2500
+function _saOpenSaPdfExportModal() {
+    var ov = document.getElementById('saPdfExportOverlay');
+    if (!ov) return;
+    _saPdfExportScope = 'open'; // reset au scope par defaut
+    _saUpdateSaPdfScopeButtons();
+    _saRenderSaPdfSectionList();
+    ov.style.display = 'block';
+}
+
+function closeSaPdfExportModal() {
+    var ov = document.getElementById('saPdfExportOverlay');
+    if (ov) ov.style.display = 'none';
+}
+
+function setSaPdfExportScope(scope) {
+    _saPdfExportScope = (scope === 'all') ? 'all' : 'open';
+    _saUpdateSaPdfScopeButtons();
+    _saRenderSaPdfSectionList();
+}
+
+function _saUpdateSaPdfScopeButtons() {
+    var btnOpen = document.getElementById('saPdfScopeOpen');
+    var btnAll = document.getElementById('saPdfScopeAll');
+    if (!btnOpen || !btnAll) return;
+    var active = { background: '#fff', color: '#1e293b', boxShadow: '0 1px 2px rgba(0,0,0,0.08)' };
+    var inactive = { background: 'transparent', color: '#64748b', boxShadow: 'none' };
+    var on = (_saPdfExportScope === 'open') ? btnOpen : btnAll;
+    var off = (_saPdfExportScope === 'open') ? btnAll : btnOpen;
+    Object.keys(active).forEach(function(k) { on.style[k] = active[k]; off.style[k] = inactive[k]; });
+}
+
+// Liste les pages exportables (selon scope) et rend les checkboxes
+function _saRenderSaPdfSectionList() {
+    var container = document.getElementById('saPdfExportSectionList');
+    if (!container) return;
+
+    var currentPageId = _saGetCurrentSaPageId();
+    var pages;
+    if (_saPdfExportScope === 'open') {
+        // Page courante uniquement (1 seule en general)
+        pages = SA_EXPORT_PAGES.filter(function(p) { return p.id === currentPageId; });
+    } else {
+        // Toutes les pages disponibles
+        pages = SA_EXPORT_PAGES.slice();
+    }
+
+    if (pages.length === 0) {
+        container.innerHTML = '<div style="padding:18px 8px;color:#94a3b8;font-size:12px;text-align:center;">Aucune page disponible. Lance d\'abord une analyse.</div>';
+        var allChk = document.getElementById('saPdfSelectAll');
+        if (allChk) allChk.checked = false;
+        return;
+    }
+
+    var html = '';
+    pages.forEach(function(p) {
+        // Coche par defaut : toutes en mode 'open' (page courante) ou 'all' (toutes les pages)
+        var checked = true;
+        var isCurrent = (p.id === currentPageId);
+        html += '<label style="display:flex;align-items:flex-start;gap:10px;padding:8px 8px;border-radius:6px;cursor:pointer;user-select:none;'
+             +    (isCurrent ? 'background:#ecfdf5;' : '')
+             +  '" '
+             +  'onmouseover="this.style.background=\'' + (isCurrent ? '#d1fae5' : '#f8fafc') + '\'" onmouseout="this.style.background=\'' + (isCurrent ? '#ecfdf5' : 'transparent') + '\'">'
+             +    '<input type="checkbox" class="sa-pdf-section-chk" data-section-id="' + p.id + '" data-goto-key="' + p.gotoKey + '" '
+             +      (checked ? 'checked ' : '')
+             +      'onchange="_saSyncSaPdfSelectAll()" '
+             +      'style="accent-color:#0D8B6F;width:15px;height:15px;cursor:pointer;flex-shrink:0;margin-top:2px;">'
+             +    '<span style="font-size:12px;line-height:1.4;">'
+             +      '<span style="font-weight:600;color:#1e293b;">' + _saEscHtml(p.label) + '</span>'
+             +      (isCurrent ? ' <span style="font-size:10px;color:#059669;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-left:4px;">\u00b7 en cours</span>' : '')
+             +      '<br><span style="color:#94a3b8;font-size:11px;">' + _saEscHtml(p.sub) + '</span>'
+             +    '</span>'
+             +  '</label>';
+    });
+    container.innerHTML = html;
+    _saSyncSaPdfSelectAll();
+}
+
+function _saSyncSaPdfSelectAll() {
+    var allChk = document.getElementById('saPdfSelectAll');
+    if (!allChk) return;
+    var chks = document.querySelectorAll('.sa-pdf-section-chk');
+    if (chks.length === 0) { allChk.checked = false; allChk.indeterminate = false; return; }
+    var checked = 0;
+    chks.forEach(function(c) { if (c.checked) checked++; });
+    allChk.checked = (checked === chks.length);
+    allChk.indeterminate = (checked > 0 && checked < chks.length);
+}
+
+function toggleSaPdfSelectAll(checked) {
+    var chks = document.querySelectorAll('.sa-pdf-section-chk');
+    chks.forEach(function(c) { c.checked = !!checked; });
+    var allChk = document.getElementById('saPdfSelectAll');
+    if (allChk) allChk.indeterminate = false;
+}
+
+function _saEscHtml(s) {
+    return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+// \u2500\u2500\u2500 Lancement de la generation depuis la modale (Word) \u2500\u2500\u2500
+function launchSaPdfExport() {
+    // Conserve par compat \u2014 delegue desormais a Word
+    return launchSaWordExport();
+}
+
+function launchSaWordExport() {
+    var includeCover = !!document.getElementById('saPdfIncludeCover').checked;
+    var includeSynthesis = !!document.getElementById('saPdfIncludeSynthesis').checked;
+    var selectedIds = [];
+    document.querySelectorAll('.sa-pdf-section-chk').forEach(function(c) {
+        if (c.checked) selectedIds.push(c.getAttribute('data-section-id'));
+    });
+
+    if (!includeCover && !includeSynthesis && selectedIds.length === 0) {
+        alert('S\u00e9lectionnez au moins un \u00e9l\u00e9ment \u00e0 exporter.');
+        return;
+    }
+
+    closeSaPdfExportModal();
+
+    var btn = document.getElementById('saExportPdfBtn');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2 a10 10 0 0 1 10 10"/></svg> G\u00e9n\u00e9ration\u2026';
+    }
+    _saCartoToast('G\u00e9n\u00e9ration du Word en cours\u2026', '#2563EB');
+
+    var startBuild = function() {
+        // dom-to-image-more pour la capture de la carte (uniquement)
+        return _saLoadDomToImage().then(function() {
+            if (typeof docx === 'undefined') {
+                throw new Error('Librairie docx non charg\u00e9e');
+            }
+            return _saBuildAnalysisWord({
+                includeCover: includeCover,
+                includeSynthesis: includeSynthesis,
+                sectionIds: selectedIds
+            });
+        });
+    };
+
+    new Promise(function(r) { setTimeout(r, 400); })
+        .then(startBuild)
+        .then(function() {
+            _saCartoToast('Word enregistr\u00e9.', '#16A34A');
+        })
+        .catch(function(err) {
+            console.error('[Export Word SA]', err);
+            _saCartoToast('Erreur : ' + (err && err.message ? err.message : err), '#DC2626');
+        })
+        .then(function() {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Export Word';
+            }
+        });
+}
+
+// =============================================================================
+// EXPORT WORD : genere un .docx avec cover + synthese + pages SA selectionnees.
+// Utilise la librairie `docx` (deja chargee) + FileSaver.
+// Pour la carte : capture via dom-to-image-more (memes patterns que carto export).
+// =============================================================================
+function _saBuildAnalysisWord(opts) {
+    opts = opts || {};
+    var includeCover = opts.includeCover !== false;
+    var includeSynthesis = opts.includeSynthesis !== false;
+    var sectionIds = Array.isArray(opts.sectionIds) ? opts.sectionIds : [];
+
+    var Document = docx.Document;
+    var Paragraph = docx.Paragraph;
+    var TextRun = docx.TextRun;
+    var HeadingLevel = docx.HeadingLevel;
+    var AlignmentType = docx.AlignmentType;
+    var Packer = docx.Packer;
+    var ImageRun = docx.ImageRun;
+    var PageBreak = docx.PageBreak;
+
+    function clean(s) {
+        if (s == null) return '';
+        return String(s)
+            .replace(/[ --]/g, '')
+            .replace(/\u00a0/g, ' ');
+    }
+
+    var children = [];
+
+    function addBlankLine() {
+        children.push(new Paragraph({ text: '' }));
+    }
+    function addHeading(text, level) {
+        children.push(new Paragraph({
+            heading: level || HeadingLevel.HEADING_1,
+            children: [new TextRun({ text: clean(text), bold: true, color: '0D8B6F' })],
+            spacing: { before: 240, after: 120 }
+        }));
+    }
+    function addText(text, opts) {
+        opts = opts || {};
+        var runs = [new TextRun({
+            text: clean(text),
+            bold: opts.bold,
+            italics: opts.italics,
+            size: opts.size,
+            color: opts.color
+        })];
+        children.push(new Paragraph({
+            children: runs,
+            alignment: opts.alignment,
+            spacing: { before: opts.before || 0, after: opts.after || 80 }
+        }));
+    }
+
+    // \u2500\u2500\u2500 COUVERTURE \u2500\u2500\u2500
+    if (includeCover) {
+        addText('VERDICT', { bold: true, size: 22, color: '0D8B6F' });
+        addText('Building Assessment Tool', { italics: true, size: 16, color: '64748B' });
+        addBlankLine();
+        addBlankLine();
+        children.push(new Paragraph({
+            heading: HeadingLevel.TITLE,
+            alignment: AlignmentType.CENTER,
+            children: [new TextRun({ text: 'Analyse environnementale de site', bold: true, size: 44 })],
+            spacing: { before: 600, after: 100 }
+        }));
+        children.push(new Paragraph({
+            alignment: AlignmentType.CENTER,
+            children: [new TextRun({ text: 'Rapport synth\u00e9tique multi-sources', italics: true, size: 22, color: '64748B' })],
+            spacing: { after: 600 }
+        }));
+
+        // Adresse
+        addText('ADRESSE', { bold: true, size: 18, color: '64748B' });
+        addText(saState.address || '\u2014', { size: 24, bold: true, after: 200 });
+
+        // GPS
+        addText('COORDONN\u00c9ES GPS', { bold: true, size: 18, color: '64748B' });
+        addText(saState.lat.toFixed(6) + ', ' + saState.lon.toFixed(6), { size: 22, after: 200 });
+
+        // Commune
+        if (saState.commune) {
+            addText('COMMUNE', { bold: true, size: 18, color: '64748B' });
+            addText(saState.commune + (saState.codeInsee ? ' (INSEE ' + saState.codeInsee + ')' : ''), { size: 22, after: 200 });
+        }
+
+        // Date
+        addText('DATE D\'ANALYSE', { bold: true, size: 18, color: '64748B' });
+        addText(new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }), { size: 22, after: 400 });
+
+        // Sources
+        addText('SOURCES PUBLIQUES MOBILIS\u00c9ES', { bold: true, size: 18, color: '475569' });
+        addText('G\u00e9orisques (DGPR) \u00b7 IGN \u00b7 INPN/MNHN \u00b7 BRGM \u00b7 ADEME \u00b7 PVGIS \u00b7 M\u00e9t\u00e9o-France', { size: 18 });
+        addText('Donn\u00e9es ouvertes France enti\u00e8re. Verdict agr\u00e8ge en client-side, sans serveur.', { italics: true, size: 16, color: '94A3B8', after: 100 });
+        addText('bat-verdict.fr', { bold: true, size: 18, color: '0D8B6F' });
+
+        // Saut de page
+        children.push(new Paragraph({
+            children: [new PageBreak()]
+        }));
+    }
+
+    // \u2500\u2500\u2500 SYNTH\u00c8SE + CARTE \u2500\u2500\u2500
+    var synthesisPromise = Promise.resolve();
+    if (includeSynthesis) {
+        synthesisPromise = synthesisPromise.then(function() {
+            // Force visibility of saResults
+            if (typeof saGoToPage === 'function') {
+                try { saGoToPage('Risques'); } catch (e) {}
+            }
+            return new Promise(function(r) { setTimeout(r, 600); });
+        }).then(function() {
+            addHeading('Synth\u00e8se du site', HeadingLevel.HEADING_1);
+
+            // Texte de la synthese
+            var synthEl = document.getElementById('saSynthesis');
+            if (synthEl) {
+                var rawText = (synthEl.innerText || synthEl.textContent || '').trim();
+                rawText = clean(rawText);
+                if (rawText) {
+                    var paragraphs = rawText.split(/\n+/).map(function(p) { return p.trim(); }).filter(Boolean);
+                    paragraphs.forEach(function(p) {
+                        var isHeading = (p.length < 50 && p === p.toUpperCase() && /[A-Z]/.test(p) && !/[.,]/.test(p));
+                        if (isHeading) {
+                            children.push(new Paragraph({
+                                heading: HeadingLevel.HEADING_3,
+                                children: [new TextRun({ text: p, bold: true, color: '0D8B6F', size: 22 })],
+                                spacing: { before: 200, after: 80 }
+                            }));
+                        } else {
+                            addText(p, { size: 20, after: 100 });
+                        }
+                    });
+                }
+            }
+            // Capture carte
+            var mapEl = document.getElementById('saMapSection');
+            if (!mapEl) return null;
+            return _saCaptureForWord(mapEl);
+        }).then(function(mapImg) {
+            if (mapImg && mapImg.buffer) {
+                addBlankLine();
+                addText('Localisation', { bold: true, size: 22, color: '0D8B6F' });
+                children.push(new Paragraph({
+                    alignment: AlignmentType.CENTER,
+                    children: [new ImageRun({
+                        data: mapImg.buffer,
+                        transformation: { width: mapImg.width, height: mapImg.height }
+                    })]
+                }));
+            }
+            children.push(new Paragraph({ children: [new PageBreak()] }));
+        });
+    }
+
+    // \u2500\u2500\u2500 PAGES SA SELECTIONNEES \u2500\u2500\u2500
+    var pagesPromise = synthesisPromise.then(function() {
+        var pagesToExport = sectionIds
+            .map(function(id) { return SA_EXPORT_PAGES.find(function(p) { return p.id === id; }); })
+            .filter(function(p) { return !!p; });
+
+        var originalPageId = _saGetCurrentSaPageId();
+        var originalPageInfo = SA_EXPORT_PAGES.find(function(p) { return p.id === originalPageId; });
+        var originalGotoKey = originalPageInfo ? originalPageInfo.gotoKey : 'MilieuPhysique';
+
+        var p = Promise.resolve();
+        pagesToExport.forEach(function(pageInfo, idx) {
+            p = p.then(function() {
+                if (typeof saGoToPage === 'function') {
+                    try { saGoToPage(pageInfo.gotoKey); } catch (e) {}
+                }
+                return new Promise(function(r) { setTimeout(r, 600); });
+            }).then(function() {
+                addHeading(pageInfo.label, HeadingLevel.HEADING_1);
+                addText(pageInfo.sub, { italics: true, size: 18, color: '64748B', after: 160 });
+
+                var pageEl = document.getElementById(pageInfo.id);
+                if (pageEl) {
+                    var rawText = (pageEl.innerText || pageEl.textContent || '').trim();
+                    rawText = clean(rawText);
+                    if (rawText) {
+                        var paragraphs = rawText.split(/\n+/).map(function(p) { return p.trim(); }).filter(Boolean);
+                        paragraphs.forEach(function(par) {
+                            var isHeading = (par.length < 60 && par === par.toUpperCase() && /[A-Z]/.test(par) && !/[.,;:]/.test(par));
+                            if (isHeading) {
+                                children.push(new Paragraph({
+                                    heading: HeadingLevel.HEADING_3,
+                                    children: [new TextRun({ text: par, bold: true, color: '0D8B6F', size: 22 })],
+                                    spacing: { before: 180, after: 80 }
+                                }));
+                            } else {
+                                addText(par, { size: 20, after: 80 });
+                            }
+                        });
+                    } else {
+                        addText('(Aucune donn\u00e9e disponible pour cette page.)', { italics: true, color: '94A3B8' });
+                    }
+                }
+
+                // Saut de page entre sections (sauf pour la derni\u00e8re)
+                if (idx < pagesToExport.length - 1) {
+                    children.push(new Paragraph({ children: [new PageBreak()] }));
+                }
+            });
+        });
+
+        // Restore la page d'origine
+        p = p.then(function() {
+            if (typeof saGoToPage === 'function') {
+                try { saGoToPage(originalGotoKey); } catch (e) {}
+            }
+        });
+
+        return p;
+    });
+
+    // \u2500\u2500\u2500 PACKAGING ET TELECHARGEMENT \u2500\u2500\u2500
+    return pagesPromise.then(function() {
+        var doc = new Document({
+            creator: 'Verdict \u2014 Building Assessment Tool',
+            title: 'Analyse environnementale de site',
+            description: saState.address || '',
+            styles: {
+                default: {
+                    document: { run: { font: 'Calibri', size: 20 } }
+                }
+            },
+            sections: [{
+                properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } },
+                children: children
+            }]
+        });
+        return Packer.toBlob(doc);
+    }).then(function(blob) {
+        var slug = (saState.address || 'analyse')
+            .toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .substring(0, 60);
+        var dateStr = new Date().toISOString().substring(0, 10);
+        var fname = 'analyse_site_' + (slug || 'verdict') + '_' + dateStr + '.docx';
+        if (typeof saveAs === 'function') {
+            saveAs(blob, fname);
+        } else {
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url; a.download = fname;
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+        }
+        console.log('[ExportWord] Sauvegarde:', fname);
+    });
+}
+
+// Helper : capture un element via dom-to-image-more et retourne { buffer, width, height }
+// pour insertion dans un docx ImageRun.
+function _saCaptureForWord(el) {
+    if (!el || typeof domtoimage === 'undefined') return Promise.resolve(null);
+    var w = el.offsetWidth || el.getBoundingClientRect().width;
+    var h = el.offsetHeight || el.getBoundingClientRect().height;
+    return domtoimage.toJpeg(el, {
+        quality: 0.85,
+        bgcolor: '#ffffff',
+        cacheBust: true,
+        width: w,
+        height: h
+    }).then(function(dataUrl) {
+        // Convertit dataURL en ArrayBuffer pour docx ImageRun
+        var b64 = dataUrl.split(',')[1];
+        var binary = atob(b64);
+        var bytes = new Uint8Array(binary.length);
+        for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        // Calcule des dimensions cibles raisonnables (max 600px de large pour le rendu Word)
+        var maxW = 600;
+        var aspect = w / h;
+        var renderW = Math.min(w, maxW);
+        var renderH = renderW / aspect;
+        return { buffer: bytes.buffer, width: Math.round(renderW), height: Math.round(renderH) };
+    }).catch(function(err) {
+        console.warn('[ExportWord] capture image failed:', err);
+        return null;
+    });
+}
+
+// Construction effective du PDF (suppose html2canvas disponible et sections ouvertes).
+// opts = { includeCover: bool, includeSynthesis: bool, sectionIds: [string] }
+function _saBuildAnalysisPDF(opts) {
+    opts = opts || {};
+    var includeCover = opts.includeCover !== false;
+    var includeSynthesis = opts.includeSynthesis !== false;
+    var sectionIds = Array.isArray(opts.sectionIds) ? opts.sectionIds : null;
+
+    console.log('[ExportPDF] === DEBUT ===');
+
+    var jsPDF = window.jspdf.jsPDF;
+    var doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    var W = 210, H = 297, M = 12;            // page width / height / margin (mm)
+    var contentW = W - 2 * M;
+    var pageNum = 1;
+    var firstPageWritten = false;  // pour savoir s'il faut addPage() avant la suite
+
+    console.log('[ExportPDF] jsPDF doc cree, pages initiales:', doc.getNumberOfPages());
+
+    // Footer commun (date + pagination + sources)
+    function addFooter(num) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(148, 163, 184);
+        var dateStr = new Date().toLocaleDateString('fr-FR');
+        doc.text(
+            'Verdict \u00b7 bat-verdict.fr \u00b7 Sources : G\u00e9orisques, IGN, INPN, BRGM, ADEME, PVGIS \u00b7 ' + dateStr,
+            M, H - 6
+        );
+        doc.text('p. ' + num, W - M, H - 6, { align: 'right' });
+    }
+
+    // Sanitise du texte pour jsPDF (helvetica = WinAnsi only)
+    function sanit(s) {
+        if (s == null) return '';
+        return String(s)
+            .replace(/[\u2018\u2019\u201a\u201b]/g, "'")
+            .replace(/[\u201c\u201d\u201e\u201f]/g, '"')
+            .replace(/\u2013|\u2014/g, '-')
+            .replace(/\u2026/g, '...')
+            .replace(/\u00a0/g, ' ');
+    }
+
+    // Capture un element. Utilise dom-to-image-more (meme librairie que l'atelier
+    // carto qui fonctionne deja chez l'utilisateur). Pas de transform CSS — on
+    // capture a la taille naturelle de l'element, plus fiable.
+    function captureEl(el, opts) {
+        opts = opts || {};
+        var w = el.offsetWidth || el.getBoundingClientRect().width;
+        var h = el.offsetHeight || el.getBoundingClientRect().height;
+
+        // Essai 1 : dom-to-image-more (utilise SVG foreignObject — meilleur sur Leaflet)
+        if (typeof domtoimage !== 'undefined') {
+            return domtoimage.toJpeg(el, {
+                quality: 0.85,
+                bgcolor: '#ffffff',
+                cacheBust: true,
+                width: w,
+                height: h
+            }).then(function(dataUrl) {
+                console.log('[ExportPDF] capture via dom-to-image OK,', el.id, 'len:', dataUrl.length, 'size:', w + 'x' + h);
+                return { dataUrl: dataUrl, width: w, height: h };
+            }).catch(function(err) {
+                console.warn('[ExportPDF] dom-to-image echec, fallback html2canvas:', err);
+                return _captureWithHtml2Canvas(el, opts.scale || 1.5);
+            });
+        }
+        return _captureWithHtml2Canvas(el, opts.scale || 1.5);
+    }
+
+    function _captureWithHtml2Canvas(el, scale) {
+        return html2canvas(el, {
+            scale: scale,
+            backgroundColor: '#ffffff',
+            useCORS: true,
+            allowTaint: true,
+            logging: false
+        }).then(function(canvas) {
+            // Re-rasterise sur fond blanc opaque pour eviter alpha/black artifact
+            var safe = document.createElement('canvas');
+            safe.width = canvas.width;
+            safe.height = canvas.height;
+            var ctx = safe.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, safe.width, safe.height);
+            ctx.drawImage(canvas, 0, 0);
+            try {
+                var dataUrl = safe.toDataURL('image/jpeg', 0.85);
+                console.log('[ExportPDF] capture via html2canvas OK,', el.id, 'len:', dataUrl.length);
+                return { dataUrl: dataUrl, width: canvas.width, height: canvas.height };
+            } catch (e) {
+                console.error('[ExportPDF] html2canvas toDataURL ERROR (probably tainted):', e.message);
+                return null;
+            }
+        });
+    }
+
+    // \u2500\u2500\u2500 PAGE 1 : COUVERTURE (optionnelle) \u2500\u2500\u2500
+    if (includeCover) {
+    // Bandeau vert (gradient simul\u00e9 en 1 rect \u2014 jsPDF ne fait pas les gradients natifs)
+    doc.setFillColor(13, 139, 111); // #0D8B6F
+    doc.rect(0, 0, W, 110, 'F');
+    // Accent plus sombre en haut (effet de profondeur)
+    doc.setFillColor(10, 122, 96);  // #0A7A60
+    doc.rect(0, 0, W, 6, 'F');
+
+    // Titre
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('VERDICT', M, 22);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(220, 252, 231);
+    doc.text('Building Assessment Tool', M, 28);
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(28);
+    doc.text('Analyse environnementale', W / 2, 60, { align: 'center' });
+    doc.setFont('helvetica', 'italic');
+    doc.setFontSize(22);
+    doc.text('de site', W / 2, 75, { align: 'center' });
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(220, 252, 231);
+    doc.text('Rapport synthetique multi-sources', W / 2, 90, { align: 'center' });
+
+    // Bloc adresse + GPS + date
+    var y = 135;
+    doc.setTextColor(30, 41, 59);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(100, 116, 139);
+    doc.text('ADRESSE', M, y);
+    y += 6;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.setTextColor(30, 41, 59);
+    var addr = sanit(saState.address || '\u2014');
+    var addrLines = doc.splitTextToSize(addr, contentW);
+    doc.text(addrLines, M, y);
+    y += addrLines.length * 6 + 8;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(100, 116, 139);
+    doc.text('COORDONNEES GPS', M, y);
+    y += 6;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.setTextColor(30, 41, 59);
+    doc.text(saState.lat.toFixed(6) + ', ' + saState.lon.toFixed(6), M, y);
+    y += 10;
+
+    if (saState.commune) {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(11);
+        doc.setTextColor(100, 116, 139);
+        doc.text('COMMUNE', M, y);
+        y += 6;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(11);
+        doc.setTextColor(30, 41, 59);
+        doc.text(sanit(saState.commune) + (saState.codeInsee ? ' (INSEE ' + saState.codeInsee + ')' : ''), M, y);
+        y += 10;
+    }
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(100, 116, 139);
+    doc.text('DATE D\'ANALYSE', M, y);
+    y += 6;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.setTextColor(30, 41, 59);
+    doc.text(new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }), M, y);
+
+    // Bloc sources (bas de page)
+    doc.setFillColor(241, 245, 249); // slate-100
+    doc.rect(M, 240, contentW, 38, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(71, 85, 105);
+    doc.text('SOURCES PUBLIQUES MOBILISEES', M + 4, 248);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(100, 116, 139);
+    doc.text('Georisques (DGPR) \u00b7 IGN \u00b7 INPN/MNHN \u00b7 BRGM \u00b7 ADEME \u00b7 PVGIS \u00b7 Meteo-France', M + 4, 256);
+    doc.setTextColor(148, 163, 184);
+    doc.setFontSize(7.5);
+    doc.text('Donnees ouvertes France entiere. Verdict agrege en client-side, sans serveur.', M + 4, 263);
+    doc.setFontSize(8);
+    doc.setTextColor(13, 139, 111);
+    doc.setFont('helvetica', 'bold');
+    doc.text('bat-verdict.fr', M + 4, 272);
+
+    addFooter(pageNum++);
+    firstPageWritten = true;
+    console.log('[ExportPDF] cover dessinee, pages:', doc.getNumberOfPages(), 'pageNum prochain:', pageNum);
+    } // fin includeCover
+
+    // \u2500\u2500\u2500 PAGE SYNTHESE + CARTE (optionnelle) \u2500\u2500\u2500
+    var synthEl = document.getElementById('saSynthesis');
+    var mapEl = document.getElementById('saMapSection');
+
+    return Promise.resolve()
+        .then(function() {
+            if (!includeSynthesis) return;
+
+            // saSynthesis et saMapSection sont DANS #saResults — il faut donc
+            // que saResults soit visible pour que html2canvas puisse capturer.
+            // Si l'utilisateur est sur une autre page (Milieu physique, Climat, ...),
+            // on bascule temporairement sur la page Risques pour la capture.
+            if (typeof saGoToPage === 'function') {
+                try { saGoToPage('Risques'); } catch (e) {}
+            }
+            if (firstPageWritten) doc.addPage(); else firstPageWritten = true;
+            var yp2 = M;
+            doc.setTextColor(30, 41, 59);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(15);
+            doc.text('Synthese & localisation', M, yp2 + 5);
+            yp2 += 12;
+
+            // Attente render + init carte saState.map (peut etre lazy)
+            return new Promise(function(r) { setTimeout(r, 700); })
+                .then(function() {
+                    // Force le redimensionnement de la carte au cas ou elle vient d'apparaitre
+                    if (saState.map && typeof saState.map.invalidateSize === 'function') {
+                        try { saState.map.invalidateSize(); } catch (e) {}
+                    }
+                    return new Promise(function(r) { setTimeout(r, 250); });
+                })
+                .then(function() {
+                    // SYNTH : on extrait le texte (la capture image rendait noir).
+                    // jsPDF text natif = 100% fiable.
+                    if (synthEl) {
+                        var rawText = (synthEl.innerText || synthEl.textContent || '').trim();
+                        rawText = sanit(rawText);
+                        if (rawText) {
+                            // Decoupe en paragraphes par saut de ligne
+                            var paragraphs = rawText.split(/\n+/).map(function(p) { return p.trim(); }).filter(Boolean);
+                            doc.setTextColor(30, 41, 59);
+                            for (var i = 0; i < paragraphs.length; i++) {
+                                var p = paragraphs[i];
+                                // Detecte un titre court tout en majuscules (ex: "CONTEXTE DU SITE")
+                                var isHeading = (p.length < 50 && p === p.toUpperCase() && /[A-Z]/.test(p) && !/[.,]/.test(p));
+                                if (isHeading) {
+                                    doc.setFont('helvetica', 'bold');
+                                    doc.setFontSize(10);
+                                    doc.setTextColor(13, 139, 111);
+                                    yp2 += 1;
+                                } else {
+                                    doc.setFont('helvetica', 'normal');
+                                    doc.setFontSize(9.5);
+                                    doc.setTextColor(30, 41, 59);
+                                }
+                                var lines = doc.splitTextToSize(p, contentW);
+                                var lineH = isHeading ? 4.5 : 4.2;
+                                // Cap : on garde de la place pour la carte (max 55% de la page)
+                                var maxYBeforeMap = M + (H - 2*M) * 0.50;
+                                for (var l = 0; l < lines.length; l++) {
+                                    if (yp2 + lineH > maxYBeforeMap) {
+                                        doc.setFont('helvetica', 'italic');
+                                        doc.setFontSize(8);
+                                        doc.setTextColor(100, 116, 139);
+                                        doc.text('(suite tronquee — voir l\'application)', M, yp2);
+                                        yp2 += 5;
+                                        l = lines.length;
+                                        i = paragraphs.length;
+                                        break;
+                                    }
+                                    doc.text(lines[l], M, yp2);
+                                    yp2 += lineH;
+                                }
+                                yp2 += isHeading ? 0.5 : 1.5;
+                            }
+                            yp2 += 4;
+                        }
+                    }
+                    if (!mapEl) { console.warn('[ExportPDF] mapEl introuvable'); return null; }
+                    console.log('[ExportPDF] capture mapEl, computed display:', getComputedStyle(mapEl).display);
+                    return captureEl(mapEl);
+                })
+                .then(function(mapRes) {
+                    if (mapRes && mapRes.dataUrl) {
+                        var aspect = mapRes.width / mapRes.height;
+                        var availH = H - yp2 - M - 12;
+                        var iw = contentW, ih = iw / aspect;
+                        if (ih > availH) { ih = availH; iw = ih * aspect; if (iw > contentW) { iw = contentW; ih = iw / aspect; } }
+                        try {
+                            doc.addImage(mapRes.dataUrl, 'JPEG', M, yp2, iw, ih);
+                            console.log('[ExportPDF] map addImage OK');
+                        } catch (e) {
+                            console.error('[ExportPDF] mapCanvas addImage ERROR:', e);
+                        }
+                    }
+                    addFooter(pageNum++);
+                });
+        })
+        .then(function() {
+            // \u2500\u2500\u2500 PAGES SA SELECTIONNEES \u2500\u2500\u2500
+            // sectionIds contient des id de pages (saResults, saMilieuPhysiquePage, ...).
+            // On navigue via saGoToPage(...) pour que chaque page s'initialise
+            // (rendu DOM + cartes Leaflet) avant capture. La modale reste affichee
+            // par-dessus pour masquer les bascules de pages a l'utilisateur.
+            var pagesToExport;
+            if (sectionIds && sectionIds.length > 0) {
+                pagesToExport = sectionIds
+                    .map(function(id) {
+                        return SA_EXPORT_PAGES.find(function(p) { return p.id === id; });
+                    })
+                    .filter(function(p) { return !!p; });
+            } else {
+                pagesToExport = [];
+            }
+
+            // Memorise la page courante pour la restaurer apres l'export
+            var originalPageId = _saGetCurrentSaPageId();
+            var originalPageInfo = SA_EXPORT_PAGES.find(function(p) { return p.id === originalPageId; });
+            var originalGotoKey = originalPageInfo ? originalPageInfo.gotoKey : 'MilieuPhysique';
+
+            console.log('[ExportPDF] pagesToExport:', pagesToExport.map(function(p) { return p.id; }));
+            // Chain sequentiellement les navigations + captures
+            var p = Promise.resolve();
+            pagesToExport.forEach(function(pageInfo) {
+                p = p.then(function() {
+                    console.log('[ExportPDF] navigation vers', pageInfo.gotoKey, '(' + pageInfo.id + ')');
+                    // Navigue vers la page (init lazy maps + render)
+                    if (typeof saGoToPage === 'function') {
+                        try { saGoToPage(pageInfo.gotoKey); } catch (e) { console.error('[ExportPDF] saGoToPage error:', e); }
+                    } else {
+                        // Fallback : force display
+                        var el = document.getElementById(pageInfo.id);
+                        if (el) el.style.display = '';
+                    }
+                    // Attente render + init cartes (cartes Leaflet ont des setTimeout 100-500ms)
+                    return new Promise(function(r) { setTimeout(r, 700); });
+                }).then(function() {
+                    var pageEl = document.getElementById(pageInfo.id);
+                    console.log('[ExportPDF] pageEl', pageInfo.id, '?', !!pageEl, 'computed display:', pageEl ? getComputedStyle(pageEl).display : '?');
+                    if (!pageEl) return null;
+
+                    // Pour saResults : force ouvertes toutes les sous-sections
+                    var subSections = pageEl.querySelectorAll('.sa-section');
+                    var subWasOpen = [];
+                    subSections.forEach(function(s, i) {
+                        subWasOpen[i] = s.classList.contains('open');
+                        s.classList.add('open');
+                    });
+
+                    return new Promise(function(r) { setTimeout(r, 200); })
+                        .then(function() {
+                            console.log('[ExportPDF] captureEl(' + pageInfo.id + ')...');
+                            return captureEl(pageEl, { scale: 1.5 });
+                        })
+                        .then(function(pageRes) {
+                            console.log('[ExportPDF] capture ' + pageInfo.id + ' result:', pageRes ? (pageRes.width + 'x' + pageRes.height) : 'null');
+                            // Restore sub-sections state
+                            subSections.forEach(function(s, i) {
+                                if (!subWasOpen[i]) s.classList.remove('open');
+                            });
+                            return pageRes;
+                        });
+                }).then(function(pageRes) {
+                    if (!pageRes || !pageRes.dataUrl) { console.warn('[ExportPDF] capture null pour', pageInfo.id, ', skip'); return; }
+                    // Convertit le dataUrl en canvas reel pour permettre le slicing multi-pages
+                    return new Promise(function(resolve) {
+                        var img = new Image();
+                        img.onload = function() {
+                            var c = document.createElement('canvas');
+                            c.width = img.naturalWidth;
+                            c.height = img.naturalHeight;
+                            var ctx = c.getContext('2d');
+                            ctx.fillStyle = '#ffffff';
+                            ctx.fillRect(0, 0, c.width, c.height);
+                            ctx.drawImage(img, 0, 0);
+                            resolve(c);
+                        };
+                        img.onerror = function() { resolve(null); };
+                        img.src = pageRes.dataUrl;
+                    });
+                }).then(function(canvas) {
+                    if (!canvas) { console.warn('[ExportPDF] canvas conversion failed pour', pageInfo.id); return; }
+
+                    // Insere un titre de page avant la capture
+                    if (firstPageWritten) doc.addPage(); else firstPageWritten = true;
+                    var yTitle = M;
+                    doc.setTextColor(13, 139, 111);
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(15);
+                    doc.text(sanit(pageInfo.label), M, yTitle + 5);
+                    doc.setFont('helvetica', 'normal');
+                    doc.setFontSize(9);
+                    doc.setTextColor(100, 116, 139);
+                    doc.text(sanit(pageInfo.sub), M, yTitle + 11);
+                    yTitle += 16;
+
+                    // Calcul placement image avec espace pour titre
+                    var availH = H - yTitle - M - 8;
+                    var aspect = canvas.width / canvas.height;
+                    var imgWmm = contentW;
+                    var imgHmm = imgWmm / aspect;
+
+                    // Cap : maximum 5 pages PDF par section pour eviter les exports
+                    // delirants (ex: 198 pages quand toutes les sections sont longues)
+                    var MAX_PAGES_PER_SECTION = 5;
+
+                    // Helper local : re-rasterise un canvas (ou portion) sur fond blanc opaque
+                    function _safeJpegUrl(srcCanvas, srcY, srcH) {
+                        srcY = srcY || 0;
+                        srcH = srcH || srcCanvas.height;
+                        var safe = document.createElement('canvas');
+                        safe.width = srcCanvas.width;
+                        safe.height = srcH;
+                        var ctxS = safe.getContext('2d');
+                        ctxS.fillStyle = '#ffffff';
+                        ctxS.fillRect(0, 0, safe.width, safe.height);
+                        ctxS.drawImage(srcCanvas, 0, srcY, srcCanvas.width, srcH, 0, 0, srcCanvas.width, srcH);
+                        return safe.toDataURL('image/jpeg', 0.85);
+                    }
+
+                    if (imgHmm <= availH) {
+                        // Tient sur la meme page que le titre
+                        try {
+                            var pageUrl = _safeJpegUrl(canvas);
+                            console.log('[ExportPDF] page', pageInfo.id, 'dataURL length:', pageUrl.length);
+                            doc.addImage(pageUrl, 'JPEG', M, yTitle, imgWmm, imgHmm);
+                            console.log('[ExportPDF] page', pageInfo.id, 'addImage OK (1 page)');
+                        } catch (e) {
+                            console.error('[ExportPDF] page', pageInfo.id, 'addImage ERROR:', e && e.message, e);
+                        }
+                        addFooter(pageNum++);
+                    } else {
+                        // Image trop grande : pagination, mais cappee a MAX_PAGES_PER_SECTION
+                        var pxPerMm = canvas.width / contentW;
+                        var firstSlicePx = Math.floor(availH * pxPerMm);
+                        var fullSlicePx = Math.floor((H - 2 * M - 8) * pxPerMm);
+
+                        // Calcul du total de pages necessaires sans cap
+                        var totalPagesNeeded = 1 + Math.ceil((canvas.height - firstSlicePx) / fullSlicePx);
+                        var capped = (totalPagesNeeded > MAX_PAGES_PER_SECTION);
+                        var pagesToProduce = Math.min(totalPagesNeeded, MAX_PAGES_PER_SECTION);
+                        console.log('[ExportPDF] page', pageInfo.id, 'pagination:', totalPagesNeeded, '→ capped a', pagesToProduce);
+
+                        // Slice 1 (avec titre) — utilise le helper _safeJpegUrl
+                        var firstH = Math.min(firstSlicePx, canvas.height);
+                        try {
+                            doc.addImage(_safeJpegUrl(canvas, 0, firstH), 'JPEG', M, yTitle, contentW, firstH / pxPerMm);
+                            console.log('[ExportPDF] slice1 OK');
+                        } catch (e) {
+                            console.error('[ExportPDF] slice1 ERROR:', e && e.message, e);
+                        }
+                        addFooter(pageNum++);
+
+                        // Slices suivantes (pleine page, sans titre)
+                        var srcY = firstH;
+                        var producedPages = 1;
+                        while (srcY < canvas.height && producedPages < pagesToProduce) {
+                            var sliceH = Math.min(fullSlicePx, canvas.height - srcY);
+                            doc.addPage();
+                            try {
+                                doc.addImage(_safeJpegUrl(canvas, srcY, sliceH), 'JPEG', M, M, contentW, sliceH / pxPerMm);
+                            } catch (e) {
+                                console.error('[ExportPDF] sliceN ERROR:', e && e.message, e);
+                            }
+                            addFooter(pageNum++);
+                            srcY += sliceH;
+                            producedPages++;
+                        }
+
+                        // Si on a tronque, on l'indique
+                        if (capped) {
+                            doc.setFont('helvetica', 'italic');
+                            doc.setFontSize(9);
+                            doc.setTextColor(220, 38, 38);
+                            doc.text(
+                                'Section tronquee a ' + MAX_PAGES_PER_SECTION + ' pages — contenu complet dans l\'application.',
+                                M, H - 14
+                            );
+                            doc.setTextColor(0, 0, 0);
+                        }
+                    }
+                });
+            });
+
+            // Apres toutes les captures, restaure la page d'origine
+            p = p.then(function() {
+                if (typeof saGoToPage === 'function') {
+                    try { saGoToPage(originalGotoKey); } catch (e) {}
+                }
+            });
+
+            return p;
+        })
+        .then(function() {
+            // Sauvegarde
+            var slug = (saState.address || 'analyse')
+                .toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // strip accents
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '')
+                .substring(0, 60);
+            var dateStr = new Date().toISOString().substring(0, 10);
+            var fname = 'analyse_site_' + (slug || 'verdict') + '_' + dateStr + '.pdf';
+            console.log('[ExportPDF] === FIN === Sauvegarde:', fname, 'pages totales:', doc.getNumberOfPages());
+            doc.save(fname);
+        });
+}
+
+// Helper : ajoute une section capturee au PDF, paginant si elle depasse une page A4.
+// Appelle cb(pagesUsed) pour permettre au caller d'ajouter les footers.
+function _saAddSectionToPdf(doc, canvas, M, contentW, H, firstPageWritten, cb) {
+    // Compatibilite : ancienne signature (5 args) -> firstPageWritten=true par defaut
+    if (typeof firstPageWritten === 'function') { cb = firstPageWritten; firstPageWritten = true; }
+    var W = 210;
+    var availH = H - 2 * M - 8;  // reserve footer
+    var aspect = canvas.width / canvas.height;
+    var imgWmm = contentW;
+    var imgHmm = imgWmm / aspect;
+    var pagesUsed;
+
+    if (firstPageWritten) doc.addPage();
+
+    if (imgHmm <= availH) {
+        // Tient sur une page
+        doc.addImage(canvas.toDataURL('image/png'), 'PNG', M, M, imgWmm, imgHmm);
+        pagesUsed = 1;
+    } else {
+        // Multi-pages : on decoupe le canvas en bandes
+        var pxPerMm = canvas.width / contentW;
+        var slicePxH = Math.floor(availH * pxPerMm);
+        var totalSlices = Math.ceil(canvas.height / slicePxH);
+
+        for (var j = 0; j < totalSlices; j++) {
+            var srcY = j * slicePxH;
+            var srcH = Math.min(slicePxH, canvas.height - srcY);
+
+            var sliceCanvas = document.createElement('canvas');
+            sliceCanvas.width = canvas.width;
+            sliceCanvas.height = srcH;
+            sliceCanvas.getContext('2d').drawImage(
+                canvas,
+                0, srcY, canvas.width, srcH,
+                0, 0, canvas.width, srcH
+            );
+
+            if (j > 0) doc.addPage();
+            var sliceHmm = srcH / pxPerMm;
+            doc.addImage(sliceCanvas.toDataURL('image/png'), 'PNG', M, M, contentW, sliceHmm);
+        }
+        pagesUsed = totalSlices;
+    }
+
+    if (cb) cb(pagesUsed);
+    return Promise.resolve();
+}
+
 function saCartoExportPDF() {
+    console.log('\u2593\u2593\u2593 [Export PDF v20260505e] saCartoExportPDF appele \u2593\u2593\u2593');
     if (!saCartoMap) { alert('Carte non initialis\u00e9e.'); return; }
     if (!window.jspdf || !window.jspdf.jsPDF) { alert('jsPDF non charg\u00e9.'); return; }
-    // Forcer la vue Mise en page pour l'export (sinon format non respect\u00e9)
     var wasView = saCartoView;
     if (saCartoView !== 'layout') saCartoSetView('layout');
     _saCartoToast('G\u00e9n\u00e9ration du PDF en cours\u2026', '#2563EB');
-    // Laisser le temps au layout de se r\u00e9organiser
-    setTimeout(function() {
-        _saLoadHtml2canvas().then(function(ok) {
-            if (!ok) { alert('Impossible de charger html2canvas.'); if (wasView !== 'layout') saCartoSetView(wasView); return; }
+    document.body.classList.add('sa-carto-exporting');
+
+    // Desactiver tous les contenteditable pendant la capture : dom-to-image-more
+    // peut produire un canvas vide/noir sur des elements editables (caret, focus state).
+    var editablesSnapshot = [];
+    document.querySelectorAll('[contenteditable="true"]').forEach(function(el) {
+        editablesSnapshot.push(el);
+        el.setAttribute('contenteditable', 'false');
+    });
+
+    function cleanup() {
+        document.body.classList.remove('sa-carto-exporting');
+        editablesSnapshot.forEach(function(el) { el.setAttribute('contenteditable', 'true'); });
+        if (wasView !== 'layout') saCartoSetView(wasView);
+    }
+
+    function buildPdfFromDataUrl(dataUrl) {
+        var jsPDF = window.jspdf.jsPDF;
+        var fmt = saCartoFormat;
+        var dims = _saCartoPageDims(fmt);
+        var doc = new jsPDF({ orientation: dims.orient, unit: 'mm', format: dims.format });
+        doc.addImage(dataUrl, 'PNG', 0, 0, dims.w, dims.h);
+        // Re-ecrit en texte VECTORIEL natif les zones contenant des libelles
+        // (legende, titre, pied de page) : on masque la version rasterisee
+        // avec un rect blanc puis on redessine via doc.text() + doc.rect().
+        // Resultat : ces textes deviennent selectionnables, copiables, recherchables.
+        try {
             var page = document.getElementById('saCartoLayoutPage');
-            if (!page) { alert('Page introuvable.'); if (wasView !== 'layout') saCartoSetView(wasView); return; }
-            html2canvas(page, {
+            if (page) _saCartoOverlayNativeText(doc, page, dims);
+        } catch (e) { console.warn('Overlay texte natif echec:', e); }
+        var fname = 'carte_' + fmt + '_' + (new Date().toISOString().substring(0, 10)) + '.pdf';
+        doc.save(fname);
+        _saCartoToast('PDF enregistr\u00e9.', '#16A34A');
+    }
+
+    // Re-ecrit en texte vectoriel natif (jsPDF) les zones de texte clefs
+    // (legende, titre, pied de page) en masquant prealablement la version
+    // rasterisee avec un rect blanc. Le texte natif est selectionnable,
+    // copiable et recherchable. Pour les swatches colores de la legende,
+    // on les redessine aussi nativement avec doc.rect() / doc.line().
+    function _saCartoOverlayNativeText(doc, page, dims) {
+        var pageRect = page.getBoundingClientRect();
+        if (!pageRect.width || !pageRect.height) return;
+        var scaleX = dims.w / pageRect.width;
+        var scaleY = dims.h / pageRect.height;
+        // Facteur de conversion px (CSS, 96dpi) -> pt (PDF, 72dpi).
+        // Theorique : 0.75. Empirique : 1.0 colle mieux au visuel ecran (zoom navigateur
+        // typique > 100%), avec un texte PDF 33% plus gros qu'en strict 96/72 dpi.
+        // 18px -> 18pt (titre), 14px -> 14pt (libelles), 13px -> 13pt.
+        var PX_TO_PT = 1.0;
+
+        function rectToPdf(rect) {
+            return {
+                x: (rect.left - pageRect.left) * scaleX,
+                y: (rect.top  - pageRect.top)  * scaleY,
+                w: rect.width  * scaleX,
+                h: rect.height * scaleY
+            };
+        }
+        function rgbFromCss(cssColor) {
+            if (!cssColor) return [0, 0, 0];
+            cssColor = String(cssColor).trim();
+            // Hex : #RGB ou #RRGGBB ou #RRGGBBAA
+            if (cssColor.charAt(0) === '#') {
+                var hex = cssColor.substring(1);
+                if (hex.length === 3) {
+                    return [parseInt(hex[0]+hex[0],16), parseInt(hex[1]+hex[1],16), parseInt(hex[2]+hex[2],16)];
+                }
+                if (hex.length >= 6) {
+                    return [parseInt(hex.substring(0,2),16), parseInt(hex.substring(2,4),16), parseInt(hex.substring(4,6),16)];
+                }
+            }
+            // rgb(r,g,b) / rgba(r,g,b,a)
+            if (cssColor.indexOf('rgb') === 0) {
+                var m = cssColor.match(/\d+/g);
+                if (m && m.length >= 3) return [parseInt(m[0],10), parseInt(m[1],10), parseInt(m[2],10)];
+            }
+            // Couleur nommee (red, blue, cyan, etc.) ou autre format CSS :
+            // on passe par canvas pour resoudre en rgb, c'est rapide et fiable.
+            try {
+                var c = document.createElement('canvas').getContext('2d');
+                c.fillStyle = '#000000';  // reset au cas ou
+                c.fillStyle = cssColor;
+                var resolved = c.fillStyle;  // retourne hex #rrggbb
+                if (resolved && resolved.charAt(0) === '#') {
+                    return [parseInt(resolved.substring(1,3),16), parseInt(resolved.substring(3,5),16), parseInt(resolved.substring(5,7),16)];
+                }
+                if (resolved && resolved.indexOf('rgb') === 0) {
+                    var m2 = resolved.match(/\d+/g);
+                    if (m2 && m2.length >= 3) return [parseInt(m2[0],10), parseInt(m2[1],10), parseInt(m2[2],10)];
+                }
+            } catch (e) {}
+            return [0, 0, 0];
+        }
+        function fillWhiteOver(el) {
+            var r = el.getBoundingClientRect();
+            if (!r.width || !r.height) return;
+            var p = rectToPdf(r);
+            doc.setFillColor(255, 255, 255);
+            doc.rect(p.x, p.y, p.w, p.h, 'F');
+        }
+        function drawTextEl(el) {
+            // Saute si parent contenant des enfants texte (on traitera l'enfant)
+            for (var i = 0; i < el.children.length; i++) {
+                var ch = el.children[i];
+                if (ch.textContent && ch.textContent.trim() && ch.tagName !== 'BR') return;
+            }
+            var text = (el.textContent || '').trim();
+            if (!text) return;
+            var cs = window.getComputedStyle(el);
+            if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) === 0) return;
+            var rect = el.getBoundingClientRect();
+            if (!rect.width || !rect.height) return;
+            var fontPx = parseFloat(cs.fontSize) || 14;
+            var fontPt = fontPx * PX_TO_PT;
+            doc.setFontSize(fontPt);
+            // Bold ?
+            var fw = cs.fontWeight;
+            var isBold = (fw === 'bold' || fw === 'bolder' || parseInt(fw, 10) >= 600);
+            try { doc.setFont('helvetica', isBold ? 'bold' : 'normal'); } catch (e) {}
+            // Couleur
+            var rgb = rgbFromCss(cs.color);
+            doc.setTextColor(rgb[0], rgb[1], rgb[2]);
+            var p = rectToPdf(rect);
+            // Hauteur de texte reelle (pas la line-height) : utile pour bien centrer
+            // verticalement quand le rect du span est plus grand que le texte rendu
+            // (line-height > font-size). Sans ca, baseline:'top' colle le texte en haut
+            // du line-box et il finit au-dessus des swatches centres dans la ligne.
+            var fontPxMm = fontPx / 96 * 25.4;  // px ecran -> mm
+            // Decoupe en lignes au max-width disponible
+            var lines;
+            try { lines = doc.splitTextToSize(text, Math.max(5, p.w + 2)); }
+            catch (e) { lines = [text]; }
+            if (!Array.isArray(lines)) lines = [lines];
+            // Si une seule ligne : centrer verticalement dans le rect (gere line-height > font-size)
+            // Si plusieurs lignes : commencer en haut du rect, espacer par line-height reelle
+            var align = (cs.textAlign === 'center') ? 'center' : (cs.textAlign === 'right' ? 'right' : 'left');
+            var tx = p.x;
+            if (align === 'center') tx = p.x + p.w / 2;
+            else if (align === 'right') tx = p.x + p.w;
+            if (lines.length === 1) {
+                var yMid = p.y + p.h / 2;
+                try {
+                    doc.text(String(lines[0]), tx, yMid, { baseline: 'middle', align: align });
+                } catch (e) {}
+            } else {
+                // Multi-lignes : line-height ecran (et non font-size pur)
+                var lineHeightCssPx = parseFloat(cs.lineHeight);
+                if (isNaN(lineHeightCssPx)) lineHeightCssPx = fontPx * 1.2;
+                var lineHeightMm = lineHeightCssPx / 96 * 25.4;
+                lines.forEach(function(line, idx) {
+                    if (!line) return;
+                    var yLine = p.y + (idx + 0.5) * lineHeightMm;  // centre de la ligne
+                    try {
+                        doc.text(String(line), tx, yLine, { baseline: 'middle', align: align });
+                    } catch (e) {}
+                });
+            }
+        }
+        function drawSwatchEl(el) {
+            var rect = el.getBoundingClientRect();
+            if (!rect.width || !rect.height) return;
+            var cs = window.getComputedStyle(el);
+            var p = rectToPdf(rect);
+            // Background color du swatch
+            var bg = cs.backgroundColor;
+            if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
+                var rgb = rgbFromCss(bg);
+                doc.setFillColor(rgb[0], rgb[1], rgb[2]);
+                // Si c'est un cercle (border-radius >= 50%), on dessine un cercle
+                var br = cs.borderRadius;
+                var isCircle = br && (br.indexOf('50%') !== -1 || (rect.width === rect.height && parseFloat(br) >= rect.width / 2));
+                if (isCircle) {
+                    doc.circle(p.x + p.w / 2, p.y + p.h / 2, Math.min(p.w, p.h) / 2, 'F');
+                } else {
+                    doc.rect(p.x, p.y, p.w, p.h, 'F');
+                }
+            }
+            // Pour les SVG (legende riche), on les laisse en image (deja rasterises avec la carte)
+        }
+
+        // 1) MASQUE LEGENDE + RECONSTRUCTION CLEAN top-to-bottom
+        // Plus fiable que de suivre les positions du DOM (qui peuvent etre etirees,
+        // clipees ou contenir des paddings invisibles).
+        var legendBox = document.getElementById('saCartoLegendBox') || document.getElementById('saCartoMapLegend');
+        if (legendBox) {
+            fillWhiteOver(legendBox);
+            var legRect = legendBox.getBoundingClientRect();
+            var x0 = (legRect.left - pageRect.left) * scaleX;
+            var y0 = (legRect.top  - pageRect.top)  * scaleY;
+            var w  = legRect.width  * scaleX;
+            // h pas utilise mais peut servir pour borner si besoin
+            var padX = 8, padY = 5;  // marge horizontale plus genereuse pour aerer la legende
+            var contentX = x0 + padX;
+            var contentW = w - 2 * padX;
+            var yCursor = y0 + padY;
+
+            // 1a) Titre (#saCartoLayoutHeader si present dans la legende)
+            var titleEl = legendBox.querySelector('#saCartoLayoutHeader');
+            if (titleEl) {
+                var titleText = (titleEl.textContent || '').trim();
+                if (titleText) {
+                    var tcs = window.getComputedStyle(titleEl);
+                    var tFontPx = parseFloat(tcs.fontSize) || 18;
+                    var tFontPt = tFontPx * PX_TO_PT;
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(tFontPt);
+                    doc.setTextColor.apply(doc, rgbFromCss(tcs.color));
+                    var tLines = doc.splitTextToSize(titleText, contentW);
+                    var tLineH = tFontPt * 1.35 / 72 * 25.4;  // line-height plus aere pour le titre
+                    tLines.forEach(function(line) {
+                        doc.text(line, x0 + w / 2, yCursor + tLineH / 2, { baseline: 'middle', align: 'center' });
+                        yCursor += tLineH;
+                    });
+                    yCursor += 4;  // espace avant le separateur
+                    // Separateur en pointilles (comme le border-bottom dashed du titre on screen)
+                    try {
+                        doc.setDrawColor(180, 188, 200);
+                        doc.setLineWidth(0.2);
+                        if (typeof doc.setLineDashPattern === 'function') {
+                            doc.setLineDashPattern([0.8, 0.8], 0);
+                        } else if (typeof doc.setLineDash === 'function') {
+                            doc.setLineDash([0.8, 0.8], 0);
+                        }
+                        doc.line(x0 + 4, yCursor, x0 + w - 4, yCursor);
+                        // reset
+                        if (typeof doc.setLineDashPattern === 'function') doc.setLineDashPattern([], 0);
+                        else if (typeof doc.setLineDash === 'function') doc.setLineDash([], 0);
+                    } catch (e) {}
+                    yCursor += 6;  // gap apres separateur, avant la 1ere section
+                }
+            }
+
+            // 1b) Iteration sur les "couches" (sections) en ordre DOM
+            var layers = legendBox.querySelectorAll('.sa-carto-legend-layer, .sa-carto-legend-section');
+            layers.forEach(function(layer, layerIdx) {
+                // Espace AVANT le titre de section (pousse "Amenagements cyclables", "Lignes TC..." vers le bas)
+                yCursor += 4;
+                // section title (label de la couche)
+                var sectionTitle = layer.querySelector('.sa-carto-legend-layer-title, .sa-carto-legend-section-text, .sa-carto-legend-section-title');
+                if (sectionTitle) {
+                    var stText = (sectionTitle.textContent || '').trim();
+                    if (stText) {
+                        var stcs = window.getComputedStyle(sectionTitle);
+                        var stFontPx = parseFloat(stcs.fontSize) || 14;
+                        // Titres de section : -2pt par rapport au bump precedent
+                        var stFontPt = Math.max(14, stFontPx * PX_TO_PT * 1.4 - 2);
+                        doc.setFont('helvetica', 'bold');
+                        doc.setFontSize(stFontPt);
+                        doc.setTextColor.apply(doc, rgbFromCss(stcs.color));
+                        var stLines = doc.splitTextToSize(stText, contentW);
+                        var stLineH = stFontPt * 1.35 / 72 * 25.4;  // section bold : un peu plus d'air
+                        stLines.forEach(function(line) {
+                            doc.text(line, contentX, yCursor + stLineH / 2, { baseline: 'middle', align: 'left' });
+                            yCursor += stLineH;
+                        });
+                        yCursor += 2.5;  // gap apres titre de section
+                    }
+                }
+                // items : rows avec swatch + label
+                var rows = layer.querySelectorAll('.sa-carto-layers-legend-row, .sa-legend-row, .sa-carto-legend-row');
+                rows.forEach(function(row) {
+                    var swatchEl = row.querySelector('.sa-carto-layers-legend-swatch, .sa-carto-legend-swatch, [class*="swatch"]');
+                    var labelEl  = row.querySelector('.sa-carto-layers-legend-label, .sa-carto-legend-label, .sa-legend-label');
+                    if (!labelEl) {
+                        // Fallback : prendre le 1er span/div texte non-swatch
+                        var cands = row.querySelectorAll('span, div');
+                        for (var ci = 0; ci < cands.length; ci++) {
+                            var c = cands[ci];
+                            var cClass = (c.className || '').toString();
+                            if (/swatch/.test(cClass)) continue;
+                            if (c.textContent && c.textContent.trim()) { labelEl = c; break; }
+                        }
+                    }
+                    if (!labelEl && !swatchEl) return;
+                    var lblText = labelEl ? (labelEl.textContent || '').trim() : '';
+                    var lcs = labelEl ? window.getComputedStyle(labelEl) : null;
+                    var lFontPx = lcs ? (parseFloat(lcs.fontSize) || 13) : 13;
+                    // Items : -2pt par rapport au bump precedent (plus discret)
+                    var lFontPt = Math.max(14, lFontPx * PX_TO_PT * 1.4 - 2);
+                    var lLineH  = lFontPt * 1.5 / 72 * 25.4;
+
+                    // Swatch : carre (par defaut) ou ligne (si shape='line').
+                    // Avant : rect 7×1.8mm — donnait l'impression de "▪▪▪" parce que les
+                    // pixels rasterises de la couche en-dessous restaient visibles autour.
+                    // Maintenant : SQUARE 4×4mm comme a l'ecran, avec un white-fill plus large
+                    // pour bien masquer la version rasterisee.
+                    var swatchW = 4.5;   // carre 4.5mm × 4.5mm
+                    var swatchH = 4.5;
+                    var swatchX = contentX;
+                    var swatchYCenter = yCursor + lLineH / 2;
+                    // Pre-masque blanc pour effacer les pixels rasterises du swatch original
+                    doc.setFillColor(255, 255, 255);
+                    doc.rect(swatchX - 0.5, swatchYCenter - swatchH / 2 - 0.5, swatchW + 4, swatchH + 1, 'F');
+                    if (swatchEl) {
+                        var scs = window.getComputedStyle(swatchEl);
+                        var bg = scs.backgroundColor;
+                        var bgIsTransparent = !bg || bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent';
+                        // Si transparent : on extrait la couleur depuis (1) le gradient
+                        // background-image, (2) la border-color, OU (3) l'attribut fill
+                        // d'un SVG enfant (swatches forme : square, star, triangle, etc.).
+                        if (bgIsTransparent) {
+                            var bgImg = scs.backgroundImage || '';
+                            var grm = bgImg.match(/rgba?\([\d\s,\.]+\)|#[0-9a-f]{3,8}/i);
+                            if (grm) bg = grm[0];
+                            else {
+                                var bc = scs.borderTopColor || scs.borderColor;
+                                if (bc && bc !== 'rgba(0, 0, 0, 0)' && bc !== 'transparent') bg = bc;
+                            }
+                            // SVG fallback : recupere fill du 1er element colore
+                            if (bgIsTransparent && (!grm || !bg)) {
+                                var svgFill = swatchEl.querySelector && swatchEl.querySelector('[fill]:not([fill="none"])');
+                                if (svgFill) {
+                                    var f = svgFill.getAttribute('fill');
+                                    if (f && f !== 'none' && f !== 'transparent') bg = f;
+                                }
+                            }
+                        }
+                        // Si SVG sans fill direct, prendre quand meme le fill du premier path/polygon
+                        if (!bg || bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent') {
+                            var anySvgEl = swatchEl.querySelector && swatchEl.querySelector('polygon, rect, circle, path');
+                            if (anySvgEl) {
+                                var f2 = anySvgEl.getAttribute('fill');
+                                if (f2 && f2 !== 'none' && f2 !== 'transparent') bg = f2;
+                            }
+                        }
+                        var rgb = rgbFromCss(bg);
+                        // Detection : swatch TRAIN (path avec dashArray '8 8') seulement
+                        var trainPath = swatchEl.querySelector && swatchEl.querySelector('path[stroke-dasharray], line[stroke-dasharray]');
+                        if (trainPath) {
+                            // Train : ligne dashed noire
+                            doc.setDrawColor(26, 26, 26);
+                            doc.setLineWidth(swatchH);
+                            try {
+                                if (typeof doc.setLineDashPattern === 'function') doc.setLineDashPattern([1.4, 1], 0);
+                                else if (typeof doc.setLineDash === 'function') doc.setLineDash([1.4, 1], 0);
+                            } catch (e) {}
+                            doc.line(swatchX, swatchYCenter, swatchX + swatchW, swatchYCenter);
+                            try {
+                                if (typeof doc.setLineDashPattern === 'function') doc.setLineDashPattern([], 0);
+                                else if (typeof doc.setLineDash === 'function') doc.setLineDash([], 0);
+                            } catch (e) {}
+                        } else if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
+                            doc.setFillColor(rgb[0], rgb[1], rgb[2]);
+                            // detecte cercle vs square vs line (selon la classe / forme du swatch)
+                            var br = scs.borderRadius;
+                            var swCls = (swatchEl.className || '').toString();
+                            var sRect = swatchEl.getBoundingClientRect();
+                            var isCircle = swCls.indexOf('circle') !== -1
+                                || (br && (br.indexOf('50%') !== -1 || (sRect.width === sRect.height && parseFloat(br) >= sRect.width / 2)));
+                            var isLine = swCls.indexOf('line') !== -1;
+                            if (isCircle) {
+                                doc.circle(swatchX + swatchW / 2, swatchYCenter, swatchW / 2, 'F');
+                            } else if (isLine) {
+                                // Ligne fine : 7mm × 1.5mm centree
+                                doc.rect(swatchX, swatchYCenter - 0.75, 7, 1.5, 'F');
+                            } else {
+                                // Square : utilise les dimensions calculees au-dessus
+                                doc.rect(swatchX, swatchYCenter - swatchH / 2, swatchW, swatchH, 'F');
+                            }
+                        }
+                    }
+                    // Label : a droite du swatch
+                    if (lblText) {
+                        doc.setFont('helvetica', 'normal');
+                        doc.setFontSize(lFontPt);
+                        doc.setTextColor.apply(doc, rgbFromCss(lcs.color));
+                        var lblX = contentX + swatchW + 2;
+                        var lblW = contentW - swatchW - 2;
+                        var lblLines = doc.splitTextToSize(lblText, lblW);
+                        lblLines.forEach(function(line, idx) {
+                            var yLine = yCursor + lLineH * (idx + 0.5);
+                            doc.text(line, lblX, yLine, { baseline: 'middle', align: 'left' });
+                        });
+                        yCursor += Math.max(lLineH, lblLines.length * lLineH);
+                    } else {
+                        yCursor += lLineH;
+                    }
+                });
+                yCursor += 5;  // gap apres section (avant la prochaine couche)
+            });
+
+            // 1c) Iteration sur les "entries" : groupes (formes dessinees, tampons, rayon...)
+            // Structure : <div.sa-carto-legend-entry> > swatch + label sur une ligne
+            var entries = legendBox.querySelectorAll('.sa-carto-legend-entry');
+            console.log('▓▓▓ [ENTRIES]', entries.length, 'entry(ies) trouvees dans legendBox',
+                'Aussi presents :', legendBox.querySelectorAll('[class*="legend-entry"], [class*="legend-row"], [class*="legend-item"]').length, 'elements legend-*');
+            entries.forEach(function(entry) {
+                var swatchEl2 = entry.querySelector('.sa-carto-legend-swatch, [class*="swatch"]');
+                var labelEl2  = entry.querySelector('.sa-carto-legend-text, .sa-carto-legend-label, span:not([class*="swatch"])');
+                if (!labelEl2) return;
+                var lblText = (labelEl2.textContent || '').trim();
+                if (!lblText) return;
+                var lcs = window.getComputedStyle(labelEl2);
+                var lFontPx = parseFloat(lcs.fontSize) || 13;
+                var lFontPt = Math.max(14, lFontPx * PX_TO_PT * 1.4 - 2);
+                var lLineH = lFontPt * 1.5 / 72 * 25.4;
+
+                // Swatch a gauche
+                var swatchW = 4.5, swatchH = 4.5;
+                var swatchX = contentX;
+                var swatchYCenter = yCursor + lLineH / 2;
+                doc.setFillColor(255, 255, 255);
+                doc.rect(swatchX - 0.5, swatchYCenter - swatchH / 2 - 0.5, swatchW + 4, swatchH + 1, 'F');
+
+                if (swatchEl2) {
+                    // PRIORITE absolue : SVG attributs (fill, stroke). Si presents, on les
+                    // utilise et on ignore tout backgroundColor / gradient / border.
+                    var bg = null;
+                    var svgEl = swatchEl2.querySelector && swatchEl2.querySelector('circle, rect, polygon, path, line');
+                    if (svgEl) {
+                        var fillAttr = svgEl.getAttribute('fill');
+                        var fillOpAttr = parseFloat(svgEl.getAttribute('fill-opacity') || '1');
+                        var strokeAttr = svgEl.getAttribute('stroke');
+                        console.log('▓ [ENTRY swatch]', lblText,
+                            '| tag:', svgEl.tagName,
+                            '| fill:', fillAttr, 'opacity:', fillOpAttr,
+                            '| stroke:', strokeAttr);
+                        var fillIsAbsent = !fillAttr || fillAttr === 'none' || fillAttr === 'transparent';
+                        var fillIsLight = fillOpAttr < 0.6;
+                        if ((fillIsAbsent || fillIsLight) && strokeAttr && strokeAttr !== 'none' && strokeAttr !== 'transparent') {
+                            bg = strokeAttr;
+                        } else if (fillAttr && !fillIsAbsent) {
+                            bg = fillAttr;
+                        } else if (strokeAttr && strokeAttr !== 'none' && strokeAttr !== 'transparent') {
+                            bg = strokeAttr;
+                        }
+                        console.log('▓ [ENTRY swatch] => bg choisi:', bg, '→ rgb:', bg ? rgbFromCss(bg) : null);
+                    } else {
+                        console.warn('▓ [ENTRY swatch]', lblText, 'AUCUN element SVG. HTML:', swatchEl2.outerHTML);
+                        // Fallback CSS : background-color
+                        var scs2 = window.getComputedStyle(swatchEl2);
+                        bg = scs2.backgroundColor;
+                        if (!bg || bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent') {
+                            var bgImg2 = scs2.backgroundImage || '';
+                            var grm2 = bgImg2.match(/rgba?\([\d\s,\.]+\)|#[0-9a-f]{3,8}/i);
+                            if (grm2) bg = grm2[0];
+                        }
+                    }
+                    var rgb = rgbFromCss(bg);
+                    if (bg) {
+                        // Determine la forme : SVG -> regarde le tag (polygon=etoile/triangle, circle=rond, rect=carre)
+                        var svgInner = swatchEl2.querySelector && swatchEl2.querySelector('polygon, circle, rect, path');
+                        var swCls2 = (swatchEl2.className || '').toString();
+                        if (svgInner) {
+                            var tag = svgInner.tagName.toLowerCase();
+                            // STAR : polygon avec 10 points (5 branches)
+                            var pts = svgInner.getAttribute && svgInner.getAttribute('points');
+                            var isStar = (tag === 'polygon' && pts && pts.split(/\s+/).filter(Boolean).length >= 10);
+                            // CIRCLE
+                            if (tag === 'circle') {
+                                // Outline-only si fill="none" : dessine un cercle stroke
+                                var fillAttr = svgInner.getAttribute('fill');
+                                var isOutline = (!fillAttr || fillAttr === 'none' || fillAttr === 'transparent');
+                                if (isOutline) {
+                                    doc.setDrawColor(rgb[0], rgb[1], rgb[2]);
+                                    doc.setLineWidth(0.5);
+                                    doc.circle(swatchX + swatchW / 2, swatchYCenter, swatchW / 2 - 0.3, 'D');
+                                } else {
+                                    doc.setFillColor(rgb[0], rgb[1], rgb[2]);
+                                    doc.circle(swatchX + swatchW / 2, swatchYCenter, swatchW / 2, 'F');
+                                }
+                            } else if (isStar) {
+                                // Etoile a 5 branches centree
+                                var cx = swatchX + swatchW / 2, cy = swatchYCenter;
+                                var rOut = swatchW / 2, rIn = rOut * 0.42;
+                                doc.setFillColor(rgb[0], rgb[1], rgb[2]);
+                                var lines = [];
+                                for (var si = 0; si < 10; si++) {
+                                    var ang = (si * 36 - 90) * Math.PI / 180;
+                                    var rr = (si % 2 === 0) ? rOut : rIn;
+                                    lines.push([cx + rr * Math.cos(ang), cy + rr * Math.sin(ang)]);
+                                }
+                                // jsPDF : draw polygon via lines() ou triangle()
+                                if (typeof doc.lines === 'function') {
+                                    var rel = [];
+                                    for (var li = 1; li < lines.length; li++) rel.push([lines[li][0]-lines[li-1][0], lines[li][1]-lines[li-1][1]]);
+                                    rel.push([lines[0][0]-lines[lines.length-1][0], lines[0][1]-lines[lines.length-1][1]]);
+                                    doc.lines(rel, lines[0][0], lines[0][1], [1,1], 'F', true);
+                                } else {
+                                    doc.rect(swatchX, swatchYCenter - swatchH/2, swatchW, swatchH, 'F');
+                                }
+                            } else if (tag === 'rect') {
+                                doc.setFillColor(rgb[0], rgb[1], rgb[2]);
+                                doc.rect(swatchX, swatchYCenter - swatchH/2, swatchW, swatchH, 'F');
+                            } else {
+                                // path / autre : fallback rect
+                                doc.setFillColor(rgb[0], rgb[1], rgb[2]);
+                                doc.rect(swatchX, swatchYCenter - swatchH/2, swatchW, swatchH, 'F');
+                            }
+                        } else {
+                            // Pas de SVG -> rect / circle selon classe/border
+                            var br2 = scs.borderRadius;
+                            var sRect2 = swatchEl2.getBoundingClientRect();
+                            var isCircle2 = swCls2.indexOf('circle') !== -1
+                                || (br2 && (br2.indexOf('50%') !== -1 || (sRect2.width === sRect2.height && parseFloat(br2) >= sRect2.width / 2)));
+                            doc.setFillColor(rgb[0], rgb[1], rgb[2]);
+                            if (isCircle2) {
+                                doc.circle(swatchX + swatchW / 2, swatchYCenter, swatchW / 2, 'F');
+                            } else {
+                                doc.rect(swatchX, swatchYCenter - swatchH/2, swatchW, swatchH, 'F');
+                            }
+                        }
+                    }
+                }
+
+                // Label
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(lFontPt);
+                doc.setTextColor(40, 40, 40);
+                var lblX = contentX + swatchW + 2;
+                var lblW = contentW - swatchW - 2;
+                var lblLines = doc.splitTextToSize(lblText, lblW);
+                lblLines.forEach(function(line, idx) {
+                    doc.text(line, lblX, yCursor + lLineH * (idx + 0.5), { baseline: 'middle', align: 'left' });
+                });
+                yCursor += Math.max(lLineH, lblLines.length * lLineH);
+            });
+        }
+
+        // 2) MASQUE + REDRAW FOOTER (le titre est deja gere dans la legende ci-dessus)
+        // Le footer est en bas de la layout-page, pas dans la legende.
+        var footer = document.getElementById('saCartoLayoutFooter');
+        if (footer) {
+            fillWhiteOver(footer);
+            drawTextEl(footer);
+        }
+
+        console.log('[Export PDF] Texte natif applique (legende + titre + footer)');
+    }
+
+    function captureViaHtml2canvas(page) {
+        // On capture UNIQUEMENT le div carte (#saCartoMap), pas toute la page.
+        // Le reste (titre, legende, footer) sera rendu nativement en texte PDF.
+        var mapEl = document.getElementById('saCartoMap');
+        var target = mapEl || page;
+        return _saLoadHtml2canvas().then(function(ok) {
+            if (!ok) throw new Error('html2canvas non charge');
+            return html2canvas(target, {
                 useCORS: true, allowTaint: true, logging: false,
-                scale: Math.min(window.devicePixelRatio || 1, 2),
-                backgroundColor: '#FFFFFF'
-            }).then(function(canvas) {
-                var jsPDF = window.jspdf.jsPDF;
-                var fmt = saCartoFormat;
-                var dims = _saCartoPageDims(fmt);
-                var doc = new jsPDF({ orientation: dims.orient, unit: 'mm', format: dims.format });
-                var pageW = dims.w, pageH = dims.h;
-                var img = canvas.toDataURL('image/png');
-                doc.addImage(img, 'PNG', 0, 0, pageW, pageH);
-                var fname = 'carte_' + fmt + '_' + (new Date().toISOString().substring(0, 10)) + '.pdf';
-                doc.save(fname);
-                _saCartoToast('PDF enregistr\u00e9.', '#16A34A');
-                // Restaurer la vue
-                if (wasView !== 'layout') saCartoSetView(wasView);
-            }).catch(function(err) {
-                alert('\u00c9chec capture : ' + (err.message || err));
-                if (wasView !== 'layout') saCartoSetView(wasView);
+                scale: 2, backgroundColor: '#FFFFFF'
+            });
+        }).then(function(canvas) {
+            return { dataUrl: canvas.toDataURL('image/png'), targetEl: target };
+        });
+    }
+
+    function captureViaDomToImage(page) {
+        var mapEl = document.getElementById('saCartoMap');
+        var target = mapEl || page;
+        return _saLoadDomToImage().then(function(ok) {
+            if (!ok || typeof domtoimage === 'undefined') throw new Error('dom-to-image non charge');
+            return domtoimage.toPng(target, {
+                quality: 1,
+                bgcolor: '#FFFFFF',
+                width: target.offsetWidth * 2,
+                height: target.offsetHeight * 2,
+                style: {
+                    transform: 'scale(2)',
+                    'transform-origin': 'top left',
+                    width: target.offsetWidth + 'px',
+                    height: target.offsetHeight + 'px'
+                },
+                cacheBust: true
+            }).then(function(dataUrl) {
+                return { dataUrl: dataUrl, targetEl: target };
             });
         });
-    }, 500);
+    }
+
+    function buildPdfFromDataUrl(captureResult) {
+        var jsPDF = window.jspdf.jsPDF;
+        var fmt = saCartoFormat;
+        var dims = _saCartoPageDims(fmt);
+        var doc = new jsPDF({ orientation: dims.orient, unit: 'mm', format: dims.format });
+        var page = document.getElementById('saCartoLayoutPage');
+        var pageRect = page ? page.getBoundingClientRect() : { left:0, top:0, width:1, height:1 };
+        var scaleX = dims.w / pageRect.width;
+        var scaleY = dims.h / pageRect.height;
+        // Fond blanc
+        doc.setFillColor(255, 255, 255);
+        doc.rect(0, 0, dims.w, dims.h, 'F');
+        // 1) Image de la CARTE uniquement, placee a l'emplacement du div #saCartoMap
+        if (captureResult && captureResult.dataUrl && captureResult.targetEl) {
+            try {
+                var r = captureResult.targetEl.getBoundingClientRect();
+                var mx = (r.left - pageRect.left) * scaleX;
+                var my = (r.top  - pageRect.top)  * scaleY;
+                var mw = r.width  * scaleX;
+                var mh = r.height * scaleY;
+                doc.addImage(captureResult.dataUrl, 'PNG', mx, my, mw, mh);
+            } catch (e) { console.warn('addImage echec:', e); }
+        }
+        // 2) Texte natif (titre + legende + footer) - selectionnable, recherchable
+        try {
+            if (page) _saCartoOverlayNativeText(doc, page, dims);
+        } catch (e) { console.warn('Overlay texte natif echec:', e); }
+        var fname = 'carte_' + fmt + '_' + (new Date().toISOString().substring(0, 10)) + '.pdf';
+        doc.save(fname);
+        _saCartoToast('PDF enregistr\u00e9.', '#16A34A');
+    }
+
+    // Pose le texte (visible noir) AVANT l'image. L'image vient ensuite par-dessus
+    // et masque visuellement le texte, mais le texte reste dans le stream PDF
+    // donc reste selectionnable et recherchable. C'est la technique OCR.
+    function _saCartoOverlayInvisibleText(doc, page, dims) {
+        var pageRect = page.getBoundingClientRect();
+        if (!pageRect.width || !pageRect.height) return;
+        var scaleX = dims.w / pageRect.width;
+        var scaleY = dims.h / pageRect.height;
+        doc.setTextColor(0, 0, 0);  // noir (sera masque par l'image de toute facon)
+        var selectors = [
+            '#saCartoLayoutHeader',
+            '#saCartoLayoutFooter',
+            '#saCartoLegendBox .sa-carto-legend-layer-title',
+            '#saCartoLegendBox .sa-carto-legend-section-text',
+            '#saCartoLegendBox .sa-carto-layers-legend-label',
+            '#saCartoLegendBox strong',
+            '#saCartoLegendBox span'
+        ];
+        var seen = (typeof Set === 'function') ? new Set() : null;
+        selectors.forEach(function(sel) {
+            var els;
+            try { els = page.querySelectorAll(sel); } catch (e) { return; }
+            els.forEach(function(el) {
+                if (seen && seen.has(el)) return;
+                if (seen) seen.add(el);
+                for (var i = 0; i < el.children.length; i++) {
+                    var ch = el.children[i];
+                    if (ch.textContent && ch.textContent.trim() && ch.tagName !== 'BR') return;
+                }
+                var text = (el.textContent || '').trim();
+                if (!text) return;
+                var cs = window.getComputedStyle(el);
+                if (cs.display === 'none' || cs.visibility === 'hidden') return;
+                var rect = el.getBoundingClientRect();
+                if (!rect.width || !rect.height) return;
+                if (rect.right < pageRect.left || rect.left > pageRect.right) return;
+                if (rect.bottom < pageRect.top || rect.top > pageRect.bottom) return;
+                var fontPx = parseFloat(cs.fontSize) || 14;
+                var fontPt = fontPx * 1.0;
+                doc.setFontSize(fontPt);
+                var x = (rect.left - pageRect.left) * scaleX;
+                var y = (rect.top + rect.height / 2 - pageRect.top) * scaleY;
+                try { doc.text(String(text), x, y, { baseline: 'middle' }); } catch (e) {}
+            });
+        });
+    }
+
+    setTimeout(function() {
+        try { saCartoMap.invalidateSize(false); } catch (e) {}
+        try {
+            var c = saCartoMap.getCenter(), z = saCartoMap.getZoom();
+            saCartoMap.setView(c, z, { animate: false });
+        } catch (e) {}
+        setTimeout(function() {
+            var page = document.getElementById('saCartoLayoutPage');
+            if (!page) { alert('Page introuvable.'); cleanup(); return; }
+            // Neutraliser le transform de la layout-page pendant la capture
+            var savedTransform = page.style.transform;
+            var savedOrigin    = page.style.transformOrigin;
+            page.style.transform = '';
+            page.style.transformOrigin = '';
+            // Tente dom-to-image-more (meilleur sur SVG Leaflet) avec fallback html2canvas
+            captureViaDomToImage(page).catch(function(err) {
+                console.warn('[Export PDF] dom-to-image echec, fallback html2canvas:', err);
+                return captureViaHtml2canvas(page);
+            }).then(function(dataUrl) {
+                if (!dataUrl) throw new Error('Capture vide');
+                buildPdfFromDataUrl(dataUrl);
+                page.style.transform = savedTransform;
+                page.style.transformOrigin = savedOrigin;
+                cleanup();
+            }).catch(function(err) {
+                page.style.transform = savedTransform;
+                page.style.transformOrigin = savedOrigin;
+                alert('\u00c9chec capture : ' + (err.message || err));
+                cleanup();
+            });
+        }, 1000);
+    }, 200);
 }
 
 // Render de la l\u00e9gende (couches actives)
@@ -27884,9 +30801,9 @@ function _saCartoLegendItemSwatchHtml(it) {
 }
 
 // Rend une legende riche (tableau d'items {color, label, shape, hatched}) en HTML
-function _saCartoRenderRichLegendItems(legendArr) {
+function _saCartoRenderRichLegendItems(legendArr, layerId) {
     if (!Array.isArray(legendArr) || !legendArr.length) return '';
-    return legendArr.map(function(it) {
+    return legendArr.map(function(it, idx) {
         var shape = it.shape || 'rect';
         var bg = it.color || '#94A3B8';
         var swatchHtml;
@@ -27915,9 +30832,31 @@ function _saCartoRenderRichLegendItems(legendArr) {
             }
             swatchHtml = '<span class="sa-carto-layers-legend-swatch" style="' + style + '"></span>';
         }
+        // Si layerId est fourni : libelle editable + cliquable pour ouvrir le panneau Mise en forme
+        // Signature : item:LAYERID:IDX (distincte de layer:LID utilisee par les titres de couches)
+        var labelHtml;
+        if (layerId) {
+            var sig = 'item:' + layerId + ':' + idx;
+            // Si l'utilisateur a deja modifie le texte, on l'utilise au lieu du it.label
+            var editedText = (typeof saCartoLegendStyles !== 'undefined'
+                          && saCartoLegendStyles.entries
+                          && saCartoLegendStyles.entries[sig]
+                          && saCartoLegendStyles.entries[sig].text != null)
+                          ? saCartoLegendStyles.entries[sig].text
+                          : null;
+            var displayLabel = (editedText != null) ? saEscH(editedText) : saEscH(it.label || '');
+            labelHtml = '<span class="sa-carto-layers-legend-label sa-carto-legend-text" '
+                     + 'data-sig="' + sig + '" '
+                     + 'contenteditable="true" spellcheck="false" '
+                     + 'onclick="event.stopPropagation();saCartoOpenLegendTextPanel(\'entry\', this.dataset.sig)" '
+                     + 'oninput="event.stopPropagation();_saCartoCommitLegendTextEdit(this)" '
+                     + 'title="Cliquer pour modifier ou mettre en forme">' + displayLabel + '</span>';
+        } else {
+            labelHtml = '<span class="sa-carto-layers-legend-label">' + saEscH(it.label || '') + '</span>';
+        }
         return '<div class="sa-carto-layers-legend-row">'
              + swatchHtml
-             + '<span class="sa-carto-layers-legend-label">' + saEscH(it.label || '') + '</span>'
+             + labelHtml
              + '</div>';
     }).join('');
 }
@@ -28360,7 +31299,7 @@ function saCartoSetTab(tab) {
 }
 
 function _saCartoSyncRibbonStates() {
-    ['aerial','plan','light','scan'].forEach(function(b) {
+    ['aerial','plan','light','scan','pastel'].forEach(function(b) {
         var el = document.getElementById('rbn-b-' + b);
         if (el) el.classList.toggle('active', saCartoCurrentBase === b);
     });
@@ -28894,6 +31833,11 @@ function _saCartoResetLayerRenderer(lyr) {
         var defPane = (lyr instanceof L.Marker || (window.L.DivIcon && lyr.getElement)) ? 'markerPane' : 'overlayPane';
         lyr.options.pane = defPane;
     }
+    // FeatureGroup / LayerGroup : recurser sur les enfants (sinon les renderers SVG des
+    // enfants restent oprhelins apres softDelete et la legende reste invisible apres redo)
+    if (typeof lyr.eachLayer === 'function') {
+        lyr.eachLayer(function(child) { _saCartoResetLayerRenderer(child); });
+    }
 }
 
 function _saCartoSoftRestore(layerModel, index) {
@@ -28964,6 +31908,13 @@ function _saCartoSoftRestore(layerModel, index) {
     if (typeof _saCartoLayerAssignPane === 'function') _saCartoLayerAssignPane(layerModel);
     _saCartoApplyLayerZ();
     saCartoRenderLayerPanel();
+    // Re-attacher les listeners DOM (mousedown/dblclick/blur/input) sur l'element du marker
+    // texte ou legende. Le DOM a ete recree par Leaflet apres re-add, donc les listeners
+    // d'origine sont perdus.
+    if (typeof layerModel._attachHandlers === 'function') {
+        setTimeout(layerModel._attachHandlers, 0);
+        setTimeout(layerModel._attachHandlers, 100);
+    }
 }
 
 // ============================================================================
@@ -30061,11 +33012,28 @@ function _saCartoRenderLegendEntries() {
     // d'intercaler couches et tampons dans n'importe quel ordre via drag&drop.
     var excludedAll = saCartoLegendEdit.excludedItems || {};
     var boxItems = [];
+    // Iterate sur saCartoLayers (modeles avec id='theme_xxx' et _themeId='xxx').
+    // Inclus si actif dans state ET non explicitement exclu (items 'theme_xxx' ou 'xxx' !== false).
+    var seenIds = {};
     (saCartoLayers || []).forEach(function(l) {
-        if (l && l.type === 'theme' && l._themeId && saCartoLegendEdit.items[l._themeId] && saCartoLayersState && saCartoLayersState[l._themeId]) {
-            boxItems.push({ kind: 'layer', id: l._themeId });
-        }
+        if (!l || l.type !== 'theme' || !l._themeId) return;
+        var tid = l._themeId;
+        var modelId = l.id;  // ex 'theme_solaire_pot'
+        if (!saCartoLayersState[tid]) return;
+        // Verifier l'exclusion via les DEUX conventions d'id (mismatch historique)
+        if (saCartoLegendEdit.items[modelId] === false) return;
+        if (saCartoLegendEdit.items[tid] === false) return;
+        if (seenIds[tid]) return;
+        seenIds[tid] = true;
+        // Auto-coche les deux pour cohérence
+        if (saCartoLegendEdit.items[modelId] === undefined) saCartoLegendEdit.items[modelId] = true;
+        if (saCartoLegendEdit.items[tid] === undefined) saCartoLegendEdit.items[tid] = true;
+        boxItems.push({ kind: 'layer', id: tid });
     });
+    console.log('[Legend Box DEBUG]',
+        'saCartoLayersState actifs=', Object.keys(saCartoLayersState || {}).filter(function(k) { return saCartoLayersState[k]; }),
+        'saCartoLayers themes=', (saCartoLayers || []).filter(function(l){return l && l.type==='theme';}).map(function(l){return l._themeId;}),
+        'boxItems=', boxItems.map(function(b){return b.id;}));
     allGroups.forEach(function(g) {
         if (saCartoLegendEdit.groups[g.signature]) {
             boxItems.push({ kind: 'group', sig: g.signature });
@@ -30092,7 +33060,16 @@ function _saCartoRenderLegendEntries() {
     boxItems.forEach(function(it) {
         if (it.kind === 'layer') {
             var layerId = it.id;
-            var def = _saCartoIdx[layerId]; if (!def) return;
+            var def = _saCartoIdx[layerId];
+            // Fallback : si pas dans le catalogue, on cherche dans saCartoLayers
+            // (couche peut-etre ajoutee dynamiquement ou avec un id different)
+            if (!def) {
+                var lm = (saCartoLayers || []).filter(function(l) {
+                    return l && (l._themeId === layerId || l.id === layerId || l.id === 'theme_' + layerId);
+                })[0];
+                def = lm ? { label: lm.label, source: lm.sublabel } : { label: layerId, source: '' };
+                console.warn('[Legend Box] _saCartoIdx[' + layerId + '] absent, fallback def:', def);
+            }
             var title = saEscH(def.label || layerId);
             // Cas special climat_canicules : titre dynamique avec annee + indicateur courants
             // (les controles editables restent dans le panneau flottant en vue Normale).
@@ -30124,10 +33101,14 @@ function _saCartoRenderLegendEntries() {
                     }
                 }
                 var filtered = richLegendSrc.filter(function(_, idx) { return !excl[idx]; });
-                if (!filtered.length) return;
-                var useGradient = !!(saCartoLegendEdit.gradient && saCartoLegendEdit.gradient[layerId]);
-                if (useGradient && filtered.length >= 2) legendHtml = _saCartoRenderGradientBar(filtered);
-                else legendHtml = _saCartoRenderRichLegendItems(filtered);
+                // Si tout est exclu, on rend quand meme le titre + un message
+                if (!filtered.length) {
+                    legendHtml = '<div class="sa-carto-legend-empty-sm">(Tous les items exclus)</div>';
+                } else {
+                    var useGradient = !!(saCartoLegendEdit.gradient && saCartoLegendEdit.gradient[layerId]);
+                    if (useGradient && filtered.length >= 2) legendHtml = _saCartoRenderGradientBar(filtered);
+                    else legendHtml = _saCartoRenderRichLegendItems(filtered, layerId);
+                }
             } else if (def.legend) {
                 legendHtml = '<img class="sa-carto-legend-img" src="' + def.legend + '" alt="l\u00e9gende" onerror="this.style.display=\'none\'">';
             } else {
@@ -30135,8 +33116,27 @@ function _saCartoRenderLegendEntries() {
             }
             anyLayer = true;
             var lid = layerId.replace(/"/g,'&quot;');
+            // Le titre de couche est editable ET cliquable :
+            //  - contenteditable pour modifier le texte directement
+            //  - onclick ouvre le panneau "Mise en forme" (kind=entry, sig=layer:lid)
+            //  - oninput persiste le texte dans saCartoLegendStyles.entries[sig].text
+            // Note : draggable + contenteditable = on garde drag-and-drop sur le wrapper
+            // mais le clic court sur le texte est toujours captur\u00e9 pour l'edition.
+            var sigForLayer = 'layer:' + lid;
+            // Si l'utilisateur a deja edite le texte, on l'utilise au lieu du def.label
+            var editedTitle = (saCartoLegendStyles && saCartoLegendStyles.entries
+                            && saCartoLegendStyles.entries[sigForLayer]
+                            && saCartoLegendStyles.entries[sigForLayer].text != null)
+                            ? saCartoLegendStyles.entries[sigForLayer].text
+                            : null;
+            var displayTitle = (editedTitle != null) ? saEscH(editedTitle) : title;
             parts.push('<div class="sa-carto-legend-layer" data-layer-id="' + lid + '" data-id="' + lid + '">'
-                + '<div class="sa-carto-legend-layer-title" draggable="true" data-layer-id="' + lid + '" title="Glisser pour r\u00e9ordonner">' + title + '</div>'
+                + '<div class="sa-carto-legend-layer-title sa-carto-legend-text" '
+                +   'draggable="true" data-layer-id="' + lid + '" data-sig="' + sigForLayer + '" '
+                +   'contenteditable="true" spellcheck="false" '
+                +   'onclick="event.stopPropagation();saCartoOpenLegendTextPanel(\'entry\', this.dataset.sig)" '
+                +   'oninput="event.stopPropagation();_saCartoCommitLegendTextEdit(this)" '
+                +   'title="Cliquer pour modifier ou mettre en forme">' + displayTitle + '</div>'
                 + '<div class="sa-carto-legend-layer-body">' + legendHtml + '</div>'
                 + '</div>');
         } else if (it.kind === 'group') {
@@ -30520,6 +33520,17 @@ function _saCartoApplyStyleToEl(el, st) {
 }
 
 // Ouverture du panneau pour le titre ou pour une entree de legende donnee
+// Sauvegarde le texte modifie d'un element editable de la legende dans
+// saCartoLegendStyles.entries[sig].text. Appele via oninput.
+function _saCartoCommitLegendTextEdit(el) {
+    if (!el) return;
+    var sig = el.dataset && el.dataset.sig;
+    if (!sig) return;
+    if (!saCartoLegendStyles.entries) saCartoLegendStyles.entries = {};
+    if (!saCartoLegendStyles.entries[sig]) saCartoLegendStyles.entries[sig] = {};
+    saCartoLegendStyles.entries[sig].text = el.textContent || '';
+}
+
 function saCartoOpenLegendTextPanel(kind, signature) {
     var panel = document.getElementById('saCartoLegendTextPanel');
     if (!panel) return;
@@ -30535,9 +33546,81 @@ function saCartoOpenLegendTextPanel(kind, signature) {
     var titleEl = document.getElementById('saCartoLegendTextPanelTitle');
     if (titleEl) titleEl.textContent = (kind === 'title') ? 'Mise en forme du titre' : 'Mise en forme du texte';
     _saCartoSyncLegendTextPanel();
+    _saCartoSyncLegendStructurePanel();
     _saCartoHighlightSelectedLegendText();
     // Installer un listener document-level qui ferme le panneau au clic en dehors
     _saCartoInstallLegendTextOutsideClick();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Mise en forme de la STRUCTURE (Titre 1 / Titre 2 / Texte item)
+// Pilote en bloc tous les elements de meme niveau hierarchique de la legende.
+// Stocke en saCartoLegendStructure ; applique via styles inline sur les selecteurs.
+// ─────────────────────────────────────────────────────────────────────────────
+var saCartoLegendStructure = {
+    proportional: true,
+    title1: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18 },
+    title2: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 14 },
+    item:   { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 13 }
+};
+
+// Selecteurs CSS pour appliquer les styles a tous les elements d'un niveau
+var _SA_LEGEND_STRUCTURE_SELECTORS = {
+    title1: '#saCartoLegendBox #saCartoLayoutHeader, #saCartoLayoutHeader.sa-in-legend',
+    title2: '#saCartoLegendBox .sa-carto-legend-layer-title, #saCartoLegendBox .sa-carto-legend-section-text',
+    item:   '#saCartoLegendBox .sa-carto-layers-legend-label'
+};
+
+function saCartoSetLegendStructure(level, prop, value) {
+    if (!saCartoLegendStructure[level]) return;
+    var oldVal = saCartoLegendStructure[level][prop];
+    saCartoLegendStructure[level][prop] = value;
+    // Si proportionnel + changement de fontSize : repercute le ratio sur les autres niveaux
+    if (saCartoLegendStructure.proportional && prop === 'fontSize' && oldVal && oldVal > 0) {
+        var ratio = value / oldVal;
+        ['title1', 'title2', 'item'].forEach(function(other) {
+            if (other === level) return;
+            var prev = saCartoLegendStructure[other].fontSize;
+            // Garde au moins 8 pour ne pas tomber a 0
+            saCartoLegendStructure[other].fontSize = Math.max(8, Math.round(prev * ratio));
+        });
+    }
+    _saCartoApplyLegendStructure();
+    _saCartoSyncLegendStructurePanel();
+}
+
+function saCartoToggleLegendStructureProportional(checked) {
+    saCartoLegendStructure.proportional = !!checked;
+}
+
+// Applique les styles inline (fontFamily + fontSize) a tous les elements de chaque niveau
+function _saCartoApplyLegendStructure() {
+    Object.keys(_SA_LEGEND_STRUCTURE_SELECTORS).forEach(function(level) {
+        var selector = _SA_LEGEND_STRUCTURE_SELECTORS[level];
+        var st = saCartoLegendStructure[level];
+        if (!st) return;
+        var els;
+        try { els = document.querySelectorAll(selector); } catch (e) { return; }
+        els.forEach(function(el) {
+            if (st.fontFamily) el.style.fontFamily = st.fontFamily;
+            if (st.fontSize) el.style.fontSize = st.fontSize + 'px';
+        });
+    });
+}
+
+// Met a jour les inputs du panneau a partir de l'etat courant
+function _saCartoSyncLegendStructurePanel() {
+    ['title1', 'title2', 'item'].forEach(function(level) {
+        var st = saCartoLegendStructure[level];
+        if (!st) return;
+        var idCap = level === 'item' ? 'Item' : (level === 'title1' ? 'Title1' : 'Title2');
+        var fontEl = document.getElementById('lgs' + idCap + 'Font');
+        var sizeEl = document.getElementById('lgs' + idCap + 'Size');
+        if (fontEl && st.fontFamily) fontEl.value = st.fontFamily;
+        if (sizeEl && st.fontSize) sizeEl.value = st.fontSize;
+    });
+    var propEl = document.getElementById('lgsProportional');
+    if (propEl) propEl.checked = !!saCartoLegendStructure.proportional;
 }
 
 // Listener global (idempotent) : clic en dehors du panneau ou du texte selectionne = fermer
@@ -30697,6 +33780,14 @@ function _saCartoApplyAllLegendStyles() {
         var sig = el.getAttribute('data-sig');
         if (sig && saCartoLegendStyles.entries[sig]) _saCartoApplyStyleToEl(el, saCartoLegendStyles.entries[sig]);
     });
+    // Applique les styles de structure (Titre 1 / Titre 2 / Texte item) APRES les
+    // styles individuels. SKIP pendant l'export PDF : eviter d'eventuelles
+    // interferences avec dom-to-image-more (qui peut produire un canvas noir si
+    // les inline styles modifient le layout pendant la capture).
+    if (typeof _saCartoApplyLegendStructure === 'function'
+        && !document.body.classList.contains('sa-carto-exporting')) {
+        _saCartoApplyLegendStructure();
+    }
 }
 
 // Decore visuellement l'element selectionne
@@ -31128,16 +34219,21 @@ function _saCartoAddrModalSearch(query) {
         }
         box.innerHTML = data.features.map(function(f) {
             var label = (f.properties && f.properties.label) ? f.properties.label : '';
+            var citycode = (f.properties && f.properties.citycode) ? f.properties.citycode : '';
+            var city = (f.properties && f.properties.city) ? f.properties.city : '';
             var lon = f.geometry.coordinates[0], lat = f.geometry.coordinates[1];
             var safe = label.replace(/"/g, '&quot;').replace(/</g, '&lt;');
-            return '<div class="sa-ac-item" data-lat="' + lat + '" data-lon="' + lon + '" data-label="' + safe + '">' + safe + '</div>';
+            var safeCity = city.replace(/"/g, '&quot;').replace(/</g, '&lt;');
+            return '<div class="sa-ac-item" data-lat="' + lat + '" data-lon="' + lon + '" data-label="' + safe + '" data-citycode="' + citycode + '" data-city="' + safeCity + '">' + safe + '</div>';
         }).join('');
         box.querySelectorAll('.sa-ac-item').forEach(function(el) {
             el.addEventListener('click', function() {
                 var lat = parseFloat(el.getAttribute('data-lat'));
                 var lon = parseFloat(el.getAttribute('data-lon'));
                 var label = el.getAttribute('data-label');
-                _saCartoAddrModalSelect(lat, lon, label);
+                var citycode = el.getAttribute('data-citycode') || '';
+                var city = el.getAttribute('data-city') || '';
+                _saCartoAddrModalSelect(lat, lon, label, citycode, city);
             });
         });
     }).catch(function() {
@@ -31145,11 +34241,15 @@ function _saCartoAddrModalSearch(query) {
         if (box) box.innerHTML = '<div class="sa-ac-item" style="color:#DC2626;cursor:default;">Erreur de connexion</div>';
     });
 }
-function _saCartoAddrModalSelect(lat, lon, label) {
+function _saCartoAddrModalSelect(lat, lon, label, citycode, city) {
     if (typeof saState === 'undefined' || !saState) return;
     saState.lat = lat;
     saState.lon = lon;
     saState.address = label;
+    // Renseigne aussi codeInsee + ville pour que les couches qui en dépendent
+    // (Lignes TC, Réseaux gaz/élec/eau, etc.) puissent fonctionner.
+    if (citycode) saState.codeInsee = citycode;
+    if (city) saState.commune = city;
     saCartoCloseAddrModal();
     saCartoHideNoAddrOverlay();
     // L'onglet courant n'est plus vierge
@@ -31768,9 +34868,47 @@ function _saCartoTabActivate(tab, skipSnapshot) {
     var sub = document.getElementById('sacartoSub');
     if (tab.isBlank) {
         // Onglet vierge : on cache la map en superposant l'overlay "Aucune adresse"
+        // ET on reinitialise tous les globals pour ne pas heriter de l'onglet precedent.
         if (typeof saState !== 'undefined' && saState) {
             saState.lat = null; saState.lon = null; saState.address = '';
         }
+        // Couches actives : reset
+        if (typeof saCartoLayersState !== 'undefined') {
+            // Retire les overlays sur la carte avant de clear l'etat
+            try {
+                Object.keys(saCartoLayersState).forEach(function(id) {
+                    if (saCartoLayersState[id] && typeof _saCartoRemoveOverlay === 'function') {
+                        _saCartoRemoveOverlay(id);
+                    }
+                });
+            } catch (e) {}
+            for (var k in saCartoLayersState) { delete saCartoLayersState[k]; }
+        }
+        // Vue : retour Normale
+        if (typeof saCartoView !== 'undefined' && saCartoView !== 'normal' && typeof saCartoSetView === 'function') {
+            try { saCartoSetView('normal'); } catch (e) {}
+        }
+        // Legende et items : reset
+        if (typeof saCartoLegendEdit !== 'undefined' && saCartoLegendEdit) {
+            saCartoLegendEdit.visible = false;
+            saCartoLegendEdit.items = {};
+            saCartoLegendEdit.groups = {};
+            saCartoLegendEdit.excludedItems = {};
+            if (typeof _saCartoRemoveLegendBox === 'function') {
+                try { _saCartoRemoveLegendBox(); } catch (e) {}
+            }
+        }
+        // Header / Footer : vider
+        if (typeof saCartoHeaderText !== 'undefined') saCartoHeaderText = '';
+        if (typeof saCartoFooterText !== 'undefined') saCartoFooterText = '';
+        var hdr = document.getElementById('saCartoLayoutHeader');
+        var ftr = document.getElementById('saCartoLayoutFooter');
+        if (hdr) hdr.textContent = '';
+        if (ftr) ftr.textContent = '';
+        // Re-render des panneaux pour refleter l'etat reset
+        if (typeof saCartoRenderCatalog === 'function') { try { saCartoRenderCatalog(); } catch (e) {} }
+        if (typeof saCartoRenderLegend === 'function')  { try { saCartoRenderLegend(); }  catch (e) {} }
+        if (typeof saCartoRenderLayerPanel === 'function') { try { saCartoRenderLayerPanel(); } catch (e) {} }
         if (sub) sub.textContent = '';
         if (typeof saCartoShowNoAddrOverlay === 'function') saCartoShowNoAddrOverlay();
     } else {

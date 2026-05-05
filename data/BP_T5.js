@@ -19,7 +19,7 @@ window.BP_T5_HTML = `<div class="bp-fiche" data-theme="pac" id="bpFicheT5C1">
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>expliquer le <strong>principe thermodynamique</strong> d&rsquo;une PAC et le r&ocirc;le des quatre composants du cycle ;</li>
                                     <li>distinguer <strong>COP, SCOP, ETAS</strong> et savoir lire une fiche technique ;</li>
@@ -312,7 +312,7 @@ window.BP_T5_HTML = `<div class="bp-fiche" data-theme="pac" id="bpFicheT5C1">
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>distinguer les <strong>quatre grandes familles</strong> de PAC selon la source froide et le puits chaud ;</li>
                                     <li>comprendre les <strong>avantages et limites</strong> de chaque typologie (performance, co&ucirc;t, contraintes) ;</li>
@@ -604,7 +604,7 @@ window.BP_T5_HTML = `<div class="bp-fiche" data-theme="pac" id="bpFicheT5C1">
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l'apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre les enjeux du <strong>dimensionnement</strong> d'une PAC et les risques du sur- comme du sous-dimensionnement ;</li>
                                     <li>ma&icirc;triser les <strong>points critiques</strong> d'installation : implantation, acoustique, hydraulique, &eacute;lectrique ;</li>
@@ -905,7 +905,7 @@ window.BP_T5_HTML = `<div class="bp-fiche" data-theme="pac" id="bpFicheT5C1">
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l'apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>distinguer <strong>rafra&icirc;chissement passif</strong> et <strong>rafra&icirc;chissement actif</strong> et leurs usages respectifs ;</li>
                                     <li>comparer brasseur d'air, climatiseur mobile, split et PAC r&eacute;versible ;</li>

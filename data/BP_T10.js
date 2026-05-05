@@ -19,7 +19,7 @@ window.BP_T10_HTML = `<div class="bp-fiche" data-theme="reseaux-chaleur" id="bpF
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>d&eacute;crire l&rsquo;architecture d&rsquo;un r&eacute;seau de chaleur : <strong>chaufferie</strong>, <strong>distribution</strong>, <strong>sous-stations</strong> ;</li>
                                     <li>expliquer le r&ocirc;le du <strong>taux EnR&amp;R</strong> et ses cons&eacute;quences sur le prix, la TVA et le classement ;</li>
@@ -315,7 +315,7 @@ window.BP_T10_HTML = `<div class="bp-fiche" data-theme="reseaux-chaleur" id="bpF
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>d&eacute;finir la <strong>chaleur fatale</strong> et la distinguer d&rsquo;une production de chaleur volontaire ;</li>
                                     <li>identifier les principales sources : <strong>industrie</strong>, <strong>UIOM</strong>, <strong>STEP</strong>, <strong>data centers</strong>, eaux us&eacute;es ;</li>
@@ -603,7 +603,7 @@ window.BP_T10_HTML = `<div class="bp-fiche" data-theme="reseaux-chaleur" id="bpF
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>expliquer le principe de la <strong>digestion ana&eacute;robie</strong> et l&rsquo;architecture d&rsquo;une unit&eacute; ;</li>
                                     <li>identifier les <strong>intrants</strong> mobilisables et les contraintes de qualit&eacute; et de saisonnalit&eacute; ;</li>

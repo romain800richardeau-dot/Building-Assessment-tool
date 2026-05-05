@@ -19,7 +19,7 @@ window.BP_T14_HTML = `<div class="bp-fiche" data-theme="confort-ete" id="bpFiche
 
             <div class="ms-intro bp-section">
                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                 <ul>
                     <li>expliquer pourquoi le <strong>confort d&rsquo;&eacute;t&eacute;</strong> est devenu un enjeu de conception distinct de la performance d&rsquo;hiver ;</li>
                     <li>identifier les <strong>six param&egrave;tres physiologiques</strong> de la sensation de confort thermique ;</li>
@@ -328,7 +328,7 @@ window.BP_T14_HTML = `<div class="bp-fiche" data-theme="confort-ete" id="bpFiche
 
             <div class="ms-intro bp-section">
                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                 <ul>
                     <li>distinguer <strong>rafra&icirc;chissement passif</strong>, <strong>&agrave; faible &eacute;nergie</strong> et <strong>actif</strong>, et comprendre leur articulation ;</li>
                     <li>comparer les principales solutions techniques en termes de <strong>co&ucirc;t, consommation et efficacit&eacute;</strong> ;</li>
@@ -761,7 +761,7 @@ window.BP_T14_HTML = `<div class="bp-fiche" data-theme="confort-ete" id="bpFiche
 
             <div class="ms-intro bp-section">
                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                 <ul>
                     <li>expliquer pourquoi le <strong>fichier m&eacute;t&eacute;o</strong> est l&rsquo;hypoth&egrave;se d&rsquo;entr&eacute;e la plus impactante d&rsquo;une STD ;</li>
                     <li>identifier les <strong>formulations ambig&uuml;es</strong> dans les programmes et r&eacute;f&eacute;rentiels ;</li>
@@ -1037,7 +1037,7 @@ window.BP_T14_HTML = `<div class="bp-fiche" data-theme="confort-ete" id="bpFiche
             <!-- Objectifs -->
             <div class="ms-intro bp-section">
                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                 <ul>
                     <li>Expliquer pourquoi la <strong>temp&eacute;rature maximale</strong> seule est un indicateur inadapt&eacute;</li>
                     <li>Calculer et lire les <strong>degr&eacute;s-jours de refroidissement (DJU froid)</strong> et les situer dans une distribution statistique</li>
@@ -1376,7 +1376,7 @@ window.BP_T14_HTML = `<div class="bp-fiche" data-theme="confort-ete" id="bpFiche
 
             <div class="ms-intro bp-section">
                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                 <ul>
                     <li>identifier les indicateurs de confort estival couramment rencontr&eacute;s et juger leur pertinence ;</li>
                     <li>expliquer pourquoi le &laquo; nombre d&rsquo;heures &gt; 28 &deg;C &raquo; est un indicateur r&eacute;ducteur ;</li>
@@ -1691,7 +1691,7 @@ window.BP_T14_HTML = `<div class="bp-fiche" data-theme="confort-ete" id="bpFiche
 
             <div class="ms-intro bp-section">
                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                 <ul>
                     <li>expliquer la place de la STD dans la conception du confort d&rsquo;&eacute;t&eacute; et ses limites ;</li>
                     <li>identifier les conclusions r&eacute;currentes des STD s&eacute;rieuses et en d&eacute;duire des r&egrave;gles de conception ;</li>

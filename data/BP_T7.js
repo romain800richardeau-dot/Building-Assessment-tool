@@ -19,7 +19,7 @@ window.BP_T7_HTML = `<div class="bp-fiche" data-theme="solaire-thermique" id="bp
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre le <strong>principe physique</strong> de la conversion du rayonnement solaire en chaleur exploitable ;</li>
                                     <li>identifier les <strong>composants</strong> d&rsquo;une installation solaire thermique et leur r&ocirc;le (capteurs, fluide, ballon, r&eacute;gulation, appoint) ;</li>
@@ -335,7 +335,7 @@ window.BP_T7_HTML = `<div class="bp-fiche" data-theme="solaire-thermique" id="bp
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>dimensionner correctement la surface de capteurs et le volume de ballon d&rsquo;un CESI ou d&rsquo;un SSC ;</li>
                                     <li>identifier l&rsquo;orientation et l&rsquo;inclinaison optimales selon l&rsquo;usage (ECS seule ou ECS + chauffage) ;</li>
@@ -750,7 +750,7 @@ window.BP_T7_HTML = `<div class="bp-fiche" data-theme="solaire-thermique" id="bp
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre le ph&eacute;nom&egrave;ne de surchauffe estivale et les strat&eacute;gies pour le ma&icirc;triser ;</li>
                                     <li>identifier les points critiques de l&rsquo;int&eacute;gration architecturale et hydraulique ;</li>

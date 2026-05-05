@@ -19,7 +19,7 @@ window.BP_T8_HTML = `<div class="bp-fiche" data-theme="solaire-pv" id="bpFicheT8
 
             <div class="ms-intro bp-section">
                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                 <ul>
                     <li>expliquer le <strong>principe physique</strong> de la conversion photovolta&iuml;que (effet photo&eacute;lectrique, jonction P-N) ;</li>
                     <li>identifier les <strong>composants</strong> d&rsquo;une installation PV r&eacute;sidentielle ou tertiaire ;</li>
@@ -339,7 +339,7 @@ window.BP_T8_HTML = `<div class="bp-fiche" data-theme="solaire-pv" id="bpFicheT8
 
             <div class="ms-intro bp-section">
                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                 <ul>
                     <li>&eacute;valuer le <strong>gisement solaire</strong> d&rsquo;une toiture avec des outils publics gratuits ;</li>
                     <li>quantifier la <strong>surface &eacute;quipable</strong>, la <strong>puissance</strong> et le <strong>productible</strong> ;</li>
@@ -712,7 +712,7 @@ window.BP_T8_HTML = `<div class="bp-fiche" data-theme="solaire-pv" id="bpFicheT8
 
             <div class="ms-intro bp-section">
                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                 <ul>
                     <li>distinguer les <strong>trois mod&egrave;les &eacute;conomiques</strong> d&rsquo;une installation PV raccord&eacute;e ;</li>
                     <li>comprendre le <strong>taux d&rsquo;autoconsommation</strong> et les leviers pour l&rsquo;augmenter ;</li>
@@ -971,7 +971,7 @@ window.BP_T8_HTML = `<div class="bp-fiche" data-theme="solaire-pv" id="bpFicheT8
 
             <div class="ms-intro bp-section">
                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                 <ul>
                     <li>expliquer les <strong>sp&eacute;cificit&eacute;s juridiques</strong> du PV en copropri&eacute;t&eacute; ;</li>
                     <li>distinguer les trois <strong>montages possibles</strong> (parties communes, ACC, tiers-investisseur) ;</li>
@@ -1231,7 +1231,7 @@ window.BP_T8_HTML = `<div class="bp-fiche" data-theme="solaire-pv" id="bpFicheT8
 
             <div class="ms-intro bp-section">
                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                 <ul>
                     <li>distinguer <strong>PV classique</strong>, <strong>solaire thermique</strong>, <strong>hybride PV-T</strong> et <strong>a&eacute;rovolta&iuml;que</strong> ;</li>
                     <li>expliquer le <strong>principe de r&eacute;cup&eacute;ration de chaleur</strong> derri&egrave;re les panneaux ;</li>
@@ -1443,7 +1443,7 @@ window.BP_T8_HTML = `<div class="bp-fiche" data-theme="solaire-pv" id="bpFicheT8
 
             <div class="ms-intro bp-section">
                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                 <ul>
                     <li>comprendre pourquoi <strong>investir dans une installation personnelle n&rsquo;est pas la seule voie</strong> ;</li>
                     <li>identifier les <strong>alternatives collectives et citoyennes</strong> pour soutenir les EnR ;</li>

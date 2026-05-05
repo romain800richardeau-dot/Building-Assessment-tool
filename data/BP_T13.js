@@ -18,7 +18,7 @@ window.BP_T13_HTML = `<div class="bp-fiche" data-theme="eau" id="bpFicheT13C1">
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>Situer la consommation d&rsquo;eau moyenne d&rsquo;un m&eacute;nage fran&ccedil;ais et sa r&eacute;partition par usage ;</li>
                                     <li>Identifier les &eacute;quipements hydro-&eacute;conomes disponibles et leur gain r&eacute;el ;</li>
@@ -483,7 +483,7 @@ window.BP_T13_HTML = `<div class="bp-fiche" data-theme="eau" id="bpFicheT13C1">
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>situer les <strong>consommations d&rsquo;eau</strong> du secteur b&acirc;timent dans le bilan hydrique fran&ccedil;ais ;</li>
                                     <li>conna&icirc;tre les <strong>ratios</strong> par type d&rsquo;&eacute;tablissement tertiaire (h&ocirc;pital, h&ocirc;tellerie, bureaux, &eacute;ducation) ;</li>
@@ -762,7 +762,7 @@ window.BP_T13_HTML = `<div class="bp-fiche" data-theme="eau" id="bpFicheT13C1">
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre pourquoi la <strong>gestion &agrave; la parcelle</strong> est devenue une priorit&eacute; d&rsquo;urbanisme et d&rsquo;adaptation climatique ;</li>
                                     <li>conna&icirc;tre les <strong>quatre grandes familles</strong> de solutions et leurs co&ucirc;ts d&rsquo;ordre de grandeur ;</li>
@@ -1199,7 +1199,7 @@ window.BP_T13_HTML = `<div class="bp-fiche" data-theme="eau" id="bpFicheT13C1">
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>distinguer <strong>imp&eacute;rm&eacute;abilisation</strong>, <strong>d&eacute;simpermeabilisation</strong> et <strong>artificialisation</strong> ;</li>
                                     <li>comprendre la m&eacute;thode fond&eacute;e sur la nature port&eacute;e par EnvirobatBDM (2025) ;</li>
@@ -1493,7 +1493,7 @@ window.BP_T13_HTML = `<div class="bp-fiche" data-theme="eau" id="bpFicheT13C1">
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                                 <ul>
                                     <li>expliquer pourquoi <strong>biodiversit&eacute;</strong> et <strong>gestion alternative des eaux pluviales</strong> sont indissociables dans un projet de b&acirc;timent&nbsp;;</li>
                                     <li>conna&icirc;tre les <strong>dispositifs courants</strong> d&rsquo;int&eacute;gration de la biodiversit&eacute; (toitures v&eacute;g&eacute;talis&eacute;es, nichoirs, murs v&eacute;g&eacute;taux, espaces ext&eacute;rieurs)&nbsp;;</li>
@@ -1832,7 +1832,7 @@ window.BP_T13_HTML = `<div class="bp-fiche" data-theme="eau" id="bpFicheT13C1">
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                                 <ul>
                                     <li>comprendre le <strong>cadre r&eacute;glementaire</strong> des restrictions s&eacute;cheresse et la logique des arr&ecirc;t&eacute;s pr&eacute;fectoraux&nbsp;;</li>
                                     <li>distinguer les <strong>quatre niveaux de gravit&eacute;</strong> et leurs implications concr&egrave;tes&nbsp;;</li>

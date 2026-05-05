@@ -19,7 +19,7 @@ window.BP_T2_HTML = `<div class="bp-fiche" data-theme="enveloppe" id="bpFicheT2C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>expliquer pourquoi l&rsquo;isolation est le premier levier d&rsquo;une r&eacute;novation &eacute;nerg&eacute;tique ;</li>
                                     <li>localiser les principaux <strong>postes de d&eacute;perdition</strong> d&rsquo;un logement non isol&eacute; ;</li>
@@ -335,7 +335,7 @@ window.BP_T2_HTML = `<div class="bp-fiche" data-theme="enveloppe" id="bpFicheT2C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>distinguer les <strong>trois grandes familles</strong> d&rsquo;isolants et leurs logiques ;</li>
                                     <li>lire les <strong>caract&eacute;ristiques techniques cl&eacute;s</strong> : &lambda;, &rho;, Cp, &mu;/Sd, &eacute;nergie grise, r&eacute;action au feu ;</li>
@@ -679,7 +679,7 @@ window.BP_T2_HTML = `<div class="bp-fiche" data-theme="enveloppe" id="bpFicheT2C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>ma&icirc;triser les unit&eacute;s et les significations de <strong>&lambda;</strong>, <strong>R</strong> et <strong>U</strong> ;</li>
                                     <li>savoir <strong>calculer</strong> R et U pour une paroi multicouche ;</li>
@@ -1102,7 +1102,7 @@ window.BP_T2_HTML = `<div class="bp-fiche" data-theme="enveloppe" id="bpFicheT2C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre <strong>pourquoi</strong> l&rsquo;&eacute;tanch&eacute;it&eacute; &agrave; l&rsquo;air est devenue un poste critique ;</li>
                                     <li>distinguer <strong>&eacute;tanch&eacute;it&eacute; &agrave; l&rsquo;air</strong> et <strong>&eacute;tanch&eacute;it&eacute; &agrave; la vapeur d&rsquo;eau</strong> ;</li>
@@ -1470,7 +1470,7 @@ window.BP_T2_HTML = `<div class="bp-fiche" data-theme="enveloppe" id="bpFicheT2C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre les <strong>m&eacute;canismes</strong> de transfert d&rsquo;humidit&eacute; dans une paroi ;</li>
                                     <li>distinguer <strong>vapeur d&rsquo;eau</strong>, <strong>eau liquide</strong> et <strong>remont&eacute;es capillaires</strong> ;</li>
@@ -1871,7 +1871,7 @@ window.BP_T2_HTML = `<div class="bp-fiche" data-theme="enveloppe" id="bpFicheT2C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre pourquoi une bonne <strong>isolation d&rsquo;hiver</strong> ne garantit pas le <strong>confort d&rsquo;&eacute;t&eacute;</strong> ;</li>
                                     <li>ma&icirc;triser les notions d&rsquo;<strong>inertie</strong>, de <strong>d&eacute;phasage</strong> et d&rsquo;<strong>amortissement</strong> ;</li>
@@ -2195,7 +2195,7 @@ window.BP_T2_HTML = `<div class="bp-fiche" data-theme="enveloppe" id="bpFicheT2C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre pourquoi le <strong>b&acirc;ti ancien fonctionne diff&eacute;remment</strong> d&rsquo;une construction r&eacute;cente ;</li>
                                     <li>reconna&icirc;tre les <strong>familles constructives</strong> d&rsquo;avant 1948 ;</li>
@@ -2512,7 +2512,7 @@ window.BP_T2_HTML = `<div class="bp-fiche" data-theme="enveloppe" id="bpFicheT2C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>d&eacute;crire la technique constructive du pis&eacute; et distinguer ses variantes (bauge, adobe, torchis, BTC) ;</li>
                                     <li>expliquer le r&ocirc;le de l&rsquo;inertie, de la capillarit&eacute; et de l&rsquo;hygroscopicit&eacute; dans un mur en terre crue ;</li>

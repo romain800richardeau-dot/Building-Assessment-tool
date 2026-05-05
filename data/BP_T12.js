@@ -19,7 +19,7 @@ window.BP_T12_HTML = `<div class="bp-fiche" data-theme="carbone" id="bpFicheT12C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                                 <ul>
                                     <li>expliquer la <strong>d&eacute;finition scientifique</strong> de la neutralit&eacute; carbone au sens du GIEC et de l&rsquo;ADEME&nbsp;;</li>
                                     <li>distinguer les <strong>&eacute;chelles</strong> o&ugrave; le concept a un sens (plan&egrave;te, &Eacute;tat) de celles o&ugrave; il n&rsquo;en a pas (organisation, produit, b&acirc;timent)&nbsp;;</li>
@@ -313,7 +313,7 @@ window.BP_T12_HTML = `<div class="bp-fiche" data-theme="carbone" id="bpFicheT12C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                                 <ul>
                                     <li>expliquer pourquoi un r&eacute;f&eacute;rentiel sp&eacute;cifique a &eacute;t&eacute; n&eacute;cessaire &agrave; c&ocirc;t&eacute; du GHG Protocol et du SBTi&nbsp;;</li>
                                     <li>d&eacute;crire les <strong>trois piliers</strong> du NZI et les leviers de chaque pilier&nbsp;;</li>
@@ -586,7 +586,7 @@ window.BP_T12_HTML = `<div class="bp-fiche" data-theme="carbone" id="bpFicheT12C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                                 <ul>
                                     <li>situer le poids du <strong>secteur b&acirc;timent</strong> dans les &eacute;missions fran&ccedil;aises et dans la trajectoire SNBC 2050&nbsp;;</li>
                                     <li>identifier les <strong>grandes familles de leviers</strong> (construction neuve, r&eacute;novation, usages, transversaux)&nbsp;;</li>
@@ -836,7 +836,7 @@ window.BP_T12_HTML = `<div class="bp-fiche" data-theme="carbone" id="bpFicheT12C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                                 <ul>
                                     <li>expliquer pourquoi la r&eacute;novation est la <strong>voie prioritaire</strong> de d&eacute;carbonation du parc b&acirc;ti&nbsp;;</li>
                                     <li>distinguer les <strong>gains &eacute;nerg&eacute;tiques d&rsquo;exploitation</strong> et l&rsquo;<strong>investissement carbone</strong> d&rsquo;une op&eacute;ration&nbsp;;</li>
@@ -1094,7 +1094,7 @@ window.BP_T12_HTML = `<div class="bp-fiche" data-theme="carbone" id="bpFicheT12C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>expliquer d&rsquo;o&ugrave; vient le CO&#8322; d&rsquo;un b&eacute;ton et pourquoi le <strong>liant</strong> concentre l&rsquo;essentiel des &eacute;missions ;</li>
                                     <li>identifier les <strong>quatre grandes familles</strong> de b&eacute;tons bas carbone et leur niveau de maturit&eacute; normative ;</li>
@@ -1393,7 +1393,7 @@ window.BP_T12_HTML = `<div class="bp-fiche" data-theme="carbone" id="bpFicheT12C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>d&eacute;finir ce qu&rsquo;est une <strong>double fa&ccedil;ade ventil&eacute;e</strong> et ses composants types ;</li>
                                     <li>classer les DFV selon le <strong>compartimentage</strong> et le <strong>mode de ventilation</strong> de la cavit&eacute; ;</li>
@@ -1693,7 +1693,7 @@ window.BP_T12_HTML = `<div class="bp-fiche" data-theme="carbone" id="bpFicheT12C
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>distinguer les <strong>puits biologiques</strong> des <strong>puits technologiques</strong> et conna&icirc;tre leurs ordres de grandeur ;</li>
                                     <li>distinguer <strong>r&eacute;duction</strong>, <strong>s&eacute;questration</strong> et <strong>compensation</strong> dans une strat&eacute;gie carbone ;</li>

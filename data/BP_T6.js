@@ -19,7 +19,7 @@ window.BP_T6_HTML = `<div class="bp-fiche" data-theme="bois-energie" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>situer la <strong>ressource foresti&egrave;re fran&ccedil;aise</strong> et la part disponible pour le bois &eacute;nergie ;</li>
                                     <li>comprendre le <strong>bilan carbone</strong> et le <strong>bilan &eacute;nerg&eacute;tique</strong> des combustibles bois (b&ucirc;che, granul&eacute;, plaquette) ;</li>
@@ -334,7 +334,7 @@ window.BP_T6_HTML = `<div class="bp-fiche" data-theme="bois-energie" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>comprendre les <strong>phases physiques de la combustion</strong> du bois et les conditions d&rsquo;un bon rendement ;</li>
                                     <li>savoir <strong>choisir un bois b&ucirc;che</strong> (essence, humidit&eacute;, dimension, s&eacute;chage, stockage) ;</li>
@@ -671,7 +671,7 @@ window.BP_T6_HTML = `<div class="bp-fiche" data-theme="bois-energie" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>distinguer les <strong>familles d&rsquo;appareils ind&eacute;pendants</strong> (po&ecirc;les b&ucirc;ches, po&ecirc;les de masse, po&ecirc;les &agrave; granul&eacute;s, inserts, foyers ferm&eacute;s, cuisini&egrave;res) et leurs domaines d&rsquo;emploi ;</li>
                                     <li>comprendre les <strong>modes de diffusion</strong> (convection, rayonnement) et leur impact sur l&rsquo;implantation ;</li>
@@ -993,7 +993,7 @@ window.BP_T6_HTML = `<div class="bp-fiche" data-theme="bois-energie" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>distinguer les fili&egrave;res <strong>granul&eacute;s</strong> et <strong>plaquettes</strong> (production, livraison, qualit&eacute;, &eacute;conomie) ;</li>
                                     <li>comprendre l&rsquo;<strong>architecture d&rsquo;une chaufferie automatique</strong> : silo, extraction, chaudi&egrave;re, r&eacute;gulation ;</li>

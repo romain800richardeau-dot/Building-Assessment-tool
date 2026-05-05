@@ -19,7 +19,7 @@ window.BP_T11_HTML = `<div class="bp-fiche" data-theme="performance" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>expliquer le r&ocirc;le et le caract&egrave;re <strong>opposable</strong> du DPE depuis 2021 ;</li>
                                     <li>ma&icirc;triser la logique de la m&eacute;thode <strong>3CL-DPE 2021</strong> : hypoth&egrave;ses, p&eacute;rim&egrave;tre, postes calcul&eacute;s ;</li>
@@ -342,7 +342,7 @@ window.BP_T11_HTML = `<div class="bp-fiche" data-theme="performance" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>mener un <strong>autodiagnostic &eacute;nerg&eacute;tique rapide</strong> &agrave; partir des seules factures et de la surface chauff&eacute;e ;</li>
                                     <li>convertir les consommations en <strong>&eacute;nergie finale</strong>, <strong>&eacute;nergie primaire</strong> et <strong>&eacute;missions de GES</strong> ;</li>
@@ -594,7 +594,7 @@ window.BP_T11_HTML = `<div class="bp-fiche" data-theme="performance" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>situer le label <strong>BEPOS-Effinergie 2017</strong> dans l&rsquo;&eacute;cosyst&egrave;me des labels et de la RE 2020 ;</li>
                                     <li>distinguer <strong>BEPOS</strong> et <strong>BEPOS+</strong> et leurs niveaux E+C- ;</li>
@@ -873,7 +873,7 @@ window.BP_T11_HTML = `<div class="bp-fiche" data-theme="performance" id="bpFiche
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&#039;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>expliquer ce qu&#039;est le <strong>Barom&egrave;tre OID</strong> et la diff&eacute;rence entre consommation <strong>r&eacute;elle</strong> et consommation <strong>conventionnelle</strong> (DPE)&nbsp;;</li>
                                     <li>situer les ordres de grandeur 2023 par <strong>typologie</strong> de b&acirc;timent (bureaux, sant&eacute;, h&ocirc;tels, commerces, logistique, r&eacute;sidentiel)&nbsp;;</li>

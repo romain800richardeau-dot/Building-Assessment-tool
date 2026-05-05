@@ -19,7 +19,7 @@ window.BP_T15_HTML = `<div class="bp-fiche" data-theme="reemploi" id="bpFicheT15
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                                 <ul>
                                     <li>distinguer <strong>r&eacute;emploi, r&eacute;utilisation, recyclage, valorisation</strong> et <strong>surcyclage</strong>&nbsp;;</li>
                                     <li>expliquer le <strong>statut d&eacute;chet</strong> et les crit&egrave;res de sortie de ce statut&nbsp;;</li>
@@ -219,7 +219,7 @@ window.BP_T15_HTML = `<div class="bp-fiche" data-theme="reemploi" id="bpFicheT15
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                                 <ul>
                                     <li>identifier les <strong>op&eacute;rations soumises</strong> au diagnostic PEMD et ce qu&rsquo;il doit contenir&nbsp;;</li>
                                     <li>expliquer ce qu&rsquo;apporte un diagnostic <strong>Ressources</strong> par rapport au PEMD&nbsp;;</li>
@@ -494,7 +494,7 @@ window.BP_T15_HTML = `<div class="bp-fiche" data-theme="reemploi" id="bpFicheT15
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                                 <ul>
                                     <li>distinguer <strong>r&eacute;emploi in situ, ex situ et rapport&eacute;</strong> et leurs enjeux propres&nbsp;;</li>
                                     <li>nommer les principales <strong>plateformes num&eacute;riques et physiques</strong> fran&ccedil;aises et europ&eacute;ennes&nbsp;;</li>
@@ -764,7 +764,7 @@ window.BP_T15_HTML = `<div class="bp-fiche" data-theme="reemploi" id="bpFicheT15
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                                 <ul>
                                     <li>justifier la cr&eacute;ation d&rsquo;un <strong>lot r&eacute;emploi d&eacute;di&eacute;</strong> et en comprendre la logique transitoire&nbsp;;</li>
                                     <li>lister les <strong>missions</strong> qui peuvent lui &ecirc;tre attribu&eacute;es en amont, sur le terrain et en aval&nbsp;;</li>
@@ -1057,7 +1057,7 @@ window.BP_T15_HTML = `<div class="bp-fiche" data-theme="reemploi" id="bpFicheT15
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                                 <ul>
                                     <li>distinguer les <strong>r&eacute;gimes juridiques</strong> applicables aux ESH et aux OPH&nbsp;;</li>
                                     <li>choisir entre les <strong>trois options</strong> de cession selon les enjeux de l&rsquo;op&eacute;ration&nbsp;;</li>
@@ -1237,7 +1237,7 @@ window.BP_T15_HTML = `<div class="bp-fiche" data-theme="reemploi" id="bpFicheT15
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                                 <ul>
                                     <li>lister les <strong>assurances obligatoires</strong> dans l&rsquo;acte de construire&nbsp;;</li>
                                     <li>expliquer la notion de <strong>technique non courante</strong> et ses limites&nbsp;;</li>
@@ -1430,7 +1430,7 @@ window.BP_T15_HTML = `<div class="bp-fiche" data-theme="reemploi" id="bpFicheT15
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                                 <ul>
                                     <li>situer le <strong>r&ocirc;le</strong> du bureau de contr&ocirc;le et ses limites d&rsquo;intervention&nbsp;;</li>
                                     <li>distinguer <strong>cadre r&eacute;glementaire</strong> et <strong>cadre normatif</strong> et comprendre pourquoi cette distinction est cruciale pour le r&eacute;emploi&nbsp;;</li>
@@ -1652,7 +1652,7 @@ window.BP_T15_HTML = `<div class="bp-fiche" data-theme="reemploi" id="bpFicheT15
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                                 <ul>
                                     <li>identifier les <strong>postes de co&ucirc;t</strong> sp&eacute;cifiques au r&eacute;emploi et ceux o&ugrave; des <strong>&eacute;conomies</strong> apparaissent&nbsp;;</li>
                                     <li>raisonner en <strong>co&ucirc;t global</strong> et non pas poste par poste&nbsp;;</li>
@@ -1944,7 +1944,7 @@ window.BP_T15_HTML = `<div class="bp-fiche" data-theme="reemploi" id="bpFicheT15
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir&nbsp;:</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir&nbsp;:</h4>
                                 <ul>
                                     <li>d&eacute;finir l&rsquo;<strong>ACV</strong> et ses modules (A, B, C, D)&nbsp;;</li>
                                     <li>fixer un <strong>objectif environnemental chiffr&eacute;</strong>&nbsp;;</li>

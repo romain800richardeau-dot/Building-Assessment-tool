@@ -19,7 +19,7 @@ window.BP_T9_HTML = `<div class="bp-fiche" data-theme="geothermie" id="bpFicheT9
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>expliquer l&rsquo;origine et la nature de la <strong>chaleur g&eacute;othermique</strong> exploitable ;</li>
                                     <li>distinguer les grandes familles de g&eacute;othermie selon la <strong>profondeur</strong> et la <strong>temp&eacute;rature</strong> ;</li>
@@ -303,7 +303,7 @@ window.BP_T9_HTML = `<div class="bp-fiche" data-theme="geothermie" id="bpFicheT9
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>identifier les <strong>param&egrave;tres physiques</strong> qui pilotent la longueur d&rsquo;une sonde g&eacute;othermique verticale ;</li>
                                     <li>distinguer <strong>m&eacute;thode empirique (VDI 4640)</strong>, <strong>m&eacute;thode ASHRAE</strong> et <strong>test de r&eacute;ponse thermique (TRT)</strong> ;</li>
@@ -610,7 +610,7 @@ window.BP_T9_HTML = `<div class="bp-fiche" data-theme="geothermie" id="bpFicheT9
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>distinguer <strong>g&eacute;othermie de surface</strong> et <strong>a&eacute;rothermie</strong> sur les plans technique et r&eacute;glementaire ;</li>
                                     <li>comprendre les crit&egrave;res d&rsquo;&eacute;ligibilit&eacute; aux aides (<strong>SCOP</strong>, <strong>SEER</strong>, plafonds &eacute;nerg&eacute;tiques) ;</li>
@@ -883,7 +883,7 @@ window.BP_T9_HTML = `<div class="bp-fiche" data-theme="geothermie" id="bpFicheT9
 
                             <div class="ms-intro bp-section">
                                 <div class="ms-intro-label bp-section-title">Objectifs du chapitre</div>
-                                <h4>&Agrave; la fin de cette fiche, l&rsquo;apprenant doit savoir :</h4>
+                                <h4>&Agrave; la fin de cette fiche, le lecteur doit savoir :</h4>
                                 <ul>
                                     <li>conna&icirc;tre la <strong>m&eacute;thodologie AFPG</strong> d&rsquo;une &eacute;tude technico-&eacute;conomique g&eacute;othermique ;</li>
                                     <li>comparer les <strong>co&ucirc;ts d&rsquo;investissement et d&rsquo;exploitation</strong> des trois familles de captage ;</li>

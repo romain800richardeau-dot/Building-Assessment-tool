@@ -91,7 +91,8 @@ function saAutocomplete(query) {
                 var coords = f.geometry.coordinates; // [lon, lat]
                 h += '<div class="sa-ac-item" onclick="saSelectAddress(\'' +
                     saEsc(p.label) + '\',' + coords[1] + ',' + coords[0] + ',\'' +
-                    saEsc(p.city || '') + '\',\'' + saEsc(p.citycode || '') + '\')">' +
+                    saEsc(p.city || '') + '\',\'' + saEsc(p.citycode || '') + '\',\'' +
+                    saEsc(p.postcode || '') + '\',\'' + saEsc(p.name || '') + '\',\'' + saEsc(p.type || '') + '\')">' +
                     '<div class="sa-ac-main">' + saEscH(p.name || '') + '</div>' +
                     '<div class="sa-ac-ctx">' + saEscH(p.postcode || '') + ' ' + saEscH(p.city || '') + '</div>' +
                     '</div>';
@@ -102,11 +103,14 @@ function saAutocomplete(query) {
         .catch(function () { saHideAutocomplete(); });
 }
 
-function saSelectAddress(label, lat, lon, city, citycode) {
+function saSelectAddress(label, lat, lon, city, citycode, postcode, name, type) {
     saState.lat = lat;
     saState.lon = lon;
     saState.address = label;
     saState.commune = city;
+    saState.codePostal = postcode || '';
+    saState.searchName = name || '';
+    saState.searchType = type || ''; // 'municipality' | 'street' | 'housenumber' | 'locality'
     // Normaliser les codes INSEE des arrondissements (Paris, Lyon, Marseille)
     // L'API BAN renvoie 75101-75120, 69381-69389, 13201-13216
     // mais la plupart des API (Hub'Eau, etc.) attendent le code commune : 75056, 69123, 13055
@@ -1403,6 +1407,10 @@ function saClimatInitMap() {
     saClimatLayers.plan = L.tileLayer(
         'https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png',
         { attribution: '&copy; IGN', maxZoom: 19 }
+    );
+    saClimatLayers.light = L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        { attribution: '&copy; OpenStreetMap, &copy; CARTO', maxZoom: 20, subdomains: 'abcd' }
     );
 
     saClimatCurrentLayer = 'aerial';
@@ -6218,6 +6226,13 @@ function saInitMap(lat, lon) {
         )
     ]);
 
+    // Fond de plan clair (CartoDB Positron) — ideal pour faire ressortir
+    //  les overlays vectoriels (zones, traces, markers).
+    saState.mapLayers.light = L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        { attribution: '&copy; OpenStreetMap, &copy; CARTO', maxZoom: 20, subdomains: 'abcd' }
+    );
+
     // Add default layer (aerial)
     saState.currentLayer = 'aerial';
     saState.mapLayers.aerial.addTo(saState.map);
@@ -9724,6 +9739,10 @@ function saMpInitMap() {
             transparent: true, attribution: '&copy; IGN Cadastre', maxZoom: 20
         })
     ]);
+    saMpLayers.light = L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        { attribution: '&copy; OpenStreetMap, &copy; CARTO', maxZoom: 20, subdomains: 'abcd' }
+    );
 
     saMpCurrentLayer = 'aerial';
     saMpLayers.aerial.addTo(saMpMap);
@@ -9787,6 +9806,10 @@ function saUrbaInitMap() {
             transparent: true, attribution: '&copy; IGN Cadastre', maxZoom: 20
         })
     ]);
+    saUrbaLayers.light = L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        { attribution: '&copy; OpenStreetMap, &copy; CARTO', maxZoom: 20, subdomains: 'abcd' }
+    );
 
     saUrbaCurrentLayer = 'aerial';
     saUrbaLayers.aerial.addTo(saUrbaMap);
@@ -10783,6 +10806,10 @@ function saEcoInitMap() {
         'https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png',
         { attribution: '&copy; <a href="https://geoservices.ign.fr/">IGN</a>', maxZoom: 19 }
     );
+    saEcoLayers.light = L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        { attribution: '&copy; OpenStreetMap, &copy; CARTO', maxZoom: 20, subdomains: 'abcd' }
+    );
     saEcoLayers.cadastre = L.layerGroup([
         L.tileLayer(
             'https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/jpeg',
@@ -11660,11 +11687,17 @@ function saEnrGeoGradientCardHtml(label, layer) {
         var pct = ((v - g.min) / (g.max - g.min)) * 100;
         return '<span style="position:absolute;left:' + pct + '%;transform:translateX(-50%);font-size:0.66rem;color:#475569;white-space:nowrap;top:0;">' + fmt(v) + '</span>';
     }).join('');
+    // Réserve à droite de la rangée de ticks la même largeur que l'unité
+    // affichée au bout de la barre, pour que le dernier tick reste aligné
+    // avec la fin visuelle du gradient (et pas avec la fin du span unité).
+    var rightReserve = (g.unit.length * 0.42 + 0.7) + 'em';
     var h = '<div style="background:#fff;border:1px solid #E2E8F0;border-radius:6px;padding:6px 10px 10px;flex:1 1 280px;min-width:240px;max-width:420px;">';
     h += '<div style="font-size:0.72rem;color:#475569;font-weight:600;margin-bottom:4px;">' + label + '</div>';
-    h += '<div style="height:14px;border-radius:3px;background:linear-gradient(to right,' + stopsCss + ');border:1px solid #CBD5E1;"></div>';
-    h += '<div style="position:relative;height:14px;margin-top:2px;">' + tickHtml + '</div>';
-    h += '<div style="font-size:0.66rem;color:#64748B;text-align:right;margin-top:-2px;">' + g.unit + '</div>';
+    h += '<div style="display:flex;align-items:center;gap:6px;">';
+    h += '<div style="flex:1;height:14px;border-radius:3px;background:linear-gradient(to right,' + stopsCss + ');border:1px solid #CBD5E1;"></div>';
+    h += '<span style="font-size:0.66rem;color:#64748B;font-style:italic;white-space:nowrap;flex-shrink:0;">' + g.unit + '</span>';
+    h += '</div>';
+    h += '<div style="position:relative;height:14px;margin-top:2px;margin-right:' + rightReserve + ';">' + tickHtml + '</div>';
     h += '</div>';
     return h;
 }
@@ -12991,6 +13024,7 @@ function saEnrInitMap() {
     saEnrBase.aerial = L.tileLayer('https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/jpeg', { attribution: '© IGN', maxZoom: 19 });
     saEnrBase.plan = L.tileLayer('https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png', { attribution: '© IGN', maxZoom: 19 });
     saEnrBase.cadastre = L.tileLayer('https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=CADASTRALPARCELS.PARCELLAIRE_EXPRESS&STYLE=PCI%20vecteur&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png', { attribution: '© IGN', maxZoom: 19 });
+    saEnrBase.light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '© OpenStreetMap, © CARTO', maxZoom: 20, subdomains: 'abcd' });
     saEnrBase.aerial.addTo(saEnrMap);
 
     saEnrMarker = L.marker([lat, lon]).addTo(saEnrMap).bindPopup('Site du projet');
@@ -13275,11 +13309,11 @@ function saEnrTryGfi(overlayName, latlng, onDone) {
                     onDone({ type: 'json', data: parsed });
                     return;
                 }
-                // GML vide → essai suivant
-                if (parsed && parsed.features && parsed.features.length === 0) {
-                    tryNext(i + 1);
-                    return;
-                }
+                // GML vide ou non-parseable → on tente le format suivant.
+                // Si tous échouent, le formateur prendra le relais avec
+                // un message « aucun attribut détaillé » plutôt que le XML brut.
+                tryNext(i + 1);
+                return;
             }
             // Texte/HTML brut : on renvoie tel quel pour le formateur
             if (txt && txt.trim()) {
@@ -13407,9 +13441,30 @@ function saEnrFormatGfiResponse(overlayName, res, latlng) {
         return header + rowTpl('Valeur pixel', val);
     }
     if (!txt.trim()) return header + empty;
-    // Réponse HTML/GML non structurée : aperçu
-    var preview = txt.substring(0, 380).replace(/[<>]/g, function (c) { return c === '<' ? '&lt;' : '&gt;'; });
-    return header + '<pre style="font-size:0.68rem;color:#475569;white-space:pre-wrap;word-break:break-word;max-height:140px;overflow:auto;background:#F8FAFC;padding:6px;border-radius:3px;margin:0;">' + preview + '</pre>';
+
+    // Réponse XML/GML que le parser n'a pas su lire (msGMLOutput vide,
+    // FeatureCollection sans propriétés exploitables…) → message clair
+    // au lieu d'un dump XML qui ne sert à rien à l'utilisateur final.
+    if (/^\s*<\?xml|<msGMLOutput|<FeatureCollection|<gml:|<wfs:/i.test(txt.substring(0, 400))) {
+        return header
+            + '<div style="font-size:0.78rem;color:#475569;line-height:1.5;">Aucun attribut détaillé à ce point pour cette couche.</div>'
+            + '<div style="font-size:0.66rem;color:#94A3B8;margin-top:5px;line-height:1.4;">La donnée est rendue sous forme de zonage coloré ; se reporter à la légende et au panneau de synthèse pour les valeurs caractéristiques (aquifères, débits, profondeurs).</div>';
+    }
+    // Réponse HTML serveur — on tente d'extraire le texte utile
+    if (/<html|<body|<table/i.test(txt.substring(0, 400))) {
+        var stripped = txt.replace(/<style[\s\S]*?<\/style>/gi, '')
+            .replace(/<script[\s\S]*?<\/script>/gi, '')
+            .replace(/<[^>]+>/g, ' ')
+            .replace(/&nbsp;/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+        if (stripped.length < 4) return header + empty;
+        return header + '<div style="font-size:0.78rem;color:#334155;line-height:1.5;max-height:160px;overflow:auto;">' + stripped.substring(0, 600) + (stripped.length > 600 ? '…' : '') + '</div>';
+    }
+    // Texte brut court
+    var clean = txt.trim();
+    if (clean.length > 600) clean = clean.substring(0, 600) + '…';
+    return header + '<div style="font-size:0.78rem;color:#334155;line-height:1.5;white-space:pre-wrap;">' + clean.replace(/[<>]/g, function (c) { return c === '<' ? '&lt;' : '&gt;'; }) + '</div>';
 }
 
 // Handler principal : appelé au clic sur saEnrMap
@@ -13936,6 +13991,160 @@ document.addEventListener('keydown', function(e) {
 // Pass 1: load terrain tiles, decode elevations, store raw data, collect global min/max
 // Pass 2: once all visible tiles loaded, colorize with the actual range, update legend
 // On zoomend: reset and repeat
+
+// Construit un L.GridLayer "heatmap d'altitude" autonome (state isolé,
+//  sans base layer ni légende DOM). Idéal comme overlay (carte fullscreen
+//  MP avec couche Topographie). Réutilise la même rampe de couleurs que
+//  saAddElevationHeatmap pour cohérence visuelle.
+window.saBuildElevationLayer = function (opts) {
+    if (typeof L === 'undefined') return null;
+    var s = { globalMin: Infinity, globalMax: -Infinity, tileData: {}, pending: 0, calibrated: false };
+    var rampStops = [
+        [0.00, [0, 180, 210]], [0.10, [0, 200, 170]], [0.20, [50, 190, 100]],
+        [0.30, [80, 195, 50]], [0.40, [140, 205, 0]], [0.50, [200, 220, 0]],
+        [0.60, [240, 200, 0]], [0.70, [250, 150, 0]], [0.80, [240, 80, 10]],
+        [0.90, [210, 20, 60]], [1.00, [180, 0, 100]]
+    ];
+    var lutSize = 1024;
+    var lut = new Uint8Array(lutSize * 3);
+    for (var i = 0; i < lutSize; i++) {
+        var t = i / (lutSize - 1);
+        var lo = rampStops[0], hi = rampStops[rampStops.length - 1];
+        for (var k = 1; k < rampStops.length; k++) {
+            if (t <= rampStops[k][0]) { lo = rampStops[k - 1]; hi = rampStops[k]; break; }
+        }
+        var st = (hi[0] === lo[0]) ? 0 : (t - lo[0]) / (hi[0] - lo[0]);
+        lut[i * 3]     = Math.round(lo[1][0] + st * (hi[1][0] - lo[1][0]));
+        lut[i * 3 + 1] = Math.round(lo[1][1] + st * (hi[1][1] - lo[1][1]));
+        lut[i * 3 + 2] = Math.round(lo[1][2] + st * (hi[1][2] - lo[1][2]));
+    }
+    function colorize(td) {
+        var elevLow = s.globalMin, span = s.globalMax - s.globalMin;
+        if (span < 10) span = 10;
+        var ctx = td.canvas.getContext('2d');
+        var imgData = ctx.createImageData(td.w, td.h);
+        var px = imgData.data, elArr = td.elevArray;
+        for (var j = 0; j < elArr.length; j++) {
+            var norm = (elArr[j] - elevLow) / span;
+            if (norm < 0) norm = 0; if (norm > 1) norm = 1;
+            var li = Math.round(norm * (lutSize - 1));
+            px[j * 4]     = lut[li * 3];
+            px[j * 4 + 1] = lut[li * 3 + 1];
+            px[j * 4 + 2] = lut[li * 3 + 2];
+            px[j * 4 + 3] = 185;
+        }
+        ctx.putImageData(imgData, 0, 0);
+    }
+    function recolorAll() {
+        s.calibrated = true;
+        Object.keys(s.tileData).forEach(function (k) { colorize(s.tileData[k]); });
+        updateLegend();
+    }
+    function updateLegend() {
+        if (!s.legendDiv) return;
+        var elevLow = s.globalMin, elevHigh = s.globalMax;
+        var span = elevHigh - elevLow;
+        if (!isFinite(elevLow) || !isFinite(elevHigh) || span < 1) {
+            s.legendDiv.innerHTML = '<div style="padding:4px 8px;font-size:10px;color:#64748B;">Chargement&hellip;</div>';
+            return;
+        }
+        if (span < 10) span = 10;
+        var numSteps = 12, stepH = 18, html = '';
+        for (var si = numSteps; si >= 0; si--) {
+            var frac = si / numSteps;
+            var elev = Math.round(elevLow + frac * span);
+            var li = Math.round(frac * (lutSize - 1));
+            var r = lut[li * 3], g = lut[li * 3 + 1], b = lut[li * 3 + 2];
+            var lumin = r * 0.299 + g * 0.587 + b * 0.114;
+            var tc = lumin > 140 ? '#1a1a1a' : '#fff';
+            html += '<div style="background:rgb(' + r + ',' + g + ',' + b + ');height:' + stepH + 'px;line-height:' + stepH + 'px;padding:0 6px;font-size:10px;font-weight:600;color:' + tc + ';text-align:right;white-space:nowrap;">' + elev + ' m</div>';
+        }
+        s.legendDiv.innerHTML = html;
+    }
+    var Klass = L.GridLayer.extend({
+        createTile: function (coords, done) {
+            var tile = document.createElement('canvas');
+            var size = this.getTileSize();
+            tile.width = size.x; tile.height = size.y;
+            var key = coords.z + '/' + coords.x + '/' + coords.y;
+            s.pending++;
+            var url = 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/' + coords.z + '/' + coords.x + '/' + coords.y + '.png';
+            fetch(url).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); })
+                .then(function (b) { return createImageBitmap(b); })
+                .then(function (bm) {
+                    var ctx = tile.getContext('2d');
+                    ctx.drawImage(bm, 0, 0, size.x, size.y);
+                    bm.close();
+                    var raw = ctx.getImageData(0, 0, size.x, size.y);
+                    var px = raw.data, num = size.x * size.y;
+                    var ea = new Float32Array(num);
+                    var tMin = Infinity, tMax = -Infinity;
+                    for (var pi = 0; pi < num; pi++) {
+                        var off = pi * 4;
+                        var elev = (px[off] * 256 + px[off + 1] + px[off + 2] / 256) - 32768;
+                        ea[pi] = elev;
+                        if (elev > -100) { if (elev < tMin) tMin = elev; if (elev > tMax) tMax = elev; }
+                    }
+                    if (tMin < s.globalMin) s.globalMin = Math.max(0, tMin);
+                    if (tMax > s.globalMax) s.globalMax = tMax;
+                    s.tileData[key] = { canvas: tile, elevArray: ea, w: size.x, h: size.y };
+                    colorize(s.tileData[key]);
+                    done(null, tile);
+                    s.pending--;
+                    if (s.pending <= 0) { s.pending = 0; recolorAll(); }
+                }).catch(function () {
+                    done(null, tile);
+                    s.pending--;
+                    if (s.pending <= 0) { s.pending = 0; recolorAll(); }
+                });
+            return tile;
+        }
+    });
+    var inst = new Klass(opts || { maxZoom: 15, attribution: 'Elevation: AWS Terrain Tiles' });
+    inst.on('add', function (e) {
+        var m = e.target._map;
+        if (!m) return;
+        var lastZ = m.getZoom();
+        inst._zoomReset = function () {
+            var z = m.getZoom();
+            if (z !== lastZ) {
+                lastZ = z;
+                s.globalMin = Infinity; s.globalMax = -Infinity;
+                s.tileData = {}; s.calibrated = false;
+                updateLegend();
+            }
+        };
+        m.on('zoomend', inst._zoomReset);
+
+        // Légende verticale dynamique : on l'attache directement au
+        //  conteneur du map (pas L.Control) avec un positionnement
+        //  absolu à droite, vertical-center → en face du chevron
+        //  sommaire situé à left:0, top:50% sur la carte fullscreen.
+        if (!inst._legendDom) {
+            var div = document.createElement('div');
+            div.className = 'sa-elev-legend';
+            div.style.cssText = 'position:absolute;top:50%;right:12px;transform:translateY(-50%);z-index:650;border-radius:4px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,0.3);border:1px solid rgba(0,0,0,0.15);max-height:70vh;overflow-y:auto;pointer-events:auto;';
+            try { L.DomEvent.disableClickPropagation(div); } catch (er) {}
+            div.innerHTML = '<div style="padding:4px 8px;font-size:10px;color:#64748B;background:#fff;">Chargement&hellip;</div>';
+            inst._legendDom = div;
+            s.legendDiv = div;
+        } else {
+            s.legendDiv = inst._legendDom;
+        }
+        m.getContainer().appendChild(inst._legendDom);
+        updateLegend();
+    });
+    inst.on('remove', function (e) {
+        var m = e.target._map;
+        if (m && inst._zoomReset) m.off('zoomend', inst._zoomReset);
+        if (inst._legendDom && inst._legendDom.parentNode) {
+            inst._legendDom.parentNode.removeChild(inst._legendDom);
+        }
+        s.legendDiv = null;
+    });
+    return inst;
+};
+
 function saAddElevationHeatmap(map) {
 
     // ── Color ramp (normalized 0–1) ── cyan → green → yellow → orange → red → magenta
@@ -24446,8 +24655,8 @@ function _saCartoRadiusLabelText(measureModel, circle) {
     var showArea = !!measureModel._showRadiusArea;            // default false
     var r = circle.getRadius();
     var parts = [];
-    if (showLen) parts.push(_saCartoFmtLength(r));
-    if (showArea) parts.push(_saCartoFmtArea(Math.PI * r * r));
+    if (showLen) parts.push(_saCartoFmtLength(r, measureModel._lengthUnit));
+    if (showArea) parts.push(_saCartoFmtArea(Math.PI * r * r, measureModel._areaUnit));
     return parts.join(' \u2014 ');
 }
 
@@ -24656,15 +24865,25 @@ function _saCartoRadiusBindLabelDrag(measureModel) {
     // Curseur indicatif au survol
     marker.on('mouseover', function() { if (saCartoMap) saCartoMap.getContainer().style.cursor = 'grab'; });
     marker.on('mouseout',  function() { if (saCartoMap) saCartoMap.getContainer().style.cursor = ''; });
+    // Click sur le label = ouvre le panneau Mise en forme du cercle parent
+    marker.on('click', function(e) {
+        if (e && e.originalEvent) L.DomEvent.stopPropagation(e.originalEvent);
+        if (saCartoMap && saCartoMap._saIgnoreNextClick) return;
+        if (typeof saCartoSelectShapeLayer === 'function' && measureModel && measureModel.id != null) {
+            saCartoSelectShapeLayer(measureModel.id);
+        }
+    });
 }
 
 function _saCartoComputeMeasure(layer, kind) {
     var L_ = window.L;
+    var lu = layer && layer._lengthUnit;
+    var au = layer && layer._areaUnit;
     if (kind === 'distance') {
         var latlngs = layer.getLatLngs();
         var d = 0;
         for (var i = 1; i < latlngs.length; i++) d += latlngs[i - 1].distanceTo(latlngs[i]);
-        return { label: 'Distance', value: _saCartoFmtLength(d) };
+        return { label: 'Distance', value: _saCartoFmtLength(d, lu) };
     }
     if (kind === 'perimeter' || kind === 'area') {
         var pts = layer.getLatLngs()[0] || layer.getLatLngs();
@@ -24674,13 +24893,13 @@ function _saCartoComputeMeasure(layer, kind) {
             per += p1.distanceTo(p2);
         }
         var area = L_.GeometryUtil && L_.GeometryUtil.geodesicArea ? L_.GeometryUtil.geodesicArea(pts) : _saCartoPolygonArea(pts);
-        if (kind === 'perimeter') return { label: 'P\u00e9rim\u00e8tre', value: _saCartoFmtLength(per) };
-        return { label: 'Surface', value: _saCartoFmtArea(area) + ' \u2014 p\u00e9rim\u00e8tre ' + _saCartoFmtLength(per) };
+        if (kind === 'perimeter') return { label: 'P\u00e9rim\u00e8tre', value: _saCartoFmtLength(per, lu) };
+        return { label: 'Surface', value: _saCartoFmtArea(area, au) + ' \u2014 p\u00e9rim\u00e8tre ' + _saCartoFmtLength(per, lu) };
     }
     if (kind === 'radius') {
         var r = layer.getRadius();
         var area = Math.PI * r * r;
-        return { label: 'Rayon', value: _saCartoFmtLength(r) + ' \u2014 surface ' + _saCartoFmtArea(area) };
+        return { label: 'Rayon', value: _saCartoFmtLength(r, lu) + ' \u2014 surface ' + _saCartoFmtArea(area, au) };
     }
     return { label: '?', value: '' };
 }
@@ -24704,24 +24923,53 @@ function _saCartoEtalonRatio(et) {
         return et.realDistance / geodesic;
     } catch (e) { return null; }
 }
-function _saCartoFmtLength(m) {
+// Pr\u00e9cision adaptative : on conserve toujours ~3 chiffres significatifs pour
+// \u00e9viter qu'une petite valeur exprim\u00e9e dans une grande unit\u00e9 ne disparaisse.
+// Ex. 5,48 ha en km\u00b2 \u2192 0,0548 km\u00b2 (et non 0,05 km\u00b2).
+function _saCartoFmtNum(v) {
+    var a = Math.abs(v);
+    if (a === 0) return '0';
+    if (a >= 100)  return v.toFixed(0);
+    if (a >= 10)   return v.toFixed(1);
+    if (a >= 1)    return v.toFixed(2);
+    if (a >= 0.1)  return v.toFixed(3);
+    if (a >= 0.01) return v.toFixed(4);
+    return v.toFixed(5);
+}
+function _saCartoFmtLength(m, unit) {
+    if (unit && unit !== 'auto') {
+        switch (unit) {
+            case 'mm': return _saCartoFmtNum(m * 1000) + ' mm';
+            case 'cm': return _saCartoFmtNum(m * 100) + ' cm';
+            case 'm':  return _saCartoFmtNum(m) + ' m';
+            case 'km': return _saCartoFmtNum(m / 1000) + ' km';
+        }
+    }
     var et = _saCartoActiveEtalon();
     if (et) {
         var r = _saCartoEtalonRatio(et);
-        if (r) return (m * r).toFixed(2) + ' ' + et.unit;
+        if (r) return _saCartoFmtNum(m * r) + ' ' + et.unit;
     }
     if (m < 1000) return Math.round(m) + ' m';
-    return (m / 1000).toFixed(2) + ' km';
+    return _saCartoFmtNum(m / 1000) + ' km';
 }
-function _saCartoFmtArea(m2) {
+function _saCartoFmtArea(m2, unit) {
+    if (unit && unit !== 'auto') {
+        switch (unit) {
+            case 'cm2': case 'cm\u00b2': return _saCartoFmtNum(m2 * 10000) + ' cm\u00b2';
+            case 'm2':  case 'm\u00b2':  return _saCartoFmtNum(m2) + ' m\u00b2';
+            case 'ha':              return _saCartoFmtNum(m2 / 10000) + ' ha';
+            case 'km2': case 'km\u00b2': return _saCartoFmtNum(m2 / 1e6) + ' km\u00b2';
+        }
+    }
     var et = _saCartoActiveEtalon();
     if (et) {
         var r = _saCartoEtalonRatio(et);
-        if (r) return (m2 * r * r).toFixed(2) + ' ' + et.unit + '\u00b2';
+        if (r) return _saCartoFmtNum(m2 * r * r) + ' ' + et.unit + '\u00b2';
     }
     if (m2 < 10000) return Math.round(m2) + ' m\u00b2';
-    if (m2 < 1e6) return (m2 / 10000).toFixed(2) + ' ha';
-    return (m2 / 1e6).toFixed(2) + ' km\u00b2';
+    if (m2 < 1e6) return _saCartoFmtNum(m2 / 10000) + ' ha';
+    return _saCartoFmtNum(m2 / 1e6) + ' km\u00b2';
 }
 // Calcul d'aire planaire approx. (si GeometryUtil absent)
 function _saCartoPolygonArea(pts) {
@@ -24814,8 +25062,8 @@ function _saCartoPolyMeasureText(measureModel) {
     }
     var area = (L.GeometryUtil && L.GeometryUtil.geodesicArea) ? L.GeometryUtil.geodesicArea(pts) : _saCartoPolygonArea(pts);
     var parts = [];
-    if (measureModel._showPolyPerimeter !== false) parts.push(_saCartoFmtLength(per));
-    if (measureModel._showPolyArea) parts.push(_saCartoFmtArea(area));
+    if (measureModel._showPolyPerimeter !== false) parts.push(_saCartoFmtLength(per, measureModel._lengthUnit));
+    if (measureModel._showPolyArea) parts.push(_saCartoFmtArea(area, measureModel._areaUnit));
     return parts.join(' \u2014 ');
 }
 
@@ -25181,6 +25429,15 @@ function _saCartoPolyMeasureBindLabelDrag(measureModel) {
     }
     marker.on('mouseover', function() { if (saCartoMap) saCartoMap.getContainer().style.cursor = 'grab'; });
     marker.on('mouseout',  function() { if (saCartoMap) saCartoMap.getContainer().style.cursor = ''; });
+    // Click sur le label = ouvre le panneau Mise en forme du polygone parent
+    // (sauf pendant un drag \u2014 la flag _saIgnoreNextClick est pos\u00e9e par onUp).
+    marker.on('click', function(e) {
+        if (e && e.originalEvent) L.DomEvent.stopPropagation(e.originalEvent);
+        if (saCartoMap && saCartoMap._saIgnoreNextClick) return;
+        if (typeof saCartoSelectShapeLayer === 'function' && measureModel && measureModel.id != null) {
+            saCartoSelectShapeLayer(measureModel.id);
+        }
+    });
 }
 
 // ============================================================================
@@ -25860,6 +26117,16 @@ function _saCartoUpdateShapePanel() {
     wrapPoly.forEach(function(id)   { var el = $(id); if (el) el.style.display = isPolyMeasure     ? '' : 'none'; });
     wrapDist.forEach(function(id)   { var el = $(id); if (el) el.style.display = isDistanceMeasure ? '' : 'none'; });
 
+    // Sélecteurs d'unités (longueur / surface) — visibles selon le type de mesure
+    var lengthUnitWrap = $('shpLengthUnitWrap');
+    var areaUnitWrap   = $('shpAreaUnitWrap');
+    if (lengthUnitWrap) lengthUnitWrap.style.display = anyMeasure ? '' : 'none';
+    if (areaUnitWrap)   areaUnitWrap.style.display   = (isRadiusMeasure || isPolyMeasure) ? '' : 'none';
+    var lengthSel = $('shpLengthUnit');
+    if (lengthSel) lengthSel.value = f.layer._lengthUnit || 'auto';
+    var areaSel = $('shpAreaUnit');
+    if (areaSel) areaSel.value = f.layer._areaUnit || 'auto';
+
     if (isRadiusMeasure) {
         if ($('shpShowRadius'))       $('shpShowRadius').checked       = !!f.layer._radiusLineVisible;
         if ($('shpShowRadiusLength')) $('shpShowRadiusLength').checked = f.layer._showRadiusLength !== false;
@@ -26141,6 +26408,20 @@ function saCartoSetShapeProp(prop, value) {
         if (f.layer._measureKind === 'perimeter' || f.layer._measureKind === 'area') {
             f.layer._measureLabelColor = null;
             _saCartoPolyMeasureRefresh(f.layer);
+        }
+        _saCartoUpdateShapePanel();
+        return;
+    } else if (prop === 'lengthUnit' || prop === 'areaUnit') {
+        // Override d'unité (auto/mm/cm/m/km ou auto/cm²/m²/ha/km²) sur le layer
+        // de mesure (rayon / périmètre / surface / distance).
+        var key = (prop === 'lengthUnit') ? '_lengthUnit' : '_areaUnit';
+        f.layer[key] = (value && value !== 'auto') ? value : null;
+        if (f.layer._measureKind === 'radius' && typeof _saCartoRadiusRefresh === 'function') {
+            _saCartoRadiusRefresh(f.layer);
+        } else if ((f.layer._measureKind === 'perimeter' || f.layer._measureKind === 'area') && typeof _saCartoPolyMeasureRefresh === 'function') {
+            _saCartoPolyMeasureRefresh(f.layer);
+        } else if (f.layer._measureKind === 'distance' && typeof _saCartoDistanceRefreshLabels === 'function') {
+            _saCartoDistanceRefreshLabels(f.layer);
         }
         _saCartoUpdateShapePanel();
         return;
@@ -28795,8 +29076,9 @@ function saCartoFlyTo(lat, lon, label) {
 
 // ── Sauvegarde / chargement de l'atelier (localStorage) ────────────────
 var SA_CARTO_STORAGE_KEY = 'sa_carto_projet_v1';
-function saCartoSaveProject() {
-    if (!saCartoMap) return;
+// Construit l'objet state complet de l'atelier (\u00e0 s\u00e9rialiser).
+function _saCartoBuildStateBlob() {
+    if (!saCartoMap) return null;
     var drawings = [];
     if (saCartoDrawLayer) {
         saCartoDrawLayer.eachLayer(function(l) {
@@ -28813,7 +29095,7 @@ function saCartoSaveProject() {
     var mapLegEl = document.getElementById('saCartoMapLegend');
     var headerEl = document.getElementById('saCartoLayoutHeader');
     var footerEl = document.getElementById('saCartoLayoutFooter');
-    var state = {
+    return {
         version: 3,
         address: saState.address || '',
         center: saCartoMap.getCenter(),
@@ -28832,45 +29114,90 @@ function saCartoSaveProject() {
         },
         savedAt: new Date().toISOString()
     };
+}
+
+// Auto-save localStorage (silencieux) \u2014 appel\u00e9 par exitStandaloneTool.
+function saCartoSaveProject(silent) {
+    if (!saCartoMap) return;
+    var state = _saCartoBuildStateBlob();
+    if (!state) return;
     try {
-        localStorage.setItem(SA_CARTO_STORAGE_KEY, JSON.stringify(state));
-        _saCartoToast('Atelier sauvegard\u00e9 dans le navigateur.', '#16A34A');
+        var k = (typeof window.vdProjectKey === 'function') ? window.vdProjectKey(SA_CARTO_STORAGE_KEY) : SA_CARTO_STORAGE_KEY;
+        localStorage.setItem(k, JSON.stringify(state));
+        if (!silent) _saCartoToast('Atelier sauvegard\u00e9 dans le navigateur.', '#16A34A');
     } catch (e) {
-        alert('\u00c9chec de la sauvegarde : ' + e.message);
+        if (!silent) alert('\u00c9chec de la sauvegarde : ' + e.message);
     }
 }
-function saCartoLoadProject() {
-    if (!saCartoMap) return;
-    var raw;
-    try { raw = localStorage.getItem(SA_CARTO_STORAGE_KEY); }
-    catch (e) { alert('Stockage local inaccessible : ' + e.message); return; }
-    if (!raw) { _saCartoToast('Aucune sauvegarde trouv\u00e9e.', '#DC2626'); return; }
-    var state;
-    try { state = JSON.parse(raw); }
-    catch (e) { alert('Sauvegarde corrompue.'); return; }
 
+// Export vers fichier .atelier.json \u2014 action du bouton \u00ab Enregistrer \u00bb du ruban.
+// Tente d'utiliser la File System Access API (Chrome/Edge/Opera) qui ouvre un
+// vrai dialogue \u00ab Enregistrer sous \u00bb permettant de choisir emplacement ET nom.
+// Fallback Firefox/Safari : prompt() pour le nom + download classique.
+async function saCartoExportProjectFile() {
+    if (!saCartoMap) { alert('Atelier non initialis\u00e9.'); return; }
+    var state = _saCartoBuildStateBlob();
+    if (!state) { alert('Impossible de construire la sauvegarde.'); return; }
+    var addr = (saState.address || 'sans-adresse').replace(/[^\w\-]+/g, '_').toLowerCase();
+    var defaultName = 'atelier_' + addr + '_' + new Date().toISOString().substring(0, 10) + '.atelier.json';
+    var json = JSON.stringify(state, null, 2);
+
+    // Chemin moderne : showSaveFilePicker (Chrome 86+, Edge 86+, Opera 72+)
+    if (typeof window.showSaveFilePicker === 'function') {
+        try {
+            var handle = await window.showSaveFilePicker({
+                suggestedName: defaultName,
+                types: [{
+                    description: 'Projet Atelier Verdict',
+                    accept: { 'application/json': ['.json', '.atelier.json'] }
+                }]
+            });
+            var writable = await handle.createWritable();
+            await writable.write(json);
+            await writable.close();
+            _saCartoToast('Projet enregistr\u00e9.', '#16A34A');
+            return;
+        } catch (err) {
+            // L'utilisateur a annul\u00e9 OU une vraie erreur. AbortError = annulation, pas un toast.
+            if (err && err.name === 'AbortError') return;
+            console.warn('[Atelier] showSaveFilePicker \u00e9chou\u00e9, fallback download', err);
+            // continue vers le fallback ci-dessous
+        }
+    }
+
+    // Fallback : prompt pour le nom de fichier + download classique
+    var fname = window.prompt('Nom du fichier \u00e0 enregistrer :', defaultName);
+    if (!fname) return; // annul\u00e9
+    if (!/\.json$/i.test(fname)) fname += '.atelier.json';
+    var blob = new Blob([json], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = fname;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+    _saCartoToast('Projet enregistr\u00e9 (' + fname + ').', '#16A34A');
+}
+// Applique un objet state sur l'atelier courant.
+function _saCartoApplyStateBlob(state) {
+    if (!saCartoMap || !state) return false;
     // Reset
     Object.keys(saCartoLayersState).forEach(function(id) { if (saCartoLayersState[id]) _saCartoRemoveOverlay(id); });
     saCartoLayersState = {};
     saCartoLayersOpacity = state.opacities || {};
     if (saCartoDrawLayer) saCartoDrawLayer.clearLayers();
-
     // Basemap
     if (state.basemap && saCartoBasemaps[state.basemap]) saCartoSetBasemap(state.basemap);
-
     // Format + Vue
     if (state.format) saCartoSetFormat(state.format);
     if (state.view) saCartoSetView(state.view);
-
     // Position carte
     if (state.center && state.zoom != null) saCartoMap.setView([state.center.lat, state.center.lng], state.zoom);
-
     // Titre / pied de page
     var hEl = document.getElementById('saCartoLayoutHeader');
     var fEl = document.getElementById('saCartoLayoutFooter');
     if (hEl) { hEl.textContent = state.header || ''; saCartoHeaderText = state.header || ''; }
     if (fEl) { fEl.textContent = state.footer || ''; saCartoFooterText = state.footer || ''; }
-
     // L\u00e9gende carte
     if (state.mapLegend) {
         saCartoMapLegendPos = state.mapLegend.pos || null;
@@ -28880,7 +29207,6 @@ function saCartoLoadProject() {
             if (state.mapLegend.visible) saCartoToggleMapLegend();
         }
     }
-
     // Couches
     Object.keys(state.layers || {}).forEach(function(id) {
         if (state.layers[id] && _saCartoIdx[id]) {
@@ -28888,7 +29214,6 @@ function saCartoLoadProject() {
             _saCartoAddOverlay(id);
         }
     });
-
     // Dessins
     (state.drawings || []).forEach(function(gj) {
         if (gj.properties && gj.properties._type === 'circle') {
@@ -28903,10 +29228,57 @@ function saCartoLoadProject() {
             });
         }
     });
-
     saCartoRenderCatalog();
     saCartoRenderLegend();
-    _saCartoToast('Atelier restaur\u00e9 (' + (state.savedAt || '').substring(0, 10) + ')', '#16A34A');
+    return true;
+}
+
+// Auto-load localStorage (silencieux) \u2014 appel\u00e9 \u00e0 l'entr\u00e9e de l'atelier.
+function saCartoLoadProject(silent) {
+    if (!saCartoMap) return false;
+    var raw;
+    try {
+        var k = (typeof window.vdProjectKey === 'function') ? window.vdProjectKey(SA_CARTO_STORAGE_KEY) : SA_CARTO_STORAGE_KEY;
+        raw = localStorage.getItem(k);
+    }
+    catch (e) { if (!silent) alert('Stockage local inaccessible : ' + e.message); return false; }
+    if (!raw) { if (!silent) _saCartoToast('Aucune sauvegarde trouv\u00e9e.', '#DC2626'); return false; }
+    var state;
+    try { state = JSON.parse(raw); }
+    catch (e) { if (!silent) alert('Sauvegarde corrompue.'); return false; }
+    var ok = _saCartoApplyStateBlob(state);
+    if (ok && !silent) _saCartoToast('Atelier restaur\u00e9 (' + (state.savedAt || '').substring(0, 10) + ')', '#16A34A');
+    return ok;
+}
+
+// Import depuis fichier .atelier.json \u2014 action du bouton \u00ab Charger \u00bb du ruban.
+function saCartoImportProjectFile() {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json,application/json';
+    input.onchange = function() {
+        if (!input.files || !input.files[0]) return;
+        var file = input.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var state;
+            try { state = JSON.parse(e.target.result); }
+            catch (err) { alert('Fichier invalide : ' + err.message); return; }
+            if (!state || !state.version) { alert('Ce fichier ne semble pas \u00eatre un projet Atelier (version manquante).'); return; }
+            // Si pas d'adresse courante, on r\u00e9cup\u00e8re celle du fichier pour que la
+            // carte soit centr\u00e9e correctement avant l'application de l'\u00e9tat.
+            if (state.center && (!saState.lat || !saState.lon)) {
+                saState.lat = state.center.lat;
+                saState.lon = state.center.lng;
+                saState.address = state.address || '';
+            }
+            var ok = _saCartoApplyStateBlob(state);
+            if (ok) _saCartoToast('Projet import\u00e9 (' + (state.savedAt || '').substring(0, 10) + ')', '#16A34A');
+            else alert('\u00c9chec de l\'application du projet.');
+        };
+        reader.readAsText(file);
+    };
+    input.click();
 }
 function _saCartoToast(msg, color) {
     var host = document.querySelector('.sa-carto-main');
@@ -31063,16 +31435,16 @@ function _saCartoColorForNotation(s) {
 var SA_CARTO_RIBBON = {
     fichier: [
         { group: 'Projet', items: [
-            { label: 'Enregistrer', icon: 'save', action: 'saCartoSaveProject()' },
-            { label: 'Charger', icon: 'folder-open', action: 'saCartoLoadProject()' }
+            { label: 'Exporter', icon: 'save', action: 'saCartoExportProjectFile()' },
+            { label: 'Charger', icon: 'folder-open', action: 'saCartoImportProjectFile()' }
         ]},
         { group: 'Export', items: [
             { label: 'Export PDF', icon: 'file-text', action: 'saCartoExportPDF()', primary: true },
             { label: 'Exporter GeoJSON', icon: 'download', action: 'saCartoExportGeoJSON()' },
             { label: 'Importer GeoJSON', icon: 'upload', action: "document.getElementById('saCartoImportInput').click()" }
         ]},
-        { group: 'Atelier', items: [
-            { label: 'R\u00e9initialiser', icon: 'refresh-ccw', action: 'saCartoReset()' }
+        { group: 'Tutoriel', items: [
+            { label: 'Tour', icon: 'refresh-ccw', action: 'saCartoStartTour && saCartoStartTour()' }
         ]}
     ],
     accueil: [
@@ -34787,6 +35159,18 @@ function saCartoTabAdd() {
     saCartoTabs.push(t);
     _saCartoTabActivate(t, true);
 }
+
+// Helper : crée un nouvel onglet vierge puis lance le tour guidé dessus.
+// Sans nouvel onglet, si la carte courante a déjà une adresse, le tour reste
+// bloqué car la 1re étape cible l'overlay "Aucune adresse" qui n'existe pas.
+window.saCartoStartTour = function() {
+    try { saCartoTabAdd(); } catch (e) {}
+    setTimeout(function() {
+        if (typeof window.atelierCartoReplay === 'function') {
+            window.atelierCartoReplay();
+        }
+    }, 250);
+};
 
 function saCartoTabClose(id) {
     if (saCartoTabs.length <= 1) return; // garder au moins un onglet

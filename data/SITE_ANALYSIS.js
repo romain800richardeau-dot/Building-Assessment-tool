@@ -1434,9 +1434,17 @@ function saClimatSetMapLayer(layerName) {
     if (saClimatLayers[saClimatCurrentLayer]) saClimatMap.removeLayer(saClimatLayers[saClimatCurrentLayer]);
     saClimatLayers[layerName].addTo(saClimatMap);
     saClimatCurrentLayer = layerName;
-    ['Aerial','Plan'].forEach(function(n) {
+    ['Aerial','Plan','Light'].forEach(function(n) {
         var b = document.getElementById('saClimatLayer' + n);
         if (b) b.classList.toggle('active', n.toLowerCase() === layerName);
+    });
+    // Remet les overlays non-base au-dessus de la nouvelle base
+    var baseSet = new Set(Object.values(saClimatLayers || {}));
+    saClimatMap.eachLayer(function (l) {
+        if (baseSet.has(l)) return;
+        if (typeof l.bringToFront === 'function') {
+            try { l.bringToFront(); } catch (e) {}
+        }
     });
 }
 
@@ -1499,6 +1507,14 @@ function saAccessSetMapLayer(layerName) {
     ['Aerial','Plan','Light'].forEach(function(n) {
         var b = document.getElementById('saAccessLayer' + n);
         if (b) b.classList.toggle('active', n.toLowerCase() === layerName);
+    });
+    // Remet les overlays non-base au-dessus de la nouvelle base
+    var baseSet = new Set(Object.values(saAccessLayers || {}));
+    saAccessMap.eachLayer(function (l) {
+        if (baseSet.has(l)) return;
+        if (typeof l.bringToFront === 'function') {
+            try { l.bringToFront(); } catch (e) {}
+        }
     });
 }
 
@@ -4821,6 +4837,15 @@ function saRenderClimatTable() {
 }
 
 function saGoToPage(page) {
+    // Atelier cartographique réservé au desktop → bloque sur mobile
+    //  avec un message clair (réutilise window.showMobileCartoBlock).
+    if (page === 'Carto'
+        && typeof window.matchMedia === 'function'
+        && window.matchMedia('(max-width: 768px)').matches
+        && typeof window.showMobileCartoBlock === 'function') {
+        window.showMobileCartoBlock();
+        return;
+    }
     // Update active state in TOC
     var items = document.querySelectorAll('.sa-toc-item');
     // Marquer les colonnes Crédits BREEAM pour le mode standalone (différé après render)
@@ -6265,6 +6290,17 @@ function saSetMapLayer(layerName) {
     // Add new layer
     saState.mapLayers[layerName].addTo(saState.map);
     saState.currentLayer = layerName;
+
+    // Remet tous les overlays/couches non-base au-dessus de la
+    //  nouvelle base : on parcourt les layers du map et on bringToFront
+    //  ceux qui ne sont pas dans saState.mapLayers (base layers).
+    var baseSet = new Set(Object.values(saState.mapLayers || {}));
+    saState.map.eachLayer(function (l) {
+        if (baseSet.has(l)) return;
+        if (typeof l.bringToFront === 'function') {
+            try { l.bringToFront(); } catch (e) {}
+        }
+    });
 
     // Update button states
     document.querySelectorAll('.sa-map-layer-btn').forEach(function (btn) {
@@ -9766,9 +9802,17 @@ function saMpSetMapLayer(layerName) {
     if (saMpLayers[saMpCurrentLayer]) saMpMap.removeLayer(saMpLayers[saMpCurrentLayer]);
     saMpLayers[layerName].addTo(saMpMap);
     saMpCurrentLayer = layerName;
-    ['Aerial','Plan','Cadastre'].forEach(function(n) {
+    ['Aerial','Plan','Light','Cadastre'].forEach(function(n) {
         var b = document.getElementById('saMpLayer' + n);
         if (b) b.classList.toggle('active', n.toLowerCase() === layerName);
+    });
+    // Remet les overlays non-base au-dessus de la nouvelle base
+    var baseSet = new Set(Object.values(saMpLayers || {}));
+    saMpMap.eachLayer(function (l) {
+        if (baseSet.has(l)) return;
+        if (typeof l.bringToFront === 'function') {
+            try { l.bringToFront(); } catch (e) {}
+        }
     });
 }
 
@@ -9833,9 +9877,17 @@ function saUrbaSetMapLayer(layerName) {
     if (saUrbaLayers[saUrbaCurrentLayer]) saUrbaMap.removeLayer(saUrbaLayers[saUrbaCurrentLayer]);
     saUrbaLayers[layerName].addTo(saUrbaMap);
     saUrbaCurrentLayer = layerName;
-    ['Aerial','Plan','Cadastre'].forEach(function(n) {
+    ['Aerial','Plan','Light','Cadastre'].forEach(function(n) {
         var b = document.getElementById('saUrbaLayer' + n);
         if (b) b.classList.toggle('active', n.toLowerCase() === layerName);
+    });
+    // Remet les overlays non-base au-dessus de la nouvelle base
+    var baseSet = new Set(Object.values(saUrbaLayers || {}));
+    saUrbaMap.eachLayer(function (l) {
+        if (baseSet.has(l)) return;
+        if (typeof l.bringToFront === 'function') {
+            try { l.bringToFront(); } catch (e) {}
+        }
     });
 }
 
@@ -10919,9 +10971,17 @@ function saEcoSetMapLayer(layerName) {
     if (saEcoLayers[saEcoCurrentLayer]) saEcoMap.removeLayer(saEcoLayers[saEcoCurrentLayer]);
     saEcoLayers[layerName].addTo(saEcoMap);
     saEcoCurrentLayer = layerName;
-    ['Aerial','Plan','Cadastre'].forEach(function(n) {
+    ['Aerial','Plan','Light','Cadastre'].forEach(function(n) {
         var b = document.getElementById('saEcoLayer' + n);
         if (b) b.classList.toggle('active', n.toLowerCase() === layerName);
+    });
+    // Remet les overlays non-base au-dessus de la nouvelle base
+    var baseSet = new Set(Object.values(saEcoLayers || {}));
+    saEcoMap.eachLayer(function (l) {
+        if (baseSet.has(l)) return;
+        if (typeof l.bringToFront === 'function') {
+            try { l.bringToFront(); } catch (e) {}
+        }
     });
 }
 
@@ -13063,7 +13123,7 @@ function saEnrInitMap() {
 
 function saEnrSetMapLayer(which) {
     if (!saEnrMap) return;
-    ['aerial', 'plan', 'cadastre'].forEach(function (k) {
+    ['aerial', 'plan', 'cadastre', 'light'].forEach(function (k) {
         if (saEnrBase[k] && saEnrMap.hasLayer(saEnrBase[k])) saEnrMap.removeLayer(saEnrBase[k]);
         var btn = document.getElementById('saEnrLayer' + k.charAt(0).toUpperCase() + k.slice(1));
         if (btn) btn.classList.remove('active');
@@ -13071,6 +13131,17 @@ function saEnrSetMapLayer(which) {
     if (saEnrBase[which]) saEnrBase[which].addTo(saEnrMap);
     var activeBtn = document.getElementById('saEnrLayer' + which.charAt(0).toUpperCase() + which.slice(1));
     if (activeBtn) activeBtn.classList.add('active');
+    // Remet les overlays actifs au-dessus de la nouvelle base (sinon
+    //  Leaflet les laisse derrière puisque tous les tile layers vivent
+    //  dans le même tilePane z-200).
+    if (saEnrOverlays) {
+        Object.keys(saEnrOverlays).forEach(function (k) {
+            var l = saEnrOverlays[k];
+            if (l && saEnrMap.hasLayer(l) && typeof l.bringToFront === 'function') {
+                try { l.bringToFront(); } catch (e) {}
+            }
+        });
+    }
 }
 
 function saEnrToggleOverlay(name) {
@@ -17928,6 +17999,14 @@ function saReseauxSetMapLayer(layerName) {
     ['Aerial','Plan','Light'].forEach(function(n) {
         var b = document.getElementById('saReseauxLayer' + n);
         if (b) b.classList.toggle('active', n.toLowerCase() === layerName);
+    });
+    // Remet les overlays non-base au-dessus de la nouvelle base
+    var baseSet = new Set(Object.values(saReseauxLayers || {}));
+    saReseauxMap.eachLayer(function (l) {
+        if (baseSet.has(l)) return;
+        if (typeof l.bringToFront === 'function') {
+            try { l.bringToFront(); } catch (e) {}
+        }
     });
 }
 

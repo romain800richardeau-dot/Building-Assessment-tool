@@ -32,13 +32,44 @@
   // Auth API
   // ----------------------------------------------------------------------
   async function init() {
-    const { data: { session } } = await client.auth.getSession();
-    currentUser = session ? session.user : null;
-    notifyAll();
+    // IMPORTANT : on enregistre onAuthStateChange AVANT getSession()
+    //  car getSession() parse le hash URL (#access_token=…&type=recovery)
+    //  et déclenche immédiatement les events. Si le listener est posé
+    //  après, on rate l'event PASSWORD_RECOVERY.
     client.auth.onAuthStateChange((event, session) => {
       currentUser = session ? session.user : null;
       notifyAll();
+      // Recovery : Supabase déclenche cet event quand l'utilisateur
+      //  clique le lien "reset password" dans son email. On ouvre
+      //  automatiquement la modale avec le panneau "nouveau mot de passe".
+      if (event === 'PASSWORD_RECOVERY') {
+        _triggerNewPasswordModal();
+      }
     });
+    // Détection directe en fallback :
+    //  - ?auth=recovery → marqueur explicite ajouté dans redirectTo de
+    //    resetPasswordForEmail. Le plus fiable, fonctionne PKCE & implicit.
+    //  - #type=recovery → flow implicit historique (sans PKCE).
+    const urlBlob = (window.location.hash || '') + ' ' + (window.location.search || '');
+    if (/[?&]auth=recovery\b/.test(urlBlob) || /[?&#]type=recovery\b/.test(urlBlob)) {
+      _pendingRecovery = true;
+    }
+    const { data: { session } } = await client.auth.getSession();
+    currentUser = session ? session.user : null;
+    notifyAll();
+    if (_pendingRecovery) _triggerNewPasswordModal();
+  }
+  let _pendingRecovery = false;
+  function _triggerNewPasswordModal() {
+    _pendingRecovery = false;
+    var attempts = 0;
+    (function tryOpen() {
+      if (window.Verdict && window.Verdict.authUI && typeof window.Verdict.authUI.openNewPasswordModal === 'function') {
+        try { window.Verdict.authUI.openNewPasswordModal(); } catch (e) {}
+        return;
+      }
+      if (++attempts < 50) setTimeout(tryOpen, 100);
+    })();
   }
 
   function getUser()   { return currentUser; }
@@ -82,9 +113,17 @@
     return data;
   }
   async function resetPassword(email) {
+    // Marqueur ?auth=recovery dans la redirectTo : on s'en sert dans
+    //  init() pour distinguer un retour de reset password vs un login
+    //  normal (la PKCE flow ne préserve pas type=recovery dans l'URL).
     const { data, error } = await client.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + window.location.pathname
+      redirectTo: window.location.origin + window.location.pathname + '?auth=recovery'
     });
+    if (error) throw error;
+    return data;
+  }
+  async function updatePassword(newPassword) {
+    const { data, error } = await client.auth.updateUser({ password: newPassword });
     if (error) throw error;
     return data;
   }
@@ -134,7 +173,7 @@
       if (e.target && e.target.id === 'cloudAuthModal') ui.closeModal();
     },
     switchTab(tab) {
-      ['signin', 'signup', 'magic', 'reset'].forEach(t => {
+      ['signin', 'signup', 'magic', 'reset', 'newpwd'].forEach(t => {
         const pane = document.getElementById('cloudAuthPane_' + t);
         if (pane) pane.style.display = (t === tab) ? 'block' : 'none';
       });
@@ -147,14 +186,27 @@
         h.textContent = tab === 'signup' ? 'Créer un compte'
                       : tab === 'magic'  ? 'Lien magique'
                       : tab === 'reset'  ? 'Mot de passe oublié'
+                      : tab === 'newpwd' ? 'Nouveau mot de passe'
                       :                    'Connexion';
       }
-      // Tabs visibility (hide tabs while on reset sub-flow)
+      // Tabs visibility : on cache la barre d'onglets sur les sub-flows
+      //  reset (envoi du mail) et newpwd (saisie du nouveau mdp).
       const tabsEl = document.getElementById('cloudAuthTabs');
-      if (tabsEl) tabsEl.style.display = (tab === 'reset') ? 'none' : 'flex';
+      if (tabsEl) tabsEl.style.display = (tab === 'reset' || tab === 'newpwd') ? 'none' : 'flex';
       ui._clearMsg();
     },
     showResetForm() { ui.switchTab('reset'); },
+    openNewPasswordModal() {
+      const overlay = document.getElementById('cloudAuthModal');
+      if (!overlay) return;
+      overlay.style.display = 'flex';
+      ui.switchTab('newpwd');
+      ui._clearMsg();
+      setTimeout(() => {
+        const f = document.getElementById('newPwd');
+        if (f) f.focus();
+      }, 80);
+    },
 
     // -- Form submits ----------------------------------------------------
     async submitSignin(e) {
@@ -210,6 +262,27 @@
       } finally { ui._setBusy(false); }
       return false;
     },
+    async submitNewPassword(e) {
+      e.preventDefault();
+      const pwd1 = document.getElementById('newPwd').value;
+      const pwd2 = document.getElementById('newPwdConfirm').value;
+      if (pwd1.length < 8) { ui._showMsg('error', 'Mot de passe trop court (min 8 caractères).'); return false; }
+      if (pwd1 !== pwd2)   { ui._showMsg('error', 'Les deux mots de passe ne correspondent pas.'); return false; }
+      ui._setBusy(true);
+      try {
+        await updatePassword(pwd1);
+        ui._showMsg('success', 'Mot de passe mis à jour. Vous êtes maintenant connecté.');
+        // Nettoie le hash de recovery dans l'URL pour éviter une
+        //  réouverture de la modale sur un reload.
+        if (window.history && history.replaceState) {
+          try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch (er) {}
+        }
+        setTimeout(() => { ui.closeModal(); ui.switchTab('signin'); }, 1200);
+      } catch (err) {
+        ui._showMsg('error', ui._fmtErr(err));
+      } finally { ui._setBusy(false); }
+      return false;
+    },
     async signOut() {
       ui.closeMenu();
       try { await signOut(); }
@@ -236,11 +309,11 @@
     },
     _fmtErr(err) {
       const m = (err && err.message) || String(err);
-      // Petits messages plus clairs en FR
+      // Petits messages plus clairs en FR (vouvoiement systématique)
       if (/Invalid login credentials/i.test(m))           return 'Email ou mot de passe incorrect.';
       if (/Email not confirmed/i.test(m))                  return 'Votre email n\'est pas encore confirmé. Cliquez sur le lien reçu par email.';
       if (/User already registered/i.test(m))              return 'Un compte existe déjà avec cet email. Connectez-vous.';
-      if (/rate limit|too many requests/i.test(m))         return 'Trop de tentatives, réessaie dans quelques minutes.';
+      if (/rate limit|too many requests/i.test(m))         return 'Trop de tentatives, veuillez réessayer dans quelques minutes.';
       if (/Password should be at least/i.test(m))          return 'Mot de passe trop court (min 8 caractères).';
       return m;
     },
@@ -291,7 +364,7 @@
   // Expose + boot
   // ----------------------------------------------------------------------
   window.Verdict = window.Verdict || {};
-  window.Verdict.auth   = { init, signUp, signIn, signInMagic, signOut, resetPassword, getUser, getClient, isLoggedIn, onChange };
+  window.Verdict.auth   = { init, signUp, signIn, signInMagic, signOut, resetPassword, updatePassword, getUser, getClient, isLoggedIn, onChange };
   window.Verdict.authUI = ui;
 
   function boot() {

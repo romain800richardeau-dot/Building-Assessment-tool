@@ -305,6 +305,65 @@ window.SA_SIGLES_DICT = {
   "NOx": { label: "Oxydes d'azote (NO + NO₂)", context: "Polluant — combustion gaz/fioul — visé par BREEAM Pol 02.", themes: ["pollution", "icpe", "reseaux", "enr_reseaux", "enr_eolbio"] },
   "R1/R2": { label: "Tarification binôme réseau de chaleur", context: "R1 = part variable (combustible), R2 = part fixe (abonnement).", themes: ["reseaux", "enr_reseaux"] },
   "R1": { label: "Part variable d'un contrat réseau de chaleur", context: "Facturée au MWh consommé — reflète le coût du combustible.", themes: ["reseaux", "enr_reseaux"] },
-  "R2": { label: "Part fixe d'un contrat réseau de chaleur", context: "Abonnement — couvre l'amortissement du réseau et l'entretien.", themes: ["reseaux", "enr_reseaux"] }
+  "R2": { label: "Part fixe d'un contrat réseau de chaleur", context: "Abonnement — couvre l'amortissement du réseau et l'entretien.", themes: ["reseaux", "enr_reseaux"] },
+
+  // ── Fiches Bonnes Pratiques (curriculum pédagogique) ──────────────────────
+  // Solaire thermique (T7)
+  "CESI": { label: "Chauffe-Eau Solaire Individuel", context: "Installation solaire thermique pour eau chaude sanitaire — couvre 50 à 80 % des besoins ECS d'une maison.", themes: ["fiches_bp", "enr_solaire"] },
+  "SSC": { label: "Système Solaire Combiné", context: "Solaire thermique fournissant à la fois ECS et appoint chauffage — 40 à 60 % des besoins, jusqu'à 70 % en montagne.", themes: ["fiches_bp", "enr_solaire"] },
+  "EPDM": { label: "Éthylène-Propylène-Diène Monomère", context: "Caoutchouc synthétique résistant aux UV et à la chaleur — membranes étanchéité toiture et vase d'expansion solaire.", themes: ["fiches_bp"] },
+  // Étanchéité / enveloppe (T2)
+  "Q4Pa-surf": { label: "Indicateur d'étanchéité à l'air (RT 2012 / RE 2020)", context: "Débit de fuite à 4 Pa rapporté à la surface déperditive (m³/h/m²).", themes: ["fiches_bp"] },
+  "Q4Pa": { label: "Pression de référence du test d'étanchéité à l'air", context: "Différentiel de pression de 4 Pa appliqué lors du test à la porte soufflante.", themes: ["fiches_bp"] },
+  "ITE": { label: "Isolation Thermique par l'Extérieur", context: "Isolant posé côté extérieur des murs — supprime les ponts thermiques de planchers/refends.", themes: ["fiches_bp"] },
+  "ITI": { label: "Isolation Thermique par l'Intérieur", context: "Isolant posé côté intérieur — moins coûteux mais ne traite pas les ponts thermiques structurels.", themes: ["fiches_bp"] },
+  // Réglementation
+  "RT2012": { label: "Réglementation Thermique 2012", context: "Réglementation thermique pour les bâtiments neufs entre 2013 et 2021 — Cep ≤ 50 kWh/m²/an modulé.", themes: ["fiches_bp", "climat", "reseaux"] },
+  "RT 2012": { label: "Réglementation Thermique 2012", context: "Réglementation thermique pour les bâtiments neufs entre 2013 et 2021.", themes: ["fiches_bp"] },
+  // Aides / financement
+  "RGE": { label: "Reconnu Garant de l'Environnement", context: "Qualification professionnelle obligatoire pour bénéficier des aides à la rénovation énergétique (MaPrimeRénov', CEE, TVA 5,5 %).", themes: ["fiches_bp"] },
+  "CEE": { label: "Certificats d'Économies d'Énergie", context: "Dispositif obligeant les fournisseurs d'énergie à financer des travaux d'économie d'énergie chez leurs clients (création loi POPE 2005).", themes: ["fiches_bp"] },
+  "PTZ": { label: "Prêt à Taux Zéro", context: "Prêt sans intérêt pour rénovation énergétique (Éco-PTZ) ou primo-accession (PTZ).", themes: ["fiches_bp"] },
+  "Éco-PTZ": { label: "Éco-Prêt à Taux Zéro", context: "Prêt jusqu'à 50 000 € sans intérêt pour rénovation énergétique réalisée par une entreprise RGE.", themes: ["fiches_bp"] },
+  "ANAH": { label: "Agence Nationale de l'Habitat", context: "Opérateur public — gestion de MaPrimeRénov' depuis 2020.", themes: ["fiches_bp"] },
+  "MaPrimeRénov'": { label: "Aide à la rénovation énergétique des logements", context: "Subvention ANAH selon revenus et gain énergétique — remplace CITE + Habiter Mieux Agilité depuis 2020.", themes: ["fiches_bp"] },
+  // Acteurs / certifications
+  "ALEC": { label: "Agence Locale de l'Énergie et du Climat", context: "Structure territoriale d'information et d'accompagnement sur la transition énergétique — relais France Rénov'.", themes: ["fiches_bp"] },
+  "ALTE": { label: "Agence Locale Énergie Climat", context: "Variante de désignation des ALEC selon les territoires.", themes: ["fiches_bp"] },
+  "QualiSol": { label: "Qualification RGE solaire thermique", context: "Sous-marque RGE pour les installateurs de CESI/SSC.", themes: ["fiches_bp", "enr_solaire"] },
+  "QualiBois": { label: "Qualification RGE bois énergie", context: "Sous-marque RGE pour les installateurs d'appareils de chauffage au bois.", themes: ["fiches_bp"] },
+  "QualiPV": { label: "Qualification RGE photovoltaïque", context: "Sous-marque RGE pour les installateurs de panneaux PV raccordés.", themes: ["fiches_bp", "enr_solaire"] },
+  "Flamme Verte": { label: "Label de performance des appareils bois", context: "Échelle 5 à 7 étoiles — exigences sur rendement et émissions de particules fines.", themes: ["fiches_bp"] },
+  "ENplus": { label: "Certification européenne du granulé bois", context: "Classes A1/A2/B selon teneur en cendres, humidité, fines.", themes: ["fiches_bp"] },
+  "NF Biocombustibles": { label: "Norme française des combustibles bois", context: "Encadre la qualité du granulé, de la bûche, de la plaquette.", themes: ["fiches_bp"] },
+  // Construction / immobilier
+  "CCMI": { label: "Contrat de Construction de Maison Individuelle", context: "Contrat encadré par la loi de 1990 — garantie de livraison à prix et délais convenus, assurance dommages-ouvrage obligatoire.", themes: ["fiches_bp"] },
+  "VEFA": { label: "Vente en l'État Futur d'Achèvement", context: "Achat sur plan d'un bien immobilier neuf — paiement échelonné selon avancement, garantie d'achèvement.", themes: ["fiches_bp"] },
+  "MOA": { label: "Maître d'Ouvrage", context: "Personne physique ou morale pour qui les travaux sont réalisés — porteur du projet.", themes: ["fiches_bp", "*"] },
+  "MOE": { label: "Maître d'Œuvre", context: "Architecte ou bureau d'études chargé de la conception et du suivi des travaux pour le compte du MOA.", themes: ["fiches_bp", "*"] },
+  // Patrimoine / urbanisme
+  "ABF": { label: "Architecte des Bâtiments de France", context: "Autorité de l'État qui contrôle les travaux dans les périmètres de protection des Monuments Historiques.", themes: ["fiches_bp", "urbanisme"] },
+  "AVAP": { label: "Aire de mise en Valeur de l'Architecture et du Patrimoine", context: "Zonage patrimonial communal — remplacé par les SPR depuis la loi LCAP 2016.", themes: ["fiches_bp", "urbanisme"] },
+  "SPR": { label: "Site Patrimonial Remarquable", context: "Zonage de protection du patrimoine architectural, urbain et paysager (loi LCAP 2016) — remplace AVAP, ZPPAUP, secteurs sauvegardés.", themes: ["fiches_bp", "urbanisme"] },
+  // Fiscal / commercial
+  "TVA": { label: "Taxe sur la Valeur Ajoutée", context: "Impôt sur la consommation — taux réduit 5,5 % pour la rénovation énergétique réalisée par RGE.", themes: ["fiches_bp"] },
+  "TTC": { label: "Toutes Taxes Comprises", context: "Prix incluant TVA et autres taxes.", themes: ["fiches_bp"] },
+  "HT": { label: "Hors Taxes", context: "Prix avant application de la TVA.", themes: ["fiches_bp"] },
+  // Bois énergie (T6) / combustion
+  "PCI": { label: "Pouvoir Calorifique Inférieur", context: "Énergie thermique restituée par 1 kg de combustible, hors énergie de vaporisation de l'eau (en kWh/kg ou MJ/kg).", themes: ["fiches_bp"] },
+  "PCS": { label: "Pouvoir Calorifique Supérieur", context: "Énergie totale dégagée par la combustion d'1 kg, incluant l'énergie de condensation de la vapeur d'eau. Utile pour comparer une chaudière à condensation (qui exploite cette part) vs une chaudière classique. PCS = PCI + chaleur latente de vaporisation.", themes: ["fiches_bp"] },
+  "ETAS": { label: "Efficacité énergétique saisonnière (η_s)", context: "Rendement saisonnier d'un appareil de chauffage en mode combustion (chaudière, pompe à chaleur) — directive Écoconception ErP. Seuils RE 2020 / aides : ≥ 92 % pour gaz à condensation, ≥ 75 % pour bois, ≥ 117 % pour PAC air/eau.", themes: ["fiches_bp"] },
+  // Polymères / plomberie
+  "PER": { label: "PolyÉthylène Réticulé", context: "Tube plastique souple utilisé pour la plomberie, l'eau chaude et le chauffage par le sol.", themes: ["fiches_bp"] },
+  "CSTBat": { label: "Avis technique CSTB", context: "Certification du Centre Scientifique et Technique du Bâtiment — validation produit en l'absence de DTU.", themes: ["fiches_bp"] },
+  // Autoconsommation collective / copropriété
+  "PMO": { label: "Personne Morale Organisatrice", context: "Entité juridique (association, coopérative, SAS, syndic…) qui porte une opération d'autoconsommation collective : signe la convention avec Enedis, gère la clé de répartition et la facturation entre producteurs et consommateurs.", themes: ["fiches_bp", "enr_solaire"] },
+  "ACC": { label: "Autoconsommation Collective", context: "Dispositif permettant à plusieurs producteurs et consommateurs d'électricité de partager localement une production renouvelable (loi de 2017, étendue en 2019). Périmètre : 2 km en zone urbaine, jusqu'à 20 km en zone rurale (ACC étendue).", themes: ["fiches_bp", "enr_solaire"] },
+  "ACI": { label: "Autoconsommation Individuelle", context: "Production d'électricité consommée sur place par le même producteur (1 PV, 1 logement). Modèle le plus simple — pas de PMO, pas de clé de répartition.", themes: ["fiches_bp", "enr_solaire"] },
+  "Clé de répartition": { label: "Règle d'allocation de la production en ACC", context: "Définit comment l'électricité produite par l'opération est partagée entre les consommateurs. Statique (parts fixes) ou dynamique (recalculée en temps réel selon les profils de consommation). Validée par la PMO et déclarée à Enedis.", themes: ["fiches_bp", "enr_solaire"] },
+  "Article 24": { label: "Loi 65-557 — Majorité simple", context: "Décisions courantes de copropriété (entretien, contrats, comptabilité). Majorité des présents et représentés en assemblée générale. La plus simple à obtenir.", themes: ["fiches_bp"] },
+  "Article 25": { label: "Loi 65-557 — Majorité absolue", context: "Travaux d'amélioration, modification du règlement, autorisation d'installer des équipements en parties communes (panneaux solaires, bornes de recharge…). Majorité de tous les copropriétaires (présents, représentés ET absents).", themes: ["fiches_bp"] },
+  "Article 26": { label: "Loi 65-557 — Majorité qualifiée", context: "Décisions les plus engageantes : aliénation des parties communes, modification des destinations. Au moins 2/3 des voix de tous les copropriétaires.", themes: ["fiches_bp"] },
+  "AG": { label: "Assemblée Générale (de copropriété)", context: "Réunion annuelle obligatoire des copropriétaires — vote des budgets, travaux, mandats. Convocation 21 jours minimum à l'avance.", themes: ["fiches_bp"] }
 
 };

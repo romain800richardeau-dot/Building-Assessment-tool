@@ -437,8 +437,11 @@ window.BP_T4_HTML = `<div class="bp-fiche" data-theme="chauffage" id="bpFicheT4C
                                         <p>Un meuble plac&eacute; devant un panneau rayonnant bloque le rayonnement infrarouge et annule l&rsquo;avantage du syst&egrave;me.</p>
                                     </div>
                                 </aside>
-                                <div class="ms-main" style="overflow:hidden">
-                                    <div class="ms-doc no-frame" style="clear:none;margin-top:0">
+                                <div class="ms-main"></div>
+                            </div>
+                            <div class="ms-body full">
+                                <div class="ms-main">
+                                    <div class="ms-doc">
                                         <div class="ms-doc-head"><span class="ms-doc-num">Doc. 5</span>Comparatif des &eacute;metteurs &eacute;lectriques</div>
                                         <table>
                                             <thead><tr><th>Technologie</th><th>&Eacute;mission</th><th>Inertie</th><th>Confort</th><th>Usage recommand&eacute;</th><th>Co&ucirc;t install&eacute;</th></tr></thead>

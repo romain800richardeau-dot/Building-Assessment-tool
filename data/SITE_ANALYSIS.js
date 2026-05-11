@@ -1712,6 +1712,70 @@ function saGetDeptFromInsee(codeInsee) {
     return null;
 }
 
+// Renvoie le portail SIGES (Système d'Information pour la Gestion des Eaux Souterraines) le plus pertinent
+// pour un département donné. Fallback : portail national sigesfra.brgm.fr.
+function saGetSigesInfo(deptCode) {
+    var d = deptCode || '';
+    var map = {
+        // SIGES Seine-Normandie (bassin Seine-Normandie : IDF + Normandie + Picardie ouest)
+        '75': ['sigesnor', 'Seine-Normandie'], '77': ['sigesnor', 'Seine-Normandie'], '78': ['sigesnor', 'Seine-Normandie'],
+        '91': ['sigesnor', 'Seine-Normandie'], '92': ['sigesnor', 'Seine-Normandie'], '93': ['sigesnor', 'Seine-Normandie'],
+        '94': ['sigesnor', 'Seine-Normandie'], '95': ['sigesnor', 'Seine-Normandie'],
+        '14': ['sigesnor', 'Seine-Normandie'], '27': ['sigesnor', 'Seine-Normandie'], '50': ['sigesnor', 'Seine-Normandie'],
+        '61': ['sigesnor', 'Seine-Normandie'], '76': ['sigesnor', 'Seine-Normandie'],
+        '02': ['sigesnor', 'Seine-Normandie'], '60': ['sigesnor', 'Seine-Normandie'], '80': ['sigesnor', 'Seine-Normandie'],
+        // SIGES Centre-Val de Loire
+        '18': ['sigescen', 'Centre-Val de Loire'], '28': ['sigescen', 'Centre-Val de Loire'],
+        '36': ['sigescen', 'Centre-Val de Loire'], '37': ['sigescen', 'Centre-Val de Loire'],
+        '41': ['sigescen', 'Centre-Val de Loire'], '45': ['sigescen', 'Centre-Val de Loire'],
+        // SIGES Bretagne
+        '22': ['sigesbre', 'Bretagne'], '29': ['sigesbre', 'Bretagne'],
+        '35': ['sigesbre', 'Bretagne'], '56': ['sigesbre', 'Bretagne'],
+        // SIGES Pays de la Loire
+        '44': ['sigespdl', 'Pays de la Loire'], '49': ['sigespdl', 'Pays de la Loire'],
+        '53': ['sigespdl', 'Pays de la Loire'], '72': ['sigespdl', 'Pays de la Loire'], '85': ['sigespdl', 'Pays de la Loire'],
+        // SIGES Aquitaine
+        '24': ['sigesaqi', 'Aquitaine'], '33': ['sigesaqi', 'Aquitaine'], '40': ['sigesaqi', 'Aquitaine'],
+        '47': ['sigesaqi', 'Aquitaine'], '64': ['sigesaqi', 'Aquitaine'],
+        // SIGES Poitou-Charentes
+        '16': ['sigespoc', 'Poitou-Charentes'], '17': ['sigespoc', 'Poitou-Charentes'],
+        '79': ['sigespoc', 'Poitou-Charentes'], '86': ['sigespoc', 'Poitou-Charentes'],
+        // SIGES Midi-Pyrénées
+        '09': ['sigesmpy', 'Midi-Pyrénées'], '12': ['sigesmpy', 'Midi-Pyrénées'],
+        '31': ['sigesmpy', 'Midi-Pyrénées'], '32': ['sigesmpy', 'Midi-Pyrénées'],
+        '46': ['sigesmpy', 'Midi-Pyrénées'], '65': ['sigesmpy', 'Midi-Pyrénées'],
+        '81': ['sigesmpy', 'Midi-Pyrénées'], '82': ['sigesmpy', 'Midi-Pyrénées'],
+        // SIGES Languedoc-Roussillon
+        '11': ['sigeslro', 'Languedoc-Roussillon'], '30': ['sigeslro', 'Languedoc-Roussillon'],
+        '34': ['sigeslro', 'Languedoc-Roussillon'], '48': ['sigeslro', 'Languedoc-Roussillon'],
+        '66': ['sigeslro', 'Languedoc-Roussillon'],
+        // SIGES PACA
+        '04': ['sigespac', 'PACA'], '05': ['sigespac', 'PACA'], '06': ['sigespac', 'PACA'],
+        '13': ['sigespac', 'PACA'], '83': ['sigespac', 'PACA'], '84': ['sigespac', 'PACA'],
+        // SIGES Bourgogne-Franche-Comté
+        '21': ['sigesbfc', 'Bourgogne-Franche-Comté'], '25': ['sigesbfc', 'Bourgogne-Franche-Comté'],
+        '39': ['sigesbfc', 'Bourgogne-Franche-Comté'], '58': ['sigesbfc', 'Bourgogne-Franche-Comté'],
+        '70': ['sigesbfc', 'Bourgogne-Franche-Comté'], '71': ['sigesbfc', 'Bourgogne-Franche-Comté'],
+        '89': ['sigesbfc', 'Bourgogne-Franche-Comté'], '90': ['sigesbfc', 'Bourgogne-Franche-Comté'],
+        // SIGES Rhin-Meuse (Grand Est ouest + Champagne-Ardenne)
+        '08': ['sigesrm', 'Rhin-Meuse'], '10': ['sigesrm', 'Rhin-Meuse'], '51': ['sigesrm', 'Rhin-Meuse'],
+        '52': ['sigesrm', 'Rhin-Meuse'], '54': ['sigesrm', 'Rhin-Meuse'], '55': ['sigesrm', 'Rhin-Meuse'],
+        '57': ['sigesrm', 'Rhin-Meuse'], '67': ['sigesrm', 'Rhin-Meuse'], '68': ['sigesrm', 'Rhin-Meuse'],
+        '88': ['sigesrm', 'Rhin-Meuse'],
+        // SIGES Auvergne
+        '03': ['sigesaur', 'Auvergne'], '15': ['sigesaur', 'Auvergne'],
+        '43': ['sigesaur', 'Auvergne'], '63': ['sigesaur', 'Auvergne'],
+        // SIGES Nord-Pas-de-Calais (bassin Artois-Picardie)
+        '59': ['sigesnpc', 'Nord-Pas-de-Calais'], '62': ['sigesnpc', 'Nord-Pas-de-Calais'],
+        // Corse
+        '2A': ['sigescor', 'Corse'], '2B': ['sigescor', 'Corse']
+        // Reste (Rhône-Alpes : 01,07,26,38,42,69,73,74 + Limousin 19,23,87) : fallback national
+    };
+    var entry = map[d];
+    if (entry) return { url: 'https://' + entry[0] + '.brgm.fr/', name: 'SIGES ' + entry[1], bassin: entry[1] };
+    return { url: 'https://sigesfra.brgm.fr/', name: 'SIGES France (portail national)', bassin: null };
+}
+
 var SA_OVERPASS_SERVERS = [
     'https://overpass-api.de/api/interpreter',
     'https://overpass.kumi.systems/api/interpreter',
@@ -6785,13 +6849,93 @@ function saRenderMilieuPhysiqueTable() {
         .then(function(d) { return Array.isArray(d) ? d : []; })
         .catch(function() { return []; });
 
-    Promise.all([altiPromise, geoloPromise, nappePromise, hydroStationsPromise, eauPotablePromise, vigiEauPromise]).then(function(results) {
+    // Fetch MESO (Masses d'Eau Souterraines)
+    // Stratégie en 2 temps :
+    //  (1) Hub'Eau qualite_nappes (stations de suivi qualité, portent code_eu_meso + nom_meso) — bbox ~25 km
+    //  (2) Fallback BD LISA BRGM (référentiel hydrogéologique officiel, couverture exhaustive) via WMS GetFeatureInfo
+    //      → renvoie l'entité hydrogéologique (proxy de la MESO) au droit du point, indépendamment de la densité de stations
+    var mesoBbox = (lon - 0.25).toFixed(4) + ',' + (lat - 0.25).toFixed(4) + ',' + (lon + 0.25).toFixed(4) + ',' + (lat + 0.25).toFixed(4);
+    var mesoQualitePromise = fetch('https://hubeau.eaufrance.fr/api/v1/qualite_nappes/stations?bbox=' + mesoBbox + '&size=100')
+        .then(function(resp) { if (!resp.ok) return { data: [] }; return resp.json(); })
+        .then(function(d) { return (d && d.data) ? d.data : []; })
+        .catch(function(e) { console.warn('[SA] qualite_nappes error:', e.message || e); return []; });
+
+    // BD LISA — référentiel hydrogéologique BRGM (BDLISA V3), couverture exhaustive
+    // Endpoint officiel : reseau.eaufrance.fr/geotraitements/bdlisa
+    // Layer ENTITES_O1 = couche parente intelligente qui retombe sur NV2 si NV3 vide, puis NV1.
+    // (NV3 a des trous en milieu rural ; cette couche garantit un résultat sur toute la métropole)
+    var lisaBboxLat1 = (lat - 0.0005).toFixed(6), lisaBboxLat2 = (lat + 0.0005).toFixed(6);
+    var lisaBboxLon1 = (lon - 0.0005).toFixed(6), lisaBboxLon2 = (lon + 0.0005).toFixed(6);
+    var bdlisaPromise = fetch('https://reseau.eaufrance.fr/geotraitements/bdlisa/services/carto/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo'
+        + '&LAYERS=ENTITES_O1&QUERY_LAYERS=ENTITES_O1'
+        + '&INFO_FORMAT=text/plain&CRS=EPSG:4326'
+        + '&BBOX=' + lisaBboxLat1 + ',' + lisaBboxLon1 + ',' + lisaBboxLat2 + ',' + lisaBboxLon2
+        + '&WIDTH=3&HEIGHT=3&I=1&J=1&FEATURE_COUNT=10')
+        .then(function(resp) { return resp.ok ? resp.text() : ''; })
+        .then(function(txt) {
+            if (!txt) return null;
+            // Parsing du retour WMS GetFeatureInfo (format text/plain MapServer/BRGM)
+            // Format observé : "Feature N:" suivi de lignes "  key = 'value'"
+            var entites = [];
+            var lines = txt.split(/\r?\n/);
+            var current = null;
+            lines.forEach(function(line) {
+                if (/^\s*Feature\s+\d+/i.test(line)) {
+                    if (current && Object.keys(current).length > 0) entites.push(current);
+                    current = {};
+                } else if (current !== null) {
+                    var m = line.match(/^\s*([a-z_]+)\s*=\s*'?([^']*?)'?\s*$/i);
+                    if (m) current[m[1].toLowerCase()] = m[2];
+                }
+            });
+            if (current && Object.keys(current).length > 0) entites.push(current);
+            // Filtrage : on garde les features ayant une dénomination ou un code entité
+            entites = entites.filter(function(e) { return e.denomination || e.entite; });
+            return entites.length > 0 ? entites : null;
+        })
+        .catch(function(e) { console.warn('[SA] bdlisa error:', e.message || e); return null; });
+
+    var mesoPromise = Promise.all([mesoQualitePromise, bdlisaPromise]).then(function(res) {
+        return { qualiteStations: res[0] || [], bdlisaEntites: res[1] || null };
+    });
+
+    Promise.all([altiPromise, geoloPromise, nappePromise, hydroStationsPromise, eauPotablePromise, vigiEauPromise, mesoPromise]).then(function(results) {
         var altitude = results[0];
         var geologie = results[1];
         var nappeStations = results[2];
         var hydroStations = results[3];
         var eauPotable = results[4];
         var vigiEauZones = results[5];
+        var mesoData = results[6] || { qualiteStations: [], bdlisaEntites: null };
+        var mesoStations = mesoData.qualiteStations || [];
+        var bdlisaEntites = mesoData.bdlisaEntites || null;
+
+        // Agrégation source 1 : stations qualité Hub'Eau (codes EU MESO précis)
+        var mesoMap = {};
+        mesoStations.forEach(function(s) {
+            var code = s.code_eu_meso || s.code_eu_masse_eau;
+            var nom = s.nom_meso || s.nom_masse_eau;
+            if (code && nom && !mesoMap[code]) mesoMap[code] = nom;
+        });
+        var mesoList = Object.keys(mesoMap).map(function(code) { return { code: code, nom: mesoMap[code], source: 'qualite' }; });
+
+        // Agrégation source 2 : BD LISA BRGM (entités hydrogéologiques, fallback couverture exhaustive)
+        var bdlisaList = [];
+        if (bdlisaEntites && bdlisaEntites.length > 0) {
+            bdlisaEntites.forEach(function(e) {
+                if (!e.denomination && !e.entite) return;
+                bdlisaList.push({
+                    code: e.entite || '',
+                    nom: e.denomination || '',
+                    etat: e.etat || '',
+                    nature: e.nature || '',
+                    milieu: e.milieu || '',
+                    theme: e.theme || '',
+                    origine: e.origine || '',
+                    fiche: e.fiche_nationale || ''
+                });
+            });
+        }
         // Topographie
         var topoDetail = '';
         var alti = results[0]; // { centre, min, max, deniv, pentePct } or null
@@ -6886,7 +7030,29 @@ function saRenderMilieuPhysiqueTable() {
         }
         rows.push({ key: 'hydrographie', theme: 'R\u00e9seau hydrographique', detail: hydroDetail, source: 'Hub\u2019Eau / G\u00e9orisques' });
 
-        // 4. Eau potable
+        // 4. Masses d'eau souterraines (MESO) — SIGES
+        var mesoDetail = '';
+        if (mesoList.length > 0) {
+            mesoDetail = mesoList.length + ' MESO (Directive Cadre Eau) identifiée' + (mesoList.length > 1 ? 's' : '') + ' au voisinage : ';
+            mesoDetail += mesoList.slice(0, 3).map(function(m) { return m.nom; }).join(' ; ');
+            if (mesoList.length > 3) mesoDetail += ', … (+' + (mesoList.length - 3) + ')';
+            mesoDetail += '.';
+        }
+        if (bdlisaList.length > 0) {
+            if (mesoDetail) mesoDetail += ' ';
+            mesoDetail += 'Entité' + (bdlisaList.length > 1 ? 's' : '') + ' hydrogéologique' + (bdlisaList.length > 1 ? 's' : '') + ' BD LISA au droit du site : ';
+            mesoDetail += bdlisaList.slice(0, 2).map(function(e) { return e.nom; }).join(' ; ');
+            if (bdlisaList.length > 2) mesoDetail += ', … (+' + (bdlisaList.length - 2) + ')';
+            mesoDetail += '.';
+        }
+        if (!mesoDetail) {
+            mesoDetail = 'Aucune masse d’eau souterraine ou entité BD LISA identifiée automatiquement (zone à faible densité de stations Sandre, ou aquifère non renseigné dans BD LISA Niveau Local). Le SIGES du bassin reste la source autoritative.';
+        } else {
+            mesoDetail += ' Cartographie complète et état chimique/quantitatif disponibles sur le SIGES du bassin.';
+        }
+        rows.push({ key: 'meso', theme: 'Eaux souterraines (MESO / BD LISA)', detail: mesoDetail, source: 'Hub’Eau · BD LISA · SIGES' });
+
+        // 5. Eau potable
         if (eauPotable.length > 0) {
             var udiNames = {};
             eauPotable.forEach(function(u) {
@@ -6909,7 +7075,11 @@ function saRenderMilieuPhysiqueTable() {
             nappeStations: nappeStations,
             hydroStations: hydroStations,
             eauPotable: eauPotable,
-            vigiEauZones: vigiEauZones
+            vigiEauZones: vigiEauZones,
+            mesoList: mesoList,
+            mesoStations: mesoStations,
+            bdlisaList: bdlisaList,
+            bdlisaEntites: bdlisaEntites
         };
 
         // Synthèse — remplir le bloc d'intro saGeolIntro à gauche de la carte
@@ -13920,6 +14090,12 @@ function openSaDetailPanel(category, key) {
             ['saSecStep', '2. Stations d\u2019\u00e9puration'],
             ['saSecCaptage', '3. Captages AEP'],
             ['saSecEau-impact', '4. Impact BREEAM']
+        ],
+        'milieu_physique:meso': [
+            ['saSecMeso-intro', '1. Qu\u2019est-ce qu\u2019une MESO ?'],
+            ['saSecMeso-list', '2. MESO identifi\u00e9es au voisinage'],
+            ['saSecMeso-siges', '3. Portail SIGES du bassin'],
+            ['saSecMeso-impact', '4. Impact projet et BREEAM']
         ]
     };
 
@@ -17321,6 +17497,105 @@ function saGetDetailContent(category, key) {
                 saFetchPiezoLevels();
                 saBuildSyntheseGeotechnique();
             }, 200);
+
+        } else if (key === 'meso') {
+            title = 'Masses d’eau souterraines (MESO / BD LISA) — SIGES';
+            var mesoList = mp.mesoList || [];
+            var bdlisaList = mp.bdlisaList || [];
+            var deptCode = saGetDeptFromInsee(saState.codeInsee);
+            var sigesInfo = saGetSigesInfo(deptCode);
+
+            // ─── 1. Présentation ───
+            h += '<h3 id="saSecMeso-intro">1. Qu’est-ce qu’une MESO ?</h3>';
+            h += '<p>Une <strong>Masse d’Eau Souterraine</strong> (MESO) est l’unité de gestion définie par la <a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32000L0060" target="_blank" rel="noopener" style="color:#2563EB;">Directive Cadre sur l’Eau (DCE 2000/60/CE)</a> pour évaluer l’état des aquifères. Chaque MESO porte un code européen (<code>FRGGxxx</code>) et fait l’objet d’un suivi de son <strong>état chimique</strong> (pollutions diffuses : nitrates, pesticides) et de son <strong>état quantitatif</strong> (équilibre prélèvements/recharge), évalué périodiquement dans le cadre du SDAGE.</p>';
+            h += '<p style="font-size:0.84rem;color:#475569;">La <strong>BD LISA</strong> (Base de Données des Limites des Systèmes Aquifères, BRGM) est le référentiel hydrogéologique français qui découpe le territoire en entités aquifères. Plus fin que la MESO, il sert de base à sa délimitation. Couverture exhaustive du territoire métropolitain.</p>';
+
+            // ─── 2. MESO sous/autour de la parcelle ───
+            h += '<h3 id="saSecMeso-list" style="margin-top:24px;">2. Aquifères identifiés au droit du site</h3>';
+
+            // 2.1 — BD LISA (couverture exhaustive via WMS GetFeatureInfo BRGM)
+            if (bdlisaList.length > 0) {
+                h += '<h4 style="margin-top:14px;font-size:0.92rem;">2.1 Entités hydrogéologiques BD LISA (référentiel BRGM)</h4>';
+                h += '<p style="font-size:0.85rem;color:#64748B;">Identifiées par requête WMS GetFeatureInfo sur la couche <code>ENTITES_O1</code> de la <a href="https://bdlisa.eaufrance.fr/" target="_blank" rel="noopener" style="color:#2563EB;">BD LISA V3</a> (référentiel hydrogéologique officiel BRGM ; cette couche retombe automatiquement du niveau local au niveau régional ou national selon ce qui est disponible) :</p>';
+                bdlisaList.forEach(function(e) {
+                    h += '<div style="margin:10px 0;padding:12px 16px;border:1px solid #E2E8F0;background:#F8FAFC;border-radius:8px;">';
+                    h += '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:8px;">';
+                    h += '<div><div style="font-size:0.95rem;font-weight:600;color:#1E3A5F;">' + saEscH(e.nom) + '</div>';
+                    if (e.code) h += '<div style="font-size:0.78rem;color:#64748B;margin-top:2px;">Code BD LISA : <code style="background:#F1F5F9;padding:1px 5px;border-radius:3px;">' + saEscH(e.code) + '</code></div>';
+                    h += '</div>';
+                    if (e.fiche) h += '<a href="' + saEscH(e.fiche) + '" target="_blank" rel="noopener" style="flex-shrink:0;padding:5px 12px;background:#0EA5E9;color:#fff;border-radius:6px;text-decoration:none;font-size:0.78rem;font-weight:500;">Fiche PDF ↗</a>';
+                    h += '</div>';
+                    var car = [];
+                    if (e.etat) car.push(['État', e.etat]);
+                    if (e.nature) car.push(['Nature', e.nature]);
+                    if (e.milieu) car.push(['Milieu', e.milieu]);
+                    if (e.theme) car.push(['Thème', e.theme]);
+                    if (e.origine) car.push(['Origine', e.origine]);
+                    if (car.length > 0) {
+                        h += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px 14px;font-size:0.82rem;">';
+                        car.forEach(function(c) {
+                            h += '<div><span style="color:#64748B;text-transform:uppercase;font-size:0.7rem;letter-spacing:0.03em;">' + c[0] + '</span><br><span style="color:#1E3A5F;">' + saEscH(c[1]) + '</span></div>';
+                        });
+                        h += '</div>';
+                    }
+                    h += '</div>';
+                });
+                h += '<p style="margin-top:6px;font-size:0.78rem;color:#94A3B8;">Note : seules les entités <em>affleurantes</em> sont remontées par cette couche. Pour l’empilement vertical complet (aquifères captifs sous-jacents), consultez le SIGES du bassin ou la <a href="https://bdlisa.eaufrance.fr/" target="_blank" rel="noopener" style="color:#2563EB;">fiche log BDLISA</a>.</p>';
+            }
+
+            // 2.2 — MESO Hub'Eau (stations qualité, codes EU précis)
+            if (mesoList.length > 0) {
+                h += '<h4 style="margin-top:18px;font-size:0.92rem;">2.' + (bdlisaList.length > 0 ? '2' : '1') + ' MESO (codes européens DCE) identifiées par les stations Sandre</h4>';
+                h += '<p style="font-size:0.85rem;color:#64748B;">Stations de qualité Hub’Eau/Sandre dans un rayon de ~25 km autour de la parcelle :</p>';
+                h += '<table class="sa-table" style="font-size:0.84rem;"><thead><tr><th>Code EU</th><th>Nom de la masse d’eau</th><th style="width:90px;">Fiche</th></tr></thead><tbody>';
+                mesoList.forEach(function(m) {
+                    h += '<tr>';
+                    h += '<td><code style="font-size:0.78rem;background:#F1F5F9;padding:2px 6px;border-radius:3px;">' + saEscH(m.code) + '</code></td>';
+                    h += '<td>' + saEscH(m.nom) + '</td>';
+                    h += '<td><a href="https://id.eaufrance.fr/meso/' + encodeURIComponent(m.code) + '" target="_blank" rel="noopener" style="color:#2563EB;font-size:0.8rem;">Sandre ↗</a></td>';
+                    h += '</tr>';
+                });
+                h += '</tbody></table>';
+                h += '<p style="margin-top:8px;font-size:0.78rem;color:#94A3B8;">Plusieurs MESO peuvent coexister sous un même point : une MESO superficielle (libre) et une MESO profonde (captive). Le SIGES du bassin permet de visualiser leur extension cartographique et leur empilement vertical.</p>';
+            }
+
+            // Fallback complet : ni BD LISA ni qualité
+            if (bdlisaList.length === 0 && mesoList.length === 0) {
+                h += '<p style="font-size:0.85rem;color:#64748B;">Aucune entité aquifère identifiée automatiquement à ce point. Causes possibles :</p>';
+                h += '<ul style="font-size:0.84rem;color:#475569;">';
+                h += '<li>zone à faible densité de stations de suivi qualité Sandre (typique du milieu rural) ;</li>';
+                h += '<li>BD LISA Niveau Local non renseigné ou service WMS BRGM temporairement indisponible ;</li>';
+                h += '<li>secteur particulier (zone karstique, littoral, alpin) où le découpage en MESO peut être complexe.</li>';
+                h += '</ul>';
+                h += '<p style="font-size:0.85rem;color:#64748B;">La consultation directe du SIGES du bassin (section 3 ci-dessous) reste la source autoritative.</p>';
+            }
+
+            // ─── 3. Portail SIGES du bassin ───
+            h += '<h3 id="saSecMeso-siges" style="margin-top:24px;">3. Portail SIGES du bassin hydrographique</h3>';
+            h += '<p>Les <strong>SIGES</strong> (Systèmes d’Information pour la Gestion des Eaux Souterraines) sont des portails BRGM régionaux qui agrègent : cartes piézométriques, vulnérabilité intrinsèque des nappes, état chimique/quantitatif DCE, fiches descriptives des aquifères, données de prélèvement.</p>';
+            h += '<div style="margin:12px 0;padding:14px 18px;border:1px solid #BAE6FD;background:#F0F9FF;border-radius:8px;">';
+            h += '<div style="font-size:0.74rem;color:#0369A1;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;margin-bottom:4px;">Portail régional applicable</div>';
+            h += '<div style="font-size:1rem;color:#0C4A6E;font-weight:600;margin-bottom:6px;">' + saEscH(sigesInfo.name) + '</div>';
+            h += '<a href="' + sigesInfo.url + '" target="_blank" rel="noopener" style="display:inline-block;padding:6px 14px;background:#0EA5E9;color:#fff;border-radius:6px;text-decoration:none;font-size:0.85rem;font-weight:500;">Ouvrir le SIGES ↗</a>';
+            if (sigesInfo.bassin) {
+                h += '<span style="margin-left:10px;font-size:0.78rem;color:#475569;">Département ' + saEscH(deptCode || '?') + ' → bassin ' + saEscH(sigesInfo.bassin) + '</span>';
+            } else {
+                h += '<span style="margin-left:10px;font-size:0.78rem;color:#94A3B8;">Pas de SIGES régional dédié — utilisez le portail national pour sélectionner votre bassin.</span>';
+            }
+            h += '</div>';
+            h += '<p style="font-size:0.82rem;color:#64748B;margin-top:8px;">Voir aussi : <a href="https://sigesfra.brgm.fr/" target="_blank" rel="noopener" style="color:#2563EB;">SIGES France (national)</a> · <a href="https://infoterre.brgm.fr/" target="_blank" rel="noopener" style="color:#2563EB;">InfoTerre BRGM</a> · <a href="https://ades.eaufrance.fr/" target="_blank" rel="noopener" style="color:#2563EB;">ADES (eaux souterraines)</a></p>';
+
+            // ─── 4. Impact projet et BREEAM ───
+            h += '<h3 id="saSecMeso-impact" style="margin-top:24px;">4. Impact projet et BREEAM</h3>';
+            h += '<ul style="font-size:0.84rem;line-height:1.7;color:#334155;">';
+            h += '<li><strong>Fondations et terrassements</strong> : la connaissance de la profondeur et de la nature de la nappe (libre/captive) conditionne le choix des soutènements, l’étanchéité des sous-sols, et la gestion d’éventuels rabattements.</li>';
+            h += '<li><strong>Géothermie de surface</strong> (sondes verticales, doublets sur nappe) : la productivité dépend de la transmissivité de l’aquifère et de la vulnérabilité doit être qualifiée avant tout forage.</li>';
+            h += '<li><strong>Sites pollués / friches</strong> : croisée avec CASIAS/Instructions SSP, la MESO permet de qualifier le risque de transfert sol→nappe.</li>';
+            h += '<li><strong>Pol 03 (Surface water run-off)</strong> : l’infiltration des eaux pluviales à la parcelle est conditionnée par la vulnérabilité intrinsèque de la MESO sous-jacente.</li>';
+            h += '<li><strong>Wat 01/Wat 02</strong> : récupération et réutilisation des eaux non potables, en cohérence avec l’état quantitatif de la MESO.</li>';
+            h += '</ul>';
+
+            h += '<div class="sa-dp-source" style="margin-top:18px;">Sources : <a href="https://hubeau.eaufrance.fr/page/api-qualite-nappes" target="_blank" rel="noopener">Hub’Eau — Qualité nappes</a> · <a href="' + sigesInfo.url + '" target="_blank" rel="noopener">' + saEscH(sigesInfo.name) + '</a> · <a href="https://www.sandre.eaufrance.fr/" target="_blank" rel="noopener">Sandre (référentiel MESO)</a></div>';
 
         } else if (key === 'eau_potable') {
             title = 'Eau potable';
